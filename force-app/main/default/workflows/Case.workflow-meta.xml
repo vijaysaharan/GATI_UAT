@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>ADD_Extension_Request_Approved</fullName>
+        <description>ADD Extension Request Approved</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Customer_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/ADD_Extension_Approved</template>
+    </alerts>
+    <alerts>
+        <fullName>Bill_Back_of_Expense_Approved</fullName>
+        <description>Bill Back of Expense Approved</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Customer_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Bill_Back_of_Expense_Approved</template>
+    </alerts>
+    <alerts>
+        <fullName>Email_to_contact_on_case_creation</fullName>
+        <description>Email to contact on case creation</description>
+        <protected>false</protected>
+        <recipients>
+            <field>ContactEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Prospect_pickup_email_tmp</template>
+    </alerts>
+    <alerts>
+        <fullName>Follow_up_reminder</fullName>
+        <description>Follow up reminder</description>
+        <protected>false</protected>
+        <recipients>
+            <field>ContactEmail</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Pickup_Request_Reminder</template>
+    </alerts>
+    <alerts>
+        <fullName>send_email_to_customer_when_the_remark_record_is_created_along_with_open_remarks</fullName>
+        <description>send email to customer when the remark record is created along with open remarks as body</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Customer_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/CCEC_remark_email</template>
+    </alerts>
+    <alerts>
+        <fullName>task1</fullName>
+        <ccEmails>pareekdivya8135@gmail.com</ccEmails>
+        <description>check</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>kyadav@gati.com</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Complaint_Registration_Docket</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Bill_Back_Expense_Auto_Approval</fullName>
+        <field>CS_Approved__c</field>
+        <literalValue>1</literalValue>
+        <name>Bill Back Expense Auto Approval</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Bill_Back_Expense_Auto_Approved</fullName>
+        <field>Approval_Status__c</field>
+        <literalValue>Y</literalValue>
+        <name>Bill Back Expense Auto Approved</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ChangePriorityToHigh</fullName>
+        <field>Priority</field>
+        <literalValue>High</literalValue>
+        <name>Changes the case priority to high.</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Convert_into_pickup_request</fullName>
+        <field>Type</field>
+        <literalValue>Pick Up</literalValue>
+        <name>Convert into pickup request</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Convert_record_type_to_service_request</fullName>
+        <field>RecordTypeId</field>
+        <lookupValue>Service_Request</lookupValue>
+        <lookupValueType>RecordType</lookupValueType>
+        <name>Convert record type to service request</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>LookupValue</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Level_1</fullName>
+        <field>Pre_Check_Escalation__c</field>
+        <literalValue>Level 1</literalValue>
+        <name>Level 1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Mandatory_Pick_Up_Reference_Number</fullName>
+        <field>Docket_Validation__c</field>
+        <literalValue>Valid</literalValue>
+        <name>Mandatory Pick Up Reference Number</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Populate_Unique_docket_subtype</fullName>
+        <field>Unique_Docket_Subtype__c</field>
+        <formula>Docket_Number__c + &quot;.&quot; +  TEXT(Sub_Type__c)</formula>
+        <name>Populate Unique docket subtype</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Complaint_Status</fullName>
+        <field>Complaint_Status__c</field>
+        <literalValue>C</literalValue>
+        <name>Update Complaint Status</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Complaint_Status1</fullName>
+        <field>Complaint_Status__c</field>
+        <literalValue>O</literalValue>
+        <name>Update Complaint Status1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>st</fullName>
+        <field>Status</field>
+        <literalValue>Open</literalValue>
+        <name>st</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>step</fullName>
+        <field>Status</field>
+        <literalValue>Closed</literalValue>
+        <name>step</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>step2</fullName>
+        <field>Approved_Closure__c</field>
+        <literalValue>1</literalValue>
+        <name>step2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>ADD Extension Approval</fullName>
+        <actions>
+            <name>ADD_Extension_Request_Approved</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Case.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Service Request</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Type</field>
+            <operation>equals</operation>
+            <value>ADD Extension</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.ADD_Approval_Status__c</field>
+            <operation>equals</operation>
+            <value>Y</value>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Bill Back Expense Request Auto Approval</fullName>
+        <active>true</active>
+        <criteriaItems>
+            <field>Case.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Service Request</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Type</field>
+            <operation>equals</operation>
+            <value>Bill back of Expenses</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.CS_Approved__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Approval_Status__c</field>
+            <operation>notEqual</operation>
+            <value>N</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <workflowTimeTriggers>
+            <actions>
+                <name>Bill_Back_Expense_Auto_Approval</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <actions>
+                <name>Bill_Back_Expense_Auto_Approved</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <offsetFromField>Case.CreatedDate</offsetFromField>
+            <timeLength>10</timeLength>
+            <workflowTimeTriggerUnit>Days</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
+    <rules>
+        <fullName>Bill Back of Expense Approved</fullName>
+        <actions>
+            <name>Bill_Back_of_Expense_Approved</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Case.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Service Request</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Type</field>
+            <operation>equals</operation>
+            <value>Bill back of Expenses</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Approval_Status__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Convert prospect pickup into pickup request</fullName>
+        <actions>
+            <name>Follow_up_reminder</name>
+            <type>Alert</type>
+        </actions>
+        <actions>
+            <name>Convert_into_pickup_request</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Convert_record_type_to_service_request</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>AND((Convert_to_pickup_request__c = True), ISPICKVAL( Type , &apos;Prospect Pickup&apos;))</formula>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Pick Up Reference Number</fullName>
+        <actions>
+            <name>Mandatory_Pick_Up_Reference_Number</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Case.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Complaint</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Type</field>
+            <operation>equals</operation>
+            <value>Pending Pickup</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Case.Pick_Up_Ref_No__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>taskCheck</fullName>
+        <active>true</active>
+        <criteriaItems>
+            <field>Case.Sub_Type__c</field>
+            <operation>equals</operation>
+            <value>Normal</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+</Workflow>

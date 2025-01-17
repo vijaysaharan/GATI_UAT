@@ -1,0 +1,12 @@
+.THIS .leftPaddingClass {
+    padding-left: 2rem;
+}
+.THIS .margin_bottom{margin-bottom: 15px;}
+.THIS .mar_bottom{display: block; margin: 0 0 2px;}
+.THIS .pillSize{
+    width:100%;
+}
+.THIS.slds-spinner_container {  
+  z-index: 10000;
+  position: fixed;   
+}

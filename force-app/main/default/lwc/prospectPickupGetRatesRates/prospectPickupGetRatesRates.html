@@ -1,0 +1,27 @@
+<template>
+         <template if:true={showdataTable}>
+     <lightning-card variant="narrow" title="Rate Details">        
+     <div class="slds-p-around_medium slds-scrollable" style="max-height:300px;margin-top: 5px;">     
+
+        <lightning-datatable 
+                key-field="PROD_CODE"
+                data={GemsRateDetails}
+                columns={columns}
+                hide-checkbox-column
+                >
+
+        </lightning-datatable>
+        <br/><br/><br/>
+        <lightning-datatable 
+        key-field="PROD_CODE"
+        data={GemsRateDetails2}
+        columns={columns2}
+        hide-checkbox-column
+        >
+        
+    </lightning-datatable>
+    </div> 
+    <div class="slds-p-bottom_x-large"> </div>   
+     </lightning-card>
+     </template>
+</template>

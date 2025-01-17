@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <assignments>
+        <name>add_cloumns_to_the_table</name>
+        <label>add cloumns to the table</label>
+        <locationX>371</locationX>
+        <locationY>279</locationY>
+        <assignmentItems>
+            <assignToReference>table</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>tableColumns</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>MOm_list</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Add_table_row_to_table_markup</name>
+        <label>Add table row to table markup</label>
+        <locationX>972</locationX>
+        <locationY>343</locationY>
+        <assignmentItems>
+            <assignToReference>table</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>tablerows</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>MOm_list</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>t</name>
+        <label>close table markup</label>
+        <locationX>369</locationX>
+        <locationY>604</locationY>
+        <assignmentItems>
+            <assignToReference>table</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>&lt;/table&gt;</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <formulas>
+        <name>tablerows</name>
+        <dataType>String</dataType>
+        <expression>&apos;&lt;tr style=&quot;background-color: #f2f2f2;&quot;&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;&apos; + {!MOm_list.Name} +
+&apos;&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;&apos; +text( {!MOm_list.MCM_actionable__c} )+
+&apos;&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;&apos; + {!MOm_list.Task__c} +
+&apos;&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;&apos; + {!MOm_list.Action_Owner__r.FirstName}+ &quot;  &quot;  +{!MOm_list.Action_Owner__r.LastName} +
+&apos;&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;&apos; +text({!MOm_list.Due_Date__c})+
+&apos;&lt;/td&gt;&lt;/tr&gt;&apos;</expression>
+    </formulas>
+    <interviewLabel>Gati_Notify_Users {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Gati_Notify_Users</label>
+    <loops>
+        <name>MOm_list</name>
+        <label>MOm list</label>
+        <locationX>476</locationX>
+        <locationY>219</locationY>
+        <collectionReference>get_MOM_records</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Add_table_row_to_table_markup</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>t</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>get_MOM_records</name>
+        <label>get MOM records</label>
+        <locationX>258</locationX>
+        <locationY>219</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>add_cloumns_to_the_table</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Customer_Connect__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>parentId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Include_in_MOM__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Actionable__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>73</locationX>
+        <locationY>54</locationY>
+        <connector>
+            <targetReference>get_MOM_records</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>emailbody</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Hi User,&lt;/p&gt;&lt;p&gt;Here are the mom details of current MCM:&lt;/p&gt;&lt;p&gt;{!table}&lt;/p&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>Emails</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>parentId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>table</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue>&lt;table style=&quot;width:100%;border:1px solid black;font-family: Arial, Helvetica, sans-serif;   border-collapse: collapse;&quot;</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>tableColumns</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>&lt;tr&gt;  &lt;th style=&quot; padding: 8px;border: 1px solid black; padding-top: 12px;   padding-bottom: 12px;   text-align: left;   background-color: #04AA6D;   color: white;&quot;&gt;Actionable Number&lt;/th&gt;  &lt;th style=&quot;border: 1px solid black;  padding: 8px;padding-top: 12px;   padding-bottom: 12px;   text-align: left;   background-color: #04AA6D;   color: white;&quot;&gt;Actionable&lt;/th&gt;  &lt;th style=&quot;border: 1px solid black; padding: 8px; padding-top: 12px;   padding-bottom: 12px;   text-align: left;   background-color: #04AA6D;   color: white;&quot;&gt;Task&lt;/th&gt;  &lt;th style=&quot;border: 1px solid black; padding-top: 12px;  padding: 8px;  padding-bottom: 12px;   text-align: left;   background-color: #04AA6D;   color: white;&quot;&gt;Action Owner&lt;/th&gt; &lt;th style=&quot;border: 1px solid black; padding-top: 12px;  padding: 8px;  padding-bottom: 12px;   text-align: left;   background-color: #04AA6D;   color: white;&quot;&gt;Due Date&lt;/th&gt;&lt;/tr&gt;</stringValue>
+        </value>
+    </variables>
+</Flow>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <assignments>
+        <name>Set_Cross_sell</name>
+        <label>Set Cross Sell Zone &amp; Topic</label>
+        <locationX>176</locationX>
+        <locationY>287</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cross_Sell_Zone__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CrossSellZones</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Cross_Sell_Topic__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>CrossSellTopic</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <environments>Default</environments>
+    <formulas>
+        <name>CrossSellTopic</name>
+        <dataType>String</dataType>
+        <expression>&apos;Cross Sell: &apos;+{!$Record.Company}</expression>
+    </formulas>
+    <formulas>
+        <name>CrossSellZones</name>
+        <dataType>String</dataType>
+        <expression>CASE({!$Record.Lead_Assigned_OU__r.Parent__r.Parent__r.Parent__r.Name},
+		&quot;DELZ&quot;,&quot;North&quot;,
+		&quot;BLRZ&quot;,&quot;South&quot;,
+		&quot;BOMZ&quot;,&quot;West&quot;,
+		&quot;CCUZ&quot;,&quot;East&quot;,
+		NULL)</expression>
+    </formulas>
+    <interviewLabel>Cross Sell Set parameters for Lead {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Cross Sell Set parameters for Lead</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Set_Cross_sell</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Cross_Sell_Lead_Created_From__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Gati CRM</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>LeadSource</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Cross Sell</stringValue>
+            </value>
+        </filters>
+        <object>Lead</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

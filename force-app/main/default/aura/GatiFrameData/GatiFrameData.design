@@ -1,0 +1,4 @@
+<design:component>
+	<design:attribute name="iframeUrl" label="URL" description="Base url of Iframe" />
+    <design:attribute name="title" label="Title" description="Base url of Iframe" />
+</design:component>

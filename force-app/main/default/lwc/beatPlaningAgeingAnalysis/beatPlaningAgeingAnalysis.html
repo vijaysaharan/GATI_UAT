@@ -1,0 +1,119 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <div class="outer-container slds-p-around_medium slds-grid slds-grid_vertical" style="position: relative;">
+        <lightning-spinner lwc:if={showSpinner} variant="brand"></lightning-spinner>
+        <div class="slds-grid slds-grid_align-spread slds-wrap">
+            <div class="slds-col slds-size_12-of-12 header">
+                Beat Planing Ageing Analysis
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <lightning-combobox label="Zones" options={zoanPickListValue} value={selectedZone}
+                    onchange={handleZoneFilter}></lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <lightning-input type="search" label="Owner Name" value={searchedText}
+                    onchange={handleOwnerFilter}></lightning-input>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <lightning-combobox label="Account Type" options={accountType} value={selectedAccountType}
+                    onchange={handleTypeFilter}></lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <lightning-combobox label="Show" options={userFilters} value={selectedUserType}
+                    onchange={handleUserFilter}></lightning-combobox>
+            </div>
+        </div>
+        <div lwc:if={showAccountData} lwc:ref="placeHolder" class="slds-m-top_medium table-container slds-scrollable_y">
+            <table>
+                <tr class="sticky-top-header">
+                    <th> <div class="flex-header"><span>RPO Name</span> <span> <lightning-icon icon-name="utility:sort"
+                        onclick={handleSort} size="xx-small" variant="inverse" data-label="rpoName"></lightning-icon></span></div></th>
+                    <th> <div class="flex-header"><span>Account Owner</span> <span> <lightning-icon icon-name="utility:sort"
+                        onclick={handleSort} size="xx-small" variant="inverse" data-label="ownerName"></lightning-icon></span></div></th>
+                    <th><div class="flex-header"><span>Total</span> <span> <lightning-icon icon-name="utility:sort"
+                        onclick={handleSort} size="xx-small" variant="inverse" data-label="total"></lightning-icon></span></div></th>
+                    <th><div class="flex-header"><span>0-15</span> <span> <lightning-icon icon-name="utility:sort"
+                        onclick={handleSort} size="xx-small" variant="inverse" data-label="zeroToFifteen"></lightning-icon></span></div></th>
+                    <th><div class="flex-header"><span>16-30</span> <span> <lightning-icon icon-name="utility:sort"
+                        onclick={handleSort} size="xx-small" variant="inverse" data-label="sixteenToThirty"></lightning-icon></span></div></th>
+                    <th><div class="flex-header"><span>31-45</span> <span> <lightning-icon icon-name="utility:sort"
+                        onclick={handleSort} size="xx-small" variant="inverse" data-label="thirtyOneToFortyfive"></lightning-icon></span></div></th>
+                    <th><div class="flex-header"><span>46-60</span> <span> <lightning-icon icon-name="utility:sort"
+                        onclick={handleSort} size="xx-small" variant="inverse" data-label="fortySixToSixty"></lightning-icon></span></div></th>
+                    <th><div class="flex-header"><span>>60</span> <span> <lightning-icon icon-name="utility:sort"
+                        onclick={handleSort} size="xx-small" variant="inverse" data-label="greaterThanSixty"></lightning-icon></span></div></th>
+                </tr>
+                <tr for:each={accountAnalysis} for:item="account" key={account.ownerId} class="data-container">
+                    <td>
+                        {account.rpoName}
+                    </td>
+                    <td>
+                        {account.ownerName}
+                    </td>
+                    <td>
+                        <a onclick={handleOpenPopover} data-label="total" data-id={account.ownerId}>{account.total}
+                            <!-- <c-beat-planing-ageing-analysis-popover class="popover slds-chat-listitem slds-p-around_medium" account-list-api={accountToPass} lwc:if={account.totalShowAccount}></c-beat-planing-ageing-analysis-popover> -->
+                        </a>
+                    </td>
+                    <td>
+                        <a onclick={handleOpenPopover} data-label="zeroToFifteen"
+                            data-id={account.ownerId}>{account.zeroToFifteen}
+                            <!-- <c-beat-planing-ageing-analysis-popover class="popover slds-chat-listitem slds-p-around_medium" account-list-api={accountToPass} lwc:if={account.zeroToFifteenShowAccount}></c-beat-planing-ageing-analysis-popover> -->
+                        </a>
+                    </td>
+                    <td>
+                        <a onclick={handleOpenPopover} data-label="sixteenToThirty"
+                            data-id={account.ownerId}>{account.sixteenToThirty}
+                            <!-- <c-beat-planing-ageing-analysis-popover class="popover slds-chat-listitem slds-p-around_medium" account-list-api={accountToPass} lwc:if={account.sixteenToThirtyShowAccount}></c-beat-planing-ageing-analysis-popover> -->
+                        </a>
+                    </td>
+                    <td>
+                        <a onclick={handleOpenPopover} data-label="thirtyOneToFortyfive"
+                            data-id={account.ownerId}>{account.thirtyOneToFortyfive}
+                            <!-- <c-beat-planing-ageing-analysis-popover class="popover slds-chat-listitem slds-p-around_medium" account-list-api={accountToPass} lwc:if={account.thirtyOneToFortyfiveShowAccount}></c-beat-planing-ageing-analysis-popover> -->
+                        </a>
+                    </td>
+                    <td>
+                        <a onclick={handleOpenPopover} data-label="fortySixToSixty"
+                            data-id={account.ownerId}>{account.fortySixToSixty}
+                            <!-- <c-beat-planing-ageing-analysis-popover class="popover slds-chat-listitem slds-p-around_medium" account-list-api={accountToPass} lwc:if={account.fortySixToSixtyShowAccount}></c-beat-planing-ageing-analysis-popover> -->
+                        </a>
+                    </td>
+                    <td>
+                        <a onclick={handleOpenPopover} data-label="greaterThanSixty"
+                            data-id={account.ownerId}>{account.greaterThanSixty}
+                            <!-- <c-beat-planing-ageing-analysis-popover class="popover slds-chat-listitem slds-p-around_medium" account-list-api={accountToPass} lwc:if={account.greaterThanSixtyShowAccount}></c-beat-planing-ageing-analysis-popover> -->
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div lwc:else class="slds-m-top_medium no-data-found">
+            No Data Found!
+        </div>
+
+        <div lwc:if={showModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="min-width: 90vw;">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+                        <lightning-icon icon-name="utility:close" size="x-small" variant="inverse"
+                            onclick={handleCloseModel}></lightning-icon>
+                        <span class="slds-assistive-text">Cancel and close</span>
+                    </button>
+                    <div class="slds-modal__header" style="padding: 0px;">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate header"
+                            style="border-radius: 0px;" tabindex="-1">{selectedOwnerName}</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <c-beat-planing-ageing-analysis-popover
+                            account-list-api={accountToPass}></c-beat-planing-ageing-analysis-popover>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </div>
+    </div>
+</template>

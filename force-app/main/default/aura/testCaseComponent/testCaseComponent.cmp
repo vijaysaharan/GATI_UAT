@@ -1,0 +1,10 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <lightning:workspaceAPI aura:id="workspace" />
+    <!--<aura:attribute name="recordtypeid" type="string"/>-->
+    <aura:attribute name="focusedTabId" type="string"/>
+   <!-- <aura:handler name="change" value="{!v.pageReference}" action="{!c.refresh}"/>
+    <aura:handler name="init" value="this" action="{!c.doint}"></aura:handler>-->
+    <c:bulkUpload recordTypeId="012p0000000SfhRAAS" oncloseclicked="{!c.closeFocusedTab}"/>
+    
+  
+</aura:component>

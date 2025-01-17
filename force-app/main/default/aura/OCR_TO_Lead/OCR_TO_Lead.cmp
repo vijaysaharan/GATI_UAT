@@ -1,0 +1,89 @@
+<aura:component controller="OCRcontroller" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="datas" type="List"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:attribute name="data" type="Lead" />
+    <aura:attribute name="leadRecord" type="Object"/>
+    <aura:attribute name="leadFields" type="Map"/>
+    <aura:attribute name="leadError" type="String"/>
+    <aura:attribute name="loaded" type="boolean"/>
+    <aura:attribute name="leadFieldss" type="Object"/>
+    <aura:attribute name="disable" type="boolean" default="true"/>
+    
+    <force:recordData aura:id="forceRecord"
+                      fields="LastName,Company,Phone,Email,Street,PostalCode,LeadSource"
+                      
+                      targetRecord="{!v.leadRecord}"
+                      targetFields="{!v.leadFieldss}"
+                      targetError="{!v.leadError}" />
+    
+    <aura:handler name="ParentNotify"  event="C:ParentNotify" action="{!c.getChildValues}"/>
+    <article class="slds-card">
+        <div class="slds-grid slds-einstein-header slds-card__header">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-grid slds-grid_vertical-align-center slds-size_3-of-4 slds-medium-size_2-of-3">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-utility-salesforce1">
+                            
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-truncate" title="Einstein (10+)">
+                            <a href="#" class="slds-card__header-link" title="Einstein (10+)">
+                                <span class="slds-text-heading_small">OCR Reader</span>
+                            </a>
+                        </h2>
+                    </div>
+                </div>
+                
+                <div class="slds-einstein-header__figure slds-size_1-of-4 slds-medium-size_1-of-3"></div>
+            </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">  
+            <div class="slds-grid slds-wrap slds-gutters">
+                
+                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12 ">
+                    <div class="slds-col slds-size_12-of-12"> 
+                        <c:OCR ></c:OCR>
+                    </div>
+                    <div class="slds-col slds-size_12-of-12">
+                        <aura:if isTrue="{!not(empty(v.datas))}">     
+                        <div style="height: 300px">
+                            <lightning:datatable class="slds-max-medium-table_stacked"
+                                                 keyField="result"
+                                                 data="{! v.datas}"
+                                                 columns="{! v.columns }"
+                                                 hideCheckboxColumn="true"/>
+                        </div>
+                        </aura:if>
+                    </div>
+                </div>
+                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12 ">
+                    <lightning:card iconName="standard:lead" title="Lead Form" >
+                        <div class="slds-p-horizontal--small">
+                            <p class="slds-text-heading--small">
+                                <lightning:formattedText title="LeadSource" value="{!v.leadFields.LeadSource}" /></p>
+                            
+                        </div>
+                        
+                        
+                        
+                        <div class="slds-p-horizontal--small">
+                            <lightning:input disabled="{!v.disable}" required="true" aura:id="leadfield" label="Lead Name" value="{!v.leadFields.LastName}"/>
+                            <lightning:input disabled="{!v.disable}"  required="true" aura:id="leadfield" label="Company Name" value="{!v.leadFields.Company}"/>
+                            <lightning:input disabled="{!v.disable}"  required="true" aura:id="leadfield" label="Email" type="email" value="{!v.leadFields.Email}"/>
+                            <lightning:input disabled="{!v.disable}"  required="true" aura:id="leadfield" label="Phone"  type="tel" value="{!v.leadFields.Phone}"/>
+                            <lightning:input disabled="{!v.disable}"  required="true" aura:id="leadfield" label="postal Code" value="{!v.leadFields.PostalCode}"/>
+                            <lightning:input disabled="{!v.disable}"  required="true" aura:id="leadfield" label="Street" value="{!v.leadFields.Street}"/>
+                            <br/>
+                            <lightning:button label="Save Lead" variant="brand" onclick="{!c.handleSaveRecord}" />
+                        </div>
+                    </lightning:card>
+                </div>
+            </div>
+        </div>
+        
+        
+    </article>
+    
+</aura:component>

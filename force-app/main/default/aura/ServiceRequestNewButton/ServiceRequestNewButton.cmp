@@ -1,0 +1,4 @@
+<aura:component implements="lightning:actionOverride,lightning:hasPageReference" access="global" >
+	<aura:handler name="init" value="{!this}" action="{!c.init}" /> 
+  <lightning:flow aura:id="ServiceRequest" />
+</aura:component>

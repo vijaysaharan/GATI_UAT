@@ -1,0 +1,5 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" >
+    <c:GatiFrameData title="Business Committed &amp; Collection Report"/>
+    
+    
+</aura:component>

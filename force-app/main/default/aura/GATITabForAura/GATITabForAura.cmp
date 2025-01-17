@@ -1,0 +1,12 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	<aura:attribute name="canvasTabsList" type="string" default=""/>
+    <aura:attribute name="canvasTabsandParameter" type="List" default="[{TabName:'',CanvasName:''}]"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <lightning:tabset  variant="scoped">
+        <aura:iteration items="{!v.canvasTabsandParameter}" var="item">
+            <lightning:tab label="{!item.TabName}" >
+                <c:CanvasAuraParentComponent CanvasName="{!item.CanvasName}"/>
+            </lightning:tab>
+        </aura:iteration>
+	</lightning:tabset>   
+</aura:component>

@@ -1,0 +1,39 @@
+<template>
+    <div class="" style="background-color:white;">
+        <template if:true={isSpinner}>
+        <div class="">
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </div>
+        </template>
+<template if:false={isDashboard}>
+        <div class="slds-size_6-of-12 slds-var-m-around_medium slds-var-m-top_medium">
+            <lightning-combobox
+            name="Fiscal Quarters"
+            label="Fiscal Quarters"
+            value={value}
+            placeholder="Select Fiscal Quarters"
+            options={quarterList}
+            onchange={handleChangeQuarter} ></lightning-combobox>
+        </div>
+        <div class="slds-size_6-of-12 slds-var-m-around_medium">
+            <lightning-combobox
+            name="Fiscal Year"
+            label="Fiscal Year"
+            value={value}
+            placeholder="Select Fiscal Year"
+            options={fiscalYearList}
+            onchange={handleChangeFiscalYear} ></lightning-combobox>
+        </div>
+        <div class="slds-var-m-top_small slds-var-m-around_medium slds-var-m-around_medium">
+            <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={handleCancel} class="slds-var-m-left_x-small slds-var-m-top_small slds-var-m-bottom_medium"></lightning-button>
+            <lightning-button variant="brand" label="Continue" title="Continue" onclick={handleContinue} class="slds-var-m-left_x-small  slds-var-m-bottom_medium"></lightning-button>
+        </div>
+        
+    </template>
+<template if:true={isDashboard}>
+            <c-customer-connect-dashboard-child record-list={dailyAvgSales} vertical-wise-biz={vertocalData} opp-records={oppAllData} opp-records-average={oppDataAvg} business-data={contrctbusinessPer} promis-biz-per-data={promisBizPer}></c-customer-connect-dashboard-child>
+        </template>
+
+
+</div>
+</template>

@@ -1,0 +1,19 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+	<lightning:tabset  variant="scoped">
+		    <lightning:tab label="Service Performance Report" >
+            	<c:GatiFrameData iframeUrl="https://pg-uat.gati.com/GSalesForce/Canvas/SERVICEPERRPT/SERVICEPERRPT.jsp?puser=sam_21163"/>
+        	</lightning:tab>
+       		<lightning:tab label="Late Delivery Aging Report" >
+                <c:GatiFrameData iframeUrl="https://pg-uat.gati.com/GSalesForce/Canvas/DKTCONTROLRPT/DKTCONTROLRPT.jsp?puser=sam_21163"/>
+            </lightning:tab>
+            <lightning:tab label="Business Committed &amp; Collection Report">
+                <c:GatiFrameData iframeUrl="https://pg-uat.gati.com/GSalesForce/Canvas/DKTCONTROLRPT/DKTCONTROLRPT.jsp?puser=sam_21163"/>
+            </lightning:tab>
+            <lightning:tab label="Docket Level Status">
+                <c:GatiFrameData iframeUrl="https://pg-uat.gati.com/GSalesForce/Canvas/DKTListing/DKTListing.jsp?puser=sam_21163"/>
+            </lightning:tab>
+            <lightning:tab label="Customer Receivable Report" >
+                <c:GatiFrameData iframeUrl="https://pg-uat.gati.com/GSalesForce/CUSTRECEIVABLERPT.jsp?puser=sam_21163"/>
+            </lightning:tab>
+    </lightning:tabset>   
+</aura:component>

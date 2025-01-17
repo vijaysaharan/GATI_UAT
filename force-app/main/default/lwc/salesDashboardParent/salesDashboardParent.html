@@ -1,0 +1,74 @@
+<template>
+    <div class="slds-var-p-around_medium">
+        <div class="slds-grid slds-wrap">
+            <div lwc:if={isAccountTypes} class="slds-var-p-around_small slds-size_1-of-2">
+                <c-multi-select label="Account Type" options={accountTypes}
+                    oninputchange={handleAccountTypeSelection}></c-multi-select>
+            </div>
+            <div lwc:if={isZoneList} class="slds-var-p-around_small slds-size_1-of-2">
+                <c-multi-select label="Zone" options={zoneList}
+                    oninputchange={handleZoneSelection}></c-multi-select>
+            </div>
+            <div lwc:if={isSalesperson} class="slds-var-p-around_small slds-size_1-of-2">
+                <lightning-record-picker label="Salesperson" placeholder="Search..." object-api-name="User" value={selectedSalesperson}
+                    onchange={handleSalespersonChange} matching-info={matchingInfo} display-info={displayInfo} filter={filter}>
+                </lightning-record-picker>
+            </div>
+            <div lwc:if={isUserList} class="slds-var-p-around_small slds-size_1-of-2">
+                <c-multi-select label="Sales Team" is-search="true" options={userOptions}
+                    oninputchange={handleUsersSelection}></c-multi-select>
+            </div>
+            <div lwc:if={isProducts} class="slds-var-p-around_small slds-size_1-of-2">
+                <c-multi-select label="Product" options={productList}
+                    oninputchange={handleProductSelect}></c-multi-select>
+            </div>
+            <div lwc:if={isMonths} class="slds-var-p-around_small slds-size_1-of-2">
+                <lightning-combobox
+                label="Month"
+                value={dateList.selectedMonth}
+                placeholder="Select months.."
+                options={monthList}
+                onchange={handleMonthChange} 
+                ></lightning-combobox>
+            </div>
+            <div class="slds-var-p-around_small slds-size_1-of-1"
+                style="display: flex; justify-content: center; margin-top: auto;">
+                <lightning-button disabled={isSearchDisable} variant="brand" label="Search" onclick={handleSearchClick}
+                    class="slds-m-left_x-small"></lightning-button>
+            </div>
+        </div>
+        <div class="slds-var-m-top_large">
+            <c-sales-dashboard 
+            date-list={dateList}
+            ></c-sales-dashboard>
+        </div>
+        <div class="slds-var-m-top_large">
+            <c-up-and-down-trade-dashboard 
+            heading="Down Trade"
+            date-list={dateList}
+            sort-list="asc"
+            ></c-up-and-down-trade-dashboard>
+            <c-up-and-down-trade-dashboard
+            heading="UP Trade"
+            date-list={dateList} 
+            ></c-up-and-down-trade-dashboard>
+        </div>
+        <div class="slds-var-m-top_large">
+            <c-inactive-accounts-dashboard
+            heading="Inactive"
+            range-value=30
+            date-list={dateList}
+            ></c-inactive-accounts-dashboard>
+            <c-inactive-accounts-dashboard
+            range-value=90
+            heading="Non-Trading"
+            date-list={dateList}
+            ></c-inactive-accounts-dashboard>                            
+            <c-inactive-accounts-dashboard
+            range-value=180
+            heading="Lost"
+            date-list={dateList}
+            ></c-inactive-accounts-dashboard>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,30 @@
+<aura:component  implements="force:hasRecordId,force:hasSObjectName,flexipage:availableForAllPageTypes">
+    <aura:attribute name="iframeUrl" type="String" default="https://www.youtube.com/embed/UGtfBqNWCng"/>
+    <aura:attribute name="width" type="String" default="100%"/>
+     <aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}"/>
+    <aura:attribute name="Fields" type="List"/>
+   
+    <aura:attribute name="height" type="String" default="100%"/>
+    <aura:attribute name="scrolling" type="String" />
+    <aura:attribute name="frameBorder" type="String" />
+    <aura:attribute name="style" type="String" />
+    <aura:attribute name="sandbox" type="String" />
+    <aura:attribute name="title" type="String" default=""/> 
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+
+    <div class="slds-m-around_small">
+        <lightning:card title="{!v.title}" class="card">
+       
+        
+           <iframe src="{!v.iframeUrl}"
+            width="{!v.width}"
+            height="100%"
+            style="{!v.style}"
+            frameBorder="{!v.frameBorder}"
+            sandbox="{!v.sandbox}"
+            scrolling="{!v.scrolling}"/>
+       
+    </lightning:card>
+        
+	</div>
+</aura:component>

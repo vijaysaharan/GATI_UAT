@@ -1,0 +1,57 @@
+<template>
+<lightning-card variant="narrow" title="Prospect Pickup">
+    <div class="slds-align_absolute-center">
+    <lightning-button-group class="slds-m-left_medium">
+            <lightning-button label="Get Rates" onclick={getRatesfromGems}></lightning-button>
+            <lightning-button label="Raise Pick Up" onclick={openModal}></lightning-button>
+    </lightning-button-group>
+    </div>
+       <template if:true={getRates}>
+            <c-prospect-pickup-get-rates-rates record-id={recordId} onshowerror={showtoast}></c-prospect-pickup-get-rates-rates>
+       </template>
+<lightning-accordion >
+  <lightning-accordion-section name="Details" label="Details">
+<div class="slds-p-left_medium slds-p-right_medium">
+    <lightning-record-form
+    object-api-name="Case"
+    record-id={recordId}
+    fields={fields}
+    columns="2"
+>
+</lightning-record-form>
+</div>
+  </lightning-accordion-section>
+</lightning-accordion>
+</lightning-card>
+   <template if:true={bShowModal}>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="modalSection slds-modal slds-fade-in-open">
+        <div class="slds-modal__container" style="width:70%;max-width:80%">
+         <!--Modal Header Start-->
+          <header class="slds-modal__header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+              <lightning-icon variant="inverse" onclick={closeModal} alternative-text="close" icon-name="utility:close" size="small"></lightning-icon>
+            </button>
+            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Pick Up Request</h2>
+          </header>
+         <!--Modal Body Start-->
+          <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+          <!--<lightning-record-form
+          object-api-name="Case"
+          record-id={recordId}
+          columns="2"
+           fields={pickupFields}
+          record-type-id={recordTypeId}
+          mode="edit"
+          onsuccess={closeModal}
+          onreset={closeModal}
+      >   
+      </lightning-record-form>-->
+      <c-prospect-detail-edit-page record-id={recordId} record-type-id={recordTypeId} onclosemodalchild={closeModal}></c-prospect-detail-edit-page>
+          </div>
+          <!--Modal Footer Start-->
+ 
+        </div>
+      </section>
+      <div class="backdropDiv slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

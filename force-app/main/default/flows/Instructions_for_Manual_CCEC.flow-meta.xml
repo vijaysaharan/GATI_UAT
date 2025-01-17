@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <assignments>
+        <name>Instructions_for_Connect</name>
+        <label>Instructions for Connect</label>
+        <locationX>721</locationX>
+        <locationY>288</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.CCEC_Instructions__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Connect Shipment/Arrange delivery and share GA Details</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Instructions_for_Short</name>
+        <label>Instructions for Short</label>
+        <locationX>527</locationX>
+        <locationY>436</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.CCEC_Instructions__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Connect the short shipment and share connectivity details</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Check_CCEC_Reason</name>
+        <label>Check CCEC Reason</label>
+        <locationX>459</locationX>
+        <locationY>180</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>CCEC_Reason_is_Connect</name>
+            <conditionLogic>(1 OR 2) AND 3</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Case__r.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Complaint</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Case__r.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Query</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CCEC_reason__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Connect</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Instructions_for_Connect</targetReference>
+            </connector>
+            <label>CCEC Reason is Connect</label>
+        </rules>
+        <rules>
+            <name>CCEC_Reason_is_Short</name>
+            <conditionLogic>(1 OR 2) AND 3</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Case__r.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Complaint</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Case__r.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Query</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CCEC_reason__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Short</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Instructions_for_Short</targetReference>
+            </connector>
+            <label>CCEC Reason is Short</label>
+        </rules>
+    </decisions>
+    <interviewLabel>Instructions for Manual CCEC {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Instructions for Manual CCEC</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Check_CCEC_Reason</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>OP</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Auto_CCEC_Flag__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>CCEC_reason__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>CCEC__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

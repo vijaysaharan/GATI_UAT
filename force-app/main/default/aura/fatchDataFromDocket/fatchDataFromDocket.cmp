@@ -1,0 +1,11 @@
+<aura:component implements="force:appHostable,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="FetchDataFromDocketController">
+	<aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="DocketNumber" type="String"/>
+    <aura:attribute name="isButtonDisabled" type="Boolean" default="true"/>
+    <div>
+    	<lightning:input name="DocketNumber" value="{! v.DocketNumber }" placeholder="Enter docket number...." label="Docket Number" onchange="{!c.handleInputChange}"/>
+    </div>
+    <div class="slds-m-top_medium" style="text-align: center;">
+    	<lightning:button label="Fetch Data" disabled="{!v.isButtonDisabled}" variant="brand" onclick="{!c.handleFetchData}"/>
+    </div>
+</aura:component>

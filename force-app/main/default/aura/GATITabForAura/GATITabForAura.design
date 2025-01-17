@@ -1,0 +1,3 @@
+<design:component>
+	<design:attribute name="canvasTabsList" label="Canvas Parameters" description="Add in format: TabName|CanvasParamter,TabName|CanvasParameter     Eg:Multi Docket|MultiDocketTracking,Docket Tracking|DocketTracking" />
+</design:component>

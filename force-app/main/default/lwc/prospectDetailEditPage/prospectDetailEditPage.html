@@ -1,0 +1,134 @@
+<template>
+	<template if:true={showspinner}>
+	<div class="exampleHolder">
+		
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </div>
+	</template>
+<lightning-record-edit-form object-api-name="Case" record-id={recordId} record-type-id={recordTypeId}>
+    <div class="slds-grid slds-wrap slds-scrollable" style="height:60vh;width:100%">
+        <div class="slds-col slds-size_1-of-1">
+            <lightning-messages> </lightning-messages>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="OwnerId"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Type" value={type} disabled> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="CaseNumber"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="AccountId"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Sub_Type__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Origin"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Status"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Subject"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Priority"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Description"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="ContactId"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="SuppliedName"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Customer_Name__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="SuppliedPhone"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Customer_Mobile__c" required> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="SuppliedEmail"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Customer_Email__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Shipper_Name__c" required> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Pickup_Address1__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Company_of__c" required> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Pickup_Address2__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Pickup_Status__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Pickup_Address3__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Status_Change_Date__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Pickup_City__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Product__c" required> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Pick_Up_Pincode__c" required> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Actual_Weight__c" required> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Shipper_Location__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Volume__c" required> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Receiver_Pincode__c" required> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Pickup_Date__c" required> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="PickUp_OU__c"> </lightning-input-field>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="Type_of_Package__c"> </lightning-input-field>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2">
+            <lightning-input-field field-name="ProspectStatus__c"></lightning-input-field>
+        </div>
+
+        <div class="slds-col slds-size_1-of-2 slds-hide">
+            <lightning-input-field field-name="Prospect_to_Pickup__c" value={prospectToPickup}> </lightning-input-field>
+        </div>
+
+    </div>
+    <div class="slds-grid slds-wrap ">
+        <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+            <lightning-button class="slds-m-top_small slds-p-around_xx-small" variant="brand" onclick={closeModalchild} label="Cancel">
+            </lightning-button>
+            <lightning-button class="slds-m-top_small slds-p-around_xx-small" variant="brand" type="submit" label="Save">
+            </lightning-button>
+        </div>
+    </div>
+</lightning-record-edit-form>
+</template>

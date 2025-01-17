@@ -1,0 +1,6 @@
+<aura:component implements="force:lightningQuickAction,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:actionOverride,lightning:isUrlAddressable" access="global" >
+    <!--<aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.refresh}"/> -->   
+    
+    <c:oJTFeedbackForm/>
+</aura:component>

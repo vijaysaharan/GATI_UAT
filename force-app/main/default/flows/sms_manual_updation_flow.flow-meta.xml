@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>call_SMSApi_class</name>
+        <label>call SMSApi class</label>
+        <locationX>620</locationX>
+        <locationY>280</locationY>
+        <actionName>SmsAlertOutbound</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>str1</name>
+            <value>
+                <elementReference>get_case.Mobile__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>str2</name>
+            <value>
+                <elementReference>Select_Template</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>SmsAlertOutbound</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>53.0</apiVersion>
+    <choices>
+        <name>ComplaintClosure_DocketNumber</name>
+        <choiceText>Complaint Closure (Docket Number)</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <elementReference>Closurecomplaintdocket</elementReference>
+        </value>
+    </choices>
+    <choices>
+        <name>ComplaintClosurePickupSlipId</name>
+        <choiceText>Complaint Closure (Pickup Slip Id)</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <elementReference>closureComplaintPickupref</elementReference>
+        </value>
+    </choices>
+    <choices>
+        <name>ComplaintRegistrationDocket</name>
+        <choiceText>Complaint Registration with Docket</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <elementReference>complaintRegDocket</elementReference>
+        </value>
+    </choices>
+    <choices>
+        <name>ComplaintRegPick</name>
+        <choiceText>Complaint Registration with PickUp Slip</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <elementReference>ComplaintRegPickSlipNo</elementReference>
+        </value>
+    </choices>
+    <choices>
+        <name>PickupRegistration</name>
+        <choiceText>Pickup Registration</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <elementReference>pickupTemp</elementReference>
+        </value>
+    </choices>
+    <choices>
+        <name>StatusUpdateAcceptance</name>
+        <choiceText>Status Update (Acceptance)</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <elementReference>PickupStatusUpdateAcceptance</elementReference>
+        </value>
+    </choices>
+    <choices>
+        <name>StatusUpdateCancelled</name>
+        <choiceText>Status Update (Cancelled)</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <elementReference>PickupStatusUpdatecancelled</elementReference>
+        </value>
+    </choices>
+    <choices>
+        <name>StatusUpdateFulfilled</name>
+        <choiceText>Status Update (Fulfilled)</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <elementReference>PickupStatusUpdateCompletion</elementReference>
+        </value>
+    </choices>
+    <choices>
+        <name>StatusUpdatePostponed</name>
+        <choiceText>Status Update (Postponed)</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <elementReference>PickupStatusUpdatePostponement</elementReference>
+        </value>
+    </choices>
+    <interviewLabel>sms manual updation flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>sms manual flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>get_case</name>
+        <label>get case</label>
+        <locationX>218</locationX>
+        <locationY>188</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Templates</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <screens>
+        <name>Templates</name>
+        <label>Templates</label>
+        <locationX>403</locationX>
+        <locationY>296</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>call_SMSApi_class</targetReference>
+        </connector>
+        <fields>
+            <name>Select_Template</name>
+            <choiceReferences>PickupRegistration</choiceReferences>
+            <choiceReferences>ComplaintRegistrationDocket</choiceReferences>
+            <choiceReferences>ComplaintClosure_DocketNumber</choiceReferences>
+            <choiceReferences>ComplaintClosurePickupSlipId</choiceReferences>
+            <choiceReferences>StatusUpdateAcceptance</choiceReferences>
+            <choiceReferences>StatusUpdateCancelled</choiceReferences>
+            <choiceReferences>StatusUpdatePostponed</choiceReferences>
+            <choiceReferences>StatusUpdateFulfilled</choiceReferences>
+            <choiceReferences>ComplaintRegPick</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Select Template</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>false</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>get_case</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>Closurecomplaintdocket</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your complaint with reference number {!get_case.CaseNumber} for {!get_case.Sub_Type__c} of docket number {!get_case.Docket_Number__c}, registered on {!get_case.CreatedDate} has been closed on {!get_case.ClosedDate}. Please share your feedback on https://gatidevorg-pvtltd.cs76.force.com/PostIssueResolution?Caseno={!get_case.CaseNumber}. contact us on 1860-123-4284 or customerservice@gati.com in case if you are not satisfied with the resolution. Gati-KWE</text>
+    </textTemplates>
+    <textTemplates>
+        <name>closureComplaintPickupref</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your complaint with reference number {!get_case.CaseNumber} for {!get_case.Sub_Type__c} of pickup reference number {!get_case.Pick_Up_Ref_ID__c}, registered on {!get_case.CreatedDate} has been closed on {!get_case.ClosedDate}. Please share your feedback on https://gatidevorg-pvtltd.cs76.force.com/PostIssueResolution?Caseno={!get_case.CaseNumber}. contact us on 1860-123-4284 or customerservice@gati.com in case if you are not satisfied with the resolution. Gati-KWE</text>
+    </textTemplates>
+    <textTemplates>
+        <name>complaintRegDocket</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your {!get_case.Sub_Type__c} complaint for docket {!get_case.Docket_Number__c} has been registered on {!get_case.CreatedDate} and will be resolved by {!get_case.Expected_Closing_Date__c}. Please use {!get_case.CaseNumber} as a reference for further requirements. Team Gati-KWE</text>
+    </textTemplates>
+    <textTemplates>
+        <name>ComplaintRegPickSlipNo</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your {!get_case.Sub_Type__c} complaint for pickup slip {!get_case.Pick_Up_Ref_ID__c} has been registered on {!get_case.CreatedDate} and will be resolved by {!get_case.Expected_Closing_Date__c}. Please use {!get_case.CaseNumber} as a reference for further requirements. Team Gati-KWE</text>
+    </textTemplates>
+    <textTemplates>
+        <name>PickupStatusUpdateAcceptance</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your pickup request with reference number {!get_case.CaseNumber}, scheduled for {!get_case.Pickup_Date__c} has been assigned to our agent {!get_case.Pickup_GA_Name__c} who can be reached on {!get_case.Pickup_GA_Contact__c}. Contact us on 1860-123-4284 or customerservice@gati.com for assistance needed.Gati-KWE</text>
+    </textTemplates>
+    <textTemplates>
+        <name>PickupStatusUpdatecancelled</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your pickup request with reference number {!get_case.CaseNumber}, scheduled for {!get_case.Pickup_Date__c} has been cancelled due to {!get_case.Non_Pick_Up_Delivery_Reason__c}. Just send Hi as WhatsApp message to 7400012000 to register a complaint in case of disagreement.Gati-KWE</text>
+    </textTemplates>
+    <textTemplates>
+        <name>PickupStatusUpdateCompletion</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your pickup request with reference number {!get_case.CaseNumber} has been fulfilled. The consignment has been picked up from the scheduled address on {!get_case.Pickup_Date__c}. Please note the Docket No {!get_case.Docket_Number__c} for this consignment. Send Hi as a WhatsApp message to 7400012000 for assistance on-the-go with WhatsApp Genie. Gati-KWE</text>
+    </textTemplates>
+    <textTemplates>
+        <name>PickupStatusUpdatePostponement</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your pickup request with reference number {!get_case.CaseNumber}, scheduled for {!get_case.First_Schedule__c} has been postponed to {!get_case.Pickup_Date__c}. Just send Hi as WhatsApp message to 7400012000 to register a complaint in case of disagreement.Gati-KWE</text>
+    </textTemplates>
+    <textTemplates>
+        <name>pickupTemp</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Your pickup request with reference number {!get_case.CaseNumber} has been successfully registered on {!get_case.CreatedDate} and is scheduled for {!get_case.Pickup_Date__c}.Please check for details of prohibited items. https://www.gati.com/tools/prohibited-goods-for-shipping/ Gati-KWE</text>
+    </textTemplates>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

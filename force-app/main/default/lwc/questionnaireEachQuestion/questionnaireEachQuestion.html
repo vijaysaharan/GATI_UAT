@@ -1,0 +1,102 @@
+<template>
+    <div>
+        <div>{questionList.Name}) &nbsp;{questionList.Question__c}</div>
+        <div class="slds-grid slds-wrap">
+            <template if:true={isRadioButton}>
+                <template for:each={optionList} for:item="option">
+                    <div key={option} class={optionClass}>
+                        <label>
+                            <input type="radio" onchange={handleOptionChangeRadio} name={radioName}
+                                value={option}>&nbsp;{option}
+                        </label>
+                    </div>
+                </template>
+                <template if:true={isLead}>
+                    <div class="slds-grid slds-wrap slds-grid_align-spread slds-col slds-size_12-of-12">
+                        <div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input name="FirstName" value={leadList.FirstName} label="First Name"
+                                onchange={handleleadInput}></lightning-input>
+                        </div>
+                        <!--<div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input name="Street" label="Street" value={leadList.Street}
+                                onchange={handleleadInput}></lightning-input>
+                        </div>-->
+                        <div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input name="LastName" value={leadList.LastName} label="Last Name" required
+                                onchange={handleleadInput}></lightning-input>
+                        </div>
+                        <!--<div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input name="City" label="City" value={leadList.City}
+                                onchange={handleleadInput}></lightning-input>
+                        </div>-->
+                        <div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input name="Company" value={leadList.Company} label="Company" required
+                                onchange={handleleadInput}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input type="number" minlength="6" maxlength="6" name="PostalCode" label="Postal Code" value={leadList.PostalCode} required
+                                onchange={handleleadInput}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input type="email" name="Email" value={leadList.Email} label="Email" required
+                                onchange={handleleadInput}></lightning-input>
+                        </div>
+                        <!--<div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input name="State" label="State/Provision" value={leadList.State}
+                                onchange={handleleadInput}></lightning-input>
+                        </div>-->
+                        <div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input minlength="10" maxlength="10" name="MobilePhone" value={leadList.MobilePhone} label="Mobile" required
+                                onchange={handleleadInput}></lightning-input>
+                        </div>
+                        <!--<div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input name="Country" label="Country" value={leadList.Country}
+                                onchange={handleleadInput}></lightning-input>
+                        </div>-->
+                        <!--<div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input type="number" name="Turnover_of_the_Company__c"
+                                value={leadList.Turnover_of_the_Company__c} label="Turnover of Company"
+                                onchange={handleleadInput}></lightning-input>
+                        </div>-->
+                        <div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-input type="number" name="Customer_Potential__c" label="Customer Potential"
+                                value={leadList.Customer_Potential__c} onchange={handleleadInput}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-small-size_11-of-12 slds-large-size_5-of-12">
+                            <lightning-combobox name="Monthly_Spent_on_express_Logistic__c" required label="Potential Per Month"
+                                options={potentialPerMonthList} value={leadList.Monthly_Spent_on_express_Logistic__c}
+                                onchange={handleleadInput}></lightning-combobox>
+                        </div>
+                    </div>
+                </template>
+            </template>
+            <template if:true={isCheckbox}>
+                <template for:each={optionList} for:item="option">
+                    <div key={option} class={optionClass}>
+                        <label>
+                            <input type="checkbox" onchange={handleOptionChangeChechbox} value={option}>&nbsp;{option}
+                        </label>
+                    </div>
+                </template>
+                <template if:true={isOtherSelected}>
+                    <lightning-input class="others-input" style="width: 100%;" name="Others" required
+                        value={othersValue} label="Specify Others" onchange={handleOthers}></lightning-input>
+                </template>
+            </template>
+            <!-- <template if:true={isEmoji}>
+                <template for:each={optionList} for:item="option">
+                    <div key={option} class={optionClass}>
+                        {option}
+                    </div>
+                </template>
+            </template>
+            <template if:true={isNumber}>
+                <template for:each={optionList} for:item="option">
+                    <div key={option} class={optionClass}>
+                       {option}
+                    </div>
+                </template>
+            </template> -->
+        </div>
+    </div>
+</template>

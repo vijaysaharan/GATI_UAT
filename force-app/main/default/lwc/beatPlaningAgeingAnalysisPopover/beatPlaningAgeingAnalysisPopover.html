@@ -1,0 +1,73 @@
+<template>
+    <div class="outer-container" lwc:if={showAccountData}>
+        <table>
+            <tr class="sticky-top-header">
+                <th>Account Name</th>
+                <th>Account Type</th>
+                <th>RPO Name</th>
+                <th>Owner Name</th>
+                <th>Gati Potential</th>
+                <th>Last Visited Date</th>
+                <th>Last Visited By</th>
+                <th>Days Since</th>
+                <th><span>Current Business </span></th>
+                <th>Action</th>
+            </tr>
+            <tr for:each={accountList} for:item="account" key={account.Id}>
+                <td>
+                    <a onclick={handleAccountRedirect} data-id={account.Id}>{account.Name}</a>
+                </td>
+                <td>
+                    {account.account.Customer_Category__c}
+                </td>
+                <td>
+                    {account.rpoOwnerName}
+                </td>
+                <td>
+                    {account.account.Owner.Name}
+                </td>
+                <td>
+                    {account.GatiPotential}
+                </td>
+                <td>
+                    {account.lastVisitedDate}
+                </td>
+                <td>
+                    {account.lastVisitedBy}
+                </td>
+                <td>
+                    {account.DaysSince}
+                </td>
+                <td>
+                    <a onclick={handleShowCurrentBusiness} data-id={account.Id}>Show</a>
+                </td>
+                <td>
+                    <a onclick={handleRedirectCustomerConnect} data-id={account.Id}>Schedule a meeting!</a>
+                </td>
+            </tr>
+        </table> 
+        <div lwc:if={showModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="min-width: 60vw;">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+                        <lightning-icon icon-name="utility:close" size="x-small" variant="inverse"
+                            onclick={handleCloseModel}></lightning-icon>
+                        <span class="slds-assistive-text">Cancel and close</span>
+                    </button>
+                    <div class="slds-modal__header" style="padding: 0px;">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate header"
+                            style="border-radius: 0px;" tabindex="-1">{selectedAccountFor360.Name}</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <c-beat-planing-dashboard-popover account360-data-api={data360} account-data-api={selectedAccountFor360}></c-beat-planing-dashboard-popover>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </div>
+    </div>
+    <div lwc:else class="slds-m-top_medium no-data-found">
+        No Data Found!
+    </div>
+</template>

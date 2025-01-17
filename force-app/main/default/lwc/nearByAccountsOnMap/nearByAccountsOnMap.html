@@ -1,0 +1,37 @@
+<template>
+    <div lwc:if={showMap}>
+        <div class="slds-var-m-bottom_medium slds-grid slds-wrap">
+            <div class="slds-size_1-of-7 slds-grid" style="font-size: small; font-weight: bold;"><div class="slds-var-m-around_small" style="width: 15px; background-color: green; border: 1px solid #ffffff;;"></div> &nbsp; Current</div>       
+            <div class="slds-size_1-of-7 slds-grid" style="font-size: small; font-weight: bold;"><div class="slds-var-m-around_small" style="width: 15px; background-color: blue; border: 1px solid #ffffff;;"></div> &nbsp; Leads</div>       
+            <div class="slds-size_1-of-7 slds-grid" style="font-size: small; font-weight: bold;"><div class="slds-var-m-around_small" style="width: 15px; background-color:#00ddff; border: 1px solid #ffffff;;"></div> &nbsp; Strategic</div>
+            <div class="slds-size_1-of-7 slds-grid" style="font-size: small; font-weight: bold;"><div class="slds-var-m-around_small" style="width: 15px; background-color:#ff5900; border: 1px solid #ffffff;;"></div> &nbsp; Retail</div>
+            <div class="slds-size_1-of-7 slds-grid" style="font-size: small; font-weight: bold;"><div class="slds-var-m-around_small" style="width: 15px; background-color:#a600ff; border: 1px solid #ffffff;;"></div> &nbsp; Partner</div>
+            <div class="slds-size_1-of-7 slds-grid" style="font-size: small; font-weight: bold;"><div class="slds-var-m-around_small" style="width: 15px; background-color:#465e1d; border: 1px solid #ffffff;;"></div> &nbsp; MSME</div>
+            <div class="slds-size_1-of-7 slds-grid" style="font-size: small; font-weight: bold;"><div class="slds-var-m-around_small" style="width: 15px; background-color:#703a07; border: 1px solid #ffffff;;"></div> &nbsp; KEA</div>
+        </div>
+        <div class="slds-var-m-bottom_medium">
+            <lightning-combobox
+                    data-name="range"
+                    label="Range"
+                    value={rangeKM}
+                    placeholder="Select range(km)"
+                    options={rangeOptions}
+                    onchange={handleInputChange} 
+                    ></lightning-combobox>
+        </div>
+        <div class="slds-var-m-bottom_medium">
+            <lightning-map map-markers={mapMarkers} markers-title="Visit Map" onmarkerselect={handleMarkerSelect}
+            selected-marker-value={selectedMarkerValue} zoom-level={zoomLevel} list-view="visible" center={center}> </lightning-map>
+        </div>
+    </div>
+    <div>
+        <template if:false={showMap}>
+            <template if:false={noData}>
+                <lightning-spinner variant="brand" size="large"> </lightning-spinner>
+            </template>
+            <template if:true={noData}>
+                <div style="color: red;font-weight: 600; text-align: center;  margin: 50px; font-size: x-large;">{message}</div>
+            </template>
+        </template>
+    </div>
+</template>

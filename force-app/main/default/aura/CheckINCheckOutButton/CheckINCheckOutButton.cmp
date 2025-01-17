@@ -1,0 +1,4 @@
+<aura:component implements="force:appHostable,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	<aura:attribute name="recordId" type="Id"/>
+    <c:customerConnectCheckInOut recordId="{!v.recordId}"/>
+</aura:component>

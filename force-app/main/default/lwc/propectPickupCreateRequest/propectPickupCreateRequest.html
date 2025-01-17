@@ -1,0 +1,97 @@
+<template>
+    <template if:true={loadingval}>
+        <lightning-spinner size="large"></lightning-spinner>
+    </template>
+    <lightning-record-edit-form object-api-name="Case" onsuccess={handleSuccess}>
+        <div class="slds-grid slds-wrap slds-scrollable" style="height:60vh;width:100%">
+            <div class="slds-col slds-size_1-of-1">
+                <lightning-messages> </lightning-messages>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="OwnerId"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="CaseNumber"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Type" value={defValue} disabled></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Customer_Name__c"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Mobile__c"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Customer_Email__c"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Cargo_Purpose__c"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Pick_Up_Pincode__c" required></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Delivery_Pincode_Location__c" required></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Booking_Basis__c" required></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Product__c"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Actual_Weight__c" required></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="No_Of_Packages__c"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Volume__c" required></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Unit_of_Measurement__c"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Risk_Coverage_Prospect__c" required></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Value__c" onchange={handlechange}></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="COD__c" id="cd" disabled={isDisable}></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="COD_Amt__c" read-only={isReadOnly}></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Warehouse_Delivery__c"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Decl_Cargo_value__c" required></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Pick_Up_Pincode__r.Location__c"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Pickup_Date__c" required></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="ProspectSource__c"></lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="Description"></lightning-input-field>
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap ">
+            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+                <lightning-button class="slds-m-top_small slds-p-around_xx-small" variant="brand"
+                    onclick={closeModalchild} label="Cancel">
+                </lightning-button>
+                <lightning-button class="slds-m-top_small slds-p-around_xx-small" variant="brand" type="submit"
+                    label="Save">
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-record-edit-form>
+</template>

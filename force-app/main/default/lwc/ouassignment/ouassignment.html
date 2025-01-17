@@ -1,0 +1,50 @@
+<template>
+    <lightning-card>
+   <!-- <div class="slds-m-bottom_small">
+       <lightning-input type="text"
+          value={searchValue}
+          label="Organization Master"
+          onchange={searchKeyword}
+          ></lightning-input>
+    </div>
+    <lightning-button label="Search"
+    onclick={handleSearchKeyword}
+    variant="brand"></lightning-button>
+
+    <div style="height: 300px;">
+       <lightning-datatable
+               key-field="id"
+               data={orgMasterRecord}
+               columns={columns}>
+       </lightning-datatable>
+   </div>  -->
+   
+
+
+   <div class="slds-form-element" style="height: fit-content;">
+
+
+       <label class="slds-form-element__label" for="combobox-id-4" id="combobox-label-id-34">Relate To</label>
+       
+        
+       <input type="text" class="slds-input slds-combobox__input slds-has-focus slds-combobox__input-value" id="combobox-id-4" aria-activedescendant="option1" aria-autocomplete="list" aria-controls="listbox-id-4" aria-expanded="true" aria-haspopup="listbox"
+       autocomplete="off" role="combobox" placeholder="Search..." value={searchValue} onchange={searchKeyword}/>
+       <span class="slds-icon_container slds-icon-utility-search slds-input__icon slds-input__icon_right">
+       <svg class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" aria-hidden="true">
+       <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#search"></use>
+       </svg>
+       </span>
+       </div>
+       
+     
+       
+       <lightning-button label="Search"
+       onclick={handleSearchKeyword}
+       variant="brand"></lightning-button>
+    
+
+       <lightning-pill-container items={items}  ></lightning-pill-container>
+
+   </lightning-card>
+   
+</template>

@@ -1,0 +1,9 @@
+<template>
+    <div class="slds-box">
+        <template if:true={visitedValues.data}>
+            <lightning-combobox name="visited" label="Visited" value={value}
+                options={visitedValues.data.values} onchange={handleChange}>
+            </lightning-combobox>
+        </template>
+</div>
+</template>

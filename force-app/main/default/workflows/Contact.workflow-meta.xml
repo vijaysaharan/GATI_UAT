@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>FrontlineChatEmailTemplate</fullName>
+        <description>FrontlineChatEmailTemplate</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Email</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/FrontlineForChatEmailTemplate</template>
+    </alerts>
+    <alerts>
+        <fullName>FrontlineEmailTemplate</fullName>
+        <description>FrontlineEmailTemplate</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Email</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/FrontlineEmailTemplate</template>
+    </alerts>
+    <alerts>
+        <fullName>reminder_for_expiration_of_contract</fullName>
+        <description>reminder for expiration of contract</description>
+        <protected>false</protected>
+        <recipients>
+            <field>LastModifiedById</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Renewal_mailer</template>
+    </alerts>
+    <alerts>
+        <fullName>send_email_to_customer_on_RFQ_enablement</fullName>
+        <description>send email to customer on RFQ enablement</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Email</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/RFQ_checked_email_to_customer</template>
+    </alerts>
+    <rules>
+        <fullName>update contact email</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Contact.Contact_type__c</field>
+            <operation>equals</operation>
+            <value>Primary</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+</Workflow>

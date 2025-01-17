@@ -1,0 +1,60 @@
+<aura:component controller="CustomAccountTeamMemberController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:isUrlAddressable" access="global">       
+    <!-- export attributes start  -->
+       
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <!--Declare Attribute for store Contact Records List-->  
+    <aura:attribute name="ListOfAccountTeamMember" type="Account[]"/> 
+     <lightning:workspaceAPI aura:id="workspace" />
+    <!-- export attributes end-->
+    
+    <!-- Import attributes start  -->
+    <aura:attribute name="ShowModule" type="boolean" default="false"/>
+    <aura:attribute name="showcard" type="boolean" default="false"/>
+    <!-- Import attributes end  -->
+    
+    <!--component attributs -->
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    
+    <!--loading spinner start-->
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- Loading spinner end-->  
+    
+
+    
+    <div>
+        <lightning:card iconName="action:new_case" title="CSV Read">
+            <div class="slds-m-around_small">
+                <div class="slds-grid slds-wrap slds-gutters">
+                    <div class="slds-col slds-size_3-of-12">
+                        <input type="file" class="file" aura:id="file" onchange="{!c.showfiledata}"/>
+                    </div>
+                         
+                    <div class="slds-col slds-size_6-of-12">
+                        <lightning:button label="Create Account Team Member" onclick="{!c.CreateRecord}" class="slds-button slds-button--brand"/>
+                    </div>
+                    
+                    <div class="slds-col slds-large-size_3-of-12 slds-small-size_6-of-12" style="margin-top:-50px;">
+                        <lightning:button iconName="utility:download" variant="brand"
+                            name="Account Team Member" label="Add Service Resource Template" onclick="{!c.download}"></lightning:button>
+      				</div>
+                  
+                </div>
+            </div>
+            </lightning:card>
+        </div>
+        
+        <aura:if isTrue = "{!v.showcard}">
+            <lightning:card>
+                <div id="divCSV">
+                </div>  
+            </lightning:card>
+        </aura:if>
+    </aura:component>

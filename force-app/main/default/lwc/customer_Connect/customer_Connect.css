@@ -1,0 +1,16 @@
+.slds-modal__container {
+    max-width: 90rem !important;
+    width: 90% !important;
+    max-height: 1000rem !important;
+    height: 100% !important;
+}
+
+.slds-modal__content {
+    max-height: 100rem !important;
+    height: 100% !important;
+}
+
+.center-heading {
+    border-bottom: 1px solid rgb(221, 219, 218);
+    text-align: center;
+}

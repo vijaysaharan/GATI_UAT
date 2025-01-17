@@ -1,0 +1,32 @@
+<aura:component implements="force:appHostable,force:lightningQuickActionWithoutHeader,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="GeoLocationController" >
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="forceUpdate" type="Boolean"/> 
+    <aura:attribute name="currentStatus" type="String" default="Performing CheckIn..." />
+    <aura:attribute name="showPopup" type="Boolean" default="false" />
+    <aura:attribute name="selectedOption" type="String" default="No" />
+    <aura:attribute name="DissionValue" type="String" default="" />
+    <aura:handler name="init" value="{!this}" action="{!c.updateGeoLocation}"/>
+    <aura:attribute name="selectedUserId" type="String"/>
+    <aura:attribute name="showUserLookup" type="Boolean" default="false"/>
+    <aura:attribute name="showContinue" type="Boolean" default="true"/>
+    <aura:attribute name="isButtonDisabled" type="Boolean" default="false"/>
+    <aura:if isTrue="{!v.showPopup}">
+        <div class="slds-modal__container">
+            
+            <lightning:recordEditForm recordId="{! v.recordId}" objectApiName="Customer_Connect__c"> 
+                <lightning:inputField fieldName="Accompanied__c" required="true" value="{!v.selectedOption}" onchange="{!c.handleOptionChange}" />
+                <aura:if isTrue="{!v.showUserLookup}">
+                    <lightning:inputField fieldName="AcompaniedWith__c" required="true" value="{!v.selectedUserId}" onchange="{!c.handleAccompaniedWithChange}" /> 
+                </aura:if>
+              	<lightning:inputField fieldName="Key_Discussion__c" required="true" value="{!v.DissionValue}" onchange="{!c.handleDissionChange}" /> 
+            </lightning:recordEditForm> 
+            
+            <aura:if isTrue="{!v.showContinue}">
+                <div class="slds-m-top_medium" style="align-item:center;">
+                    <lightning:button label="Continue" disabled="{!v.isButtonDisabled}" variant="brand" onclick="{!c.handleContinue}"/>
+                </div>
+            </aura:if>
+        </div>
+        
+    </aura:if>
+</aura:component>

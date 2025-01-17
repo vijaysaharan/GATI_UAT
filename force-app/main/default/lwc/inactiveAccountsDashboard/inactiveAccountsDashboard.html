@@ -1,0 +1,21 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-card lwc:if={isContractData} title={heading}>
+        <div class="slds-var-p-around_medium">            
+            <div lwc:if={isContractData}>
+                <lightning-datatable key-field="Contract_Id" 
+                hide-checkbox-column 
+                columns={columnsContract}
+                data={contractData}
+                draft-values={draftValues}
+                ></lightning-datatable>
+            </div>
+            <div lwc:if={isDataAvailable} style="text-align: center; font-size: xx-large; font-weight: bold;">
+                NO DATA FOUND!
+            </div>
+            <div lwc:if={isSpinner}>
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </div>
+        </div>
+    </lightning-card>
+</template>

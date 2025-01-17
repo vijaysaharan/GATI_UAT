@@ -1,0 +1,292 @@
+<template>
+    <lightning-card lwc:if={isDashboardData} title="Salesperson">
+        <div>
+            <div class="slds-m-top_medium" lwc:if={isDashboardData}>
+                <div>
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 1">Particular</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 2">Target <br> (This Month)</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 6">Achievement <br> (This Month) %</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 4">MTD</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 5">LMTD</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 3">YTD</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Revenue
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360.TGT_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360.ACHV_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360.MTD_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360.LMTD_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360.YTD_STRING}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">NBD Revenue
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360NBD.TGT_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360NBD.ACHV_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360NBD.MTD_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360NBD.LMTD_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360NBD.YTD_STRING}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Total Revenue
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360.TGT_TOTAL_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360.ACHV_TOTAL_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360.MTD_TOTAL_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360.LMTD_TOTAL_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.Customer360.YTD_TOTAL_STRING}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">No. of Visits
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.CustomerConnect.TGT_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.CustomerConnect.ACHV_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.CustomerConnect.MTD_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.CustomerConnect.LMTD_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.CustomerConnect.YTD_STRING}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">No. of Visits NBD
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.CustomerConnectNBD.TGT_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.CustomerConnectNBD.ACHV_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.CustomerConnectNBD.MTD_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.CustomerConnectNBD.LMTD_STRING}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{customerData.CustomerConnectNBD.YTD_STRING}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="slds-m-top_medium" lwc:if={isDashboardData}>
+                <div>
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 1">Particular</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 4">MTD</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 2">Gati Potential <br> (MTD)</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 3">LMTD</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 3">Gati Potential <br> (LMTD)</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 5">Overall</div>
+                                </th>
+                                <th class="slds-cell-wrap align-centre" scope="col">
+                                    <div class="slds-truncate" title="Column 5">Gati Potential <br> (Overall)</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Leads Created
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.Lead.MTD}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.Lead.MTDPotential}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.Lead.LMTD}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.Lead.LMTDPotential}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.Lead.OVERALL}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.Lead.OVERALLPotential}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Oppourtunities Created
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityCreated.MTD}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityCreated.MTDPotential}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityCreated.LMTD}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityCreated.LMTDPotential}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityCreated.OVERALL}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityCreated.OVERALLPotential}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Oppourtunities Closed
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityClosed.MTD}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityClosed.MTDPotential}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityClosed.LMTD}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityClosed.LMTDPotential}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityClosed.OVERALL}
+                                    </div>
+                                </td>
+                                <td data-label="Column 1" class="align-right">
+                                    <div class="slds-truncate">{dashboardData.OpportunityClosed.OVERALLPotential}
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+    <div lwc:if={isSpinner}>
+        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+    </div>
+</template>

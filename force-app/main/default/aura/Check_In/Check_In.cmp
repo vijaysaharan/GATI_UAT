@@ -1,0 +1,12 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" controller="GeoLocationController" >
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="forceUpdate" type="Boolean"/> 
+    <aura:attribute name="currentStatus" type="String" default="Performing CheckIn..." />
+    <aura:handler name="init" value="{!this}" action="{!c.updateGeoLocation}"/>
+    <div class="exampleHolder">
+        <ui:message title="" severity="info" closable="true">
+            {!v.currentStatus}
+        </ui:message>
+        <lightning:spinner aura:id="mySpinner" alternativeText="Capturing Location..."/>
+    </div>
+</aura:component>

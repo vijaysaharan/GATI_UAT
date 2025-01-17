@@ -1,0 +1,3 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+     <c:GatiFrameData title="Customer Performance Dashboard" iframeUrl="https://pg-uat.gati.com/GSalesForce/Canvas/CUSTDASHBOARD/CUSTDASHBOARD.jsp?puser=sam_21163"/>
+</aura:component>

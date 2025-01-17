@@ -1,0 +1,19 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" 
+               controller="OUAssignController" access="global" >
+    <aura:attribute name="selectedLookUpRecords" type="sObject[]" default="[]"/>
+    
+    <h1 class="slds-align_absolute-center slds-text-heading_medium slds-m-bottom_medium">OU Assignment</h1>
+	<c:lookupComponent objectName="Organization_Master__c"
+                           field_API_text="Name"
+                           field_API_val="Id"
+                           limit="100"
+                           field_API_search="Pincode__c"
+                           lookupIcon="custom:custom68" 
+                           selItem="{!v.selectedLookUpRecords}" 
+                           placeholder="Enter Pin Code"></c:lookupComponent>
+    
+    <div class="slds-m-top_medium">
+    
+<lightning:button variant="brand" label="Cancel" title="Cancel" onclick="{! c.handleClickCancel }" />
+<lightning:button variant="brand" label="Save" title="Save" onclick="{!c.handleClickSave}" />    </div>
+</aura:component>

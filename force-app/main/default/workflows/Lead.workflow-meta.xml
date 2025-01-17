@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>SendingEmail</fullName>
+        <description>SendingEmail</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Email</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>gsalesforce@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Successful_mail</template>
+    </alerts>
+    <alerts>
+        <fullName>email_owner_on_revisit_date</fullName>
+        <description>email owner on revisit date</description>
+        <protected>false</protected>
+        <recipients>
+            <type>owner</type>
+        </recipients>
+        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Email_lead_owner_on_revisit_date</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Level2</fullName>
+        <field>EscalationLevels__c</field>
+        <literalValue>L2</literalValue>
+        <name>Level2</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Working_Start_Date</fullName>
+        <field>Working_start_Date__c</field>
+        <formula>TODAY()</formula>
+        <name>Update Working Start Date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>set_to_revisit</fullName>
+        <description>Set status to revisit</description>
+        <field>Status</field>
+        <literalValue>Revisit</literalValue>
+        <name>set to revisit</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>update_country</fullName>
+        <field>Country</field>
+        <formula>&apos;India&apos;</formula>
+        <name>update country</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Email lead owner on revisit date</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Lead.Revisit_Date__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <description>Email will be sent to lead owner on revisit date</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <workflowTimeTriggers>
+            <actions>
+                <name>email_owner_on_revisit_date</name>
+                <type>Alert</type>
+            </actions>
+            <offsetFromField>Lead.Revisit_Date__c</offsetFromField>
+            <timeLength>0</timeLength>
+            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
+    <rules>
+        <fullName>Send Email on Lead Creation</fullName>
+        <actions>
+            <name>SendingEmail</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Lead.Email</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Lead status to revisit</fullName>
+        <actions>
+            <name>set_to_revisit</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>Lead.Revisit_Date__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <description>Set Status of Lead to Revisit if revisit date is et in Non Qualified</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Working Start Date Autopopulate</fullName>
+        <actions>
+            <name>Update_Working_Start_Date</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Lead.Status</field>
+            <operation>equals</operation>
+            <value>Working</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>country as india</fullName>
+        <actions>
+            <name>update_country</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>Lead.Country</field>
+            <operation>equals</operation>
+            <value>Null</value>
+        </criteriaItems>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+</Workflow>

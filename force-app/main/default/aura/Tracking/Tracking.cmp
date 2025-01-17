@@ -1,0 +1,3 @@
+<aura:component implements="force:appHostable,flexipage:availableforallpagetypes">
+    <c:GatiFrameData iframeUrl="https://pg-uat.gati.com/GSalesForce/Tracking.jsp?puser=sam_21163" title="Tracking"/> <!--//"https://www.gati.net/GSalesForce/TOOLS/DOCKETTRACKING/DOCKETTRACKING.jsp?puser=PIY_20753"-->
+</aura:component>

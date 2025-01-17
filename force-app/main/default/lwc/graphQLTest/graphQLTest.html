@@ -1,0 +1,13 @@
+<template>
+    <lightning-card title="Graph QL" icon-name="custom:custom55">
+        <div lwc:if={isData}>
+            <lightning-datatable
+            key-field="Industry"
+            hide-checkbox-column
+            columns={columns}
+            data={resultData}
+            ></lightning-datatable>
+        </div>
+    </lightning-card>
+    <lightning-button variant="brand" label="ChangeCondition" onclick={handleChangeWhere} class="slds-m-left_x-small"></lightning-button>
+</template>

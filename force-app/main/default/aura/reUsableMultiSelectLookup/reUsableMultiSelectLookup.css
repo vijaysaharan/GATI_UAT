@@ -1,0 +1,8 @@
+.THIS .inputSize {
+    width:100%; 
+}
+.THIS .customcls
+{
+    pointer-events: none;
+    opacity: 0.5;
+}

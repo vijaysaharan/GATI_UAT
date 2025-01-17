@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>MISButtonFlagTobeFalse</fullName>
+        <field>MISButtonFlag__c</field>
+        <literalValue>0</literalValue>
+        <name>MISButtonFlagTobeFalse</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>MISButtonFlagTobeTrue</fullName>
+        <field>MISButtonFlag__c</field>
+        <literalValue>1</literalValue>
+        <name>MISButtonFlagTobeTrue</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>MIS_Duplicate</fullName>
+        <field>Duplicate__c</field>
+        <formula>TEXT( Customer_Code__r.Customer_Code__c) +  TEXT(Rep_Type__c)  +  Booking_OU__r.REF_Code__c</formula>
+        <name>MIS Duplicate</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>MIS Duplicate</fullName>
+        <actions>
+            <name>MIS_Duplicate</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>AND( NOT( ISBLANK(Customer_Code__r.Customer_Code__c)), NOT( ISBLANK(  TEXT(Rep_Type__c) )),  NOT( ISBLANK( Booking_OU__r.REF_Code__c ) )  )</formula>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>MISButton</fullName>
+        <actions>
+            <name>MISButtonFlagTobeTrue</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>AND( ISCHANGED( LastModifiedDate ) , AND(ISCHANGED( Unique_MIS__c ), MISButtonFlag__c = false))</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>MISButtonFlag</fullName>
+        <actions>
+            <name>MISButtonFlagTobeFalse</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <formula>AND( ISCHANGED( LastModifiedDate ) ,AND(ISCHANGED( Unique_MIS__c ), MISButtonFlag__c = true))</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

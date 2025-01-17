@@ -1,0 +1,130 @@
+.THIS {
+}
+.THIS .slds-button_neutral
+{
+   
+    height:38px !important;
+    width:38px !important;
+    border-radius:50% !important;    
+}
+.THIS .slds-button_brand1
+{
+   
+    height:40px;
+    width:40px;
+    color:white!important;
+    border-radius:60% !important;
+    background: red!important;
+
+}
+.THIS .slds-input_Mobile .slds-input
+{
+    font-size: 2.5rem;
+    padding: .5rem;
+}
+.THIS .slds-input_Mobile .slds-form-element__help
+{
+    font-size: 2rem;
+}
+.THIS .slds-button_brand_Mobile_1
+{
+    margin-left:5px!important;
+    height:5rem!important;
+    width:5rem!important;
+     color:white!important;
+    border-radius:60% !important;
+    background: red!important;
+}
+.THIS .slds-button_brand_Mobile_2
+{
+    margin-left:5px!important;
+    height:5rem!important;
+    width:5rem!important;
+     color:white!important;
+    border-radius:60% !important;
+    background: #f9b101!important;
+}
+.THIS table td {
+    word-wrap: break-word;         /* All browsers since IE 5.5+ */
+    overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+}
+.THIS .slds-table td
+{
+        white-space: inherit !important;
+}
+.THIS .slds-button_brand_Mobile_3
+{
+    margin-left:5px!important;
+    height:5rem!important;
+    width:5rem!important;
+    border-radius:60% !important;
+    color:white!important;
+    background: green!important;
+}
+
+.THIS .slds-button_neutral_Mobile
+{
+    margin-left:5px !important;
+    height:5rem !important;
+    width:5rem !important;
+    border:1px solid;
+    border-radius:60% !important;    
+}
+.THIS .slds-button_brand2
+{
+    margin-left:5px;
+    height:40px;
+    width:40px;
+    color:white!important;
+    border-radius:60% !important;
+    background: #f62a2a!important;
+}
+.THIS .slds-button_brand3
+{
+    margin-left:5px;
+    height:40px;
+    width:40px;
+    border-radius:60% !important;
+    color:white!important;
+    background: #f9b101!important;
+}
+.THIS .slds-button_brand4
+{
+    margin-left:5px;
+    height:40px;
+    width:40px;
+       color:white!important;
+    border-radius:60% !important;
+    background: #ddbf70!important;
+}
+.THIS .slds-button_brand5
+{
+    margin-left:5px;
+    height:40px;
+    width:40px;
+    color:white!important;
+    border-radius:60% !important;
+    background: green!important;
+}
+.THIS .centerContent
+        {        	
+        width:fit-content!important;
+        display: flex;
+    justify-content:center;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        }
+.THIS .ActionButton
+{
+    padding: 2rem;
+    border-radius: 1rem;
+}
+.THIS .servicerating{
+        color: black !important;
+    font-weight: 500;
+   
+}
+.THIS .slds-truncate {
+  
+    white-space: break-spaces;
+}

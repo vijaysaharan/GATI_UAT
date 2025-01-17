@@ -1,0 +1,45 @@
+.outer-container {
+    /* background-color: white;
+    border-radius: 10px; */
+    max-height: 500px;
+}
+
+.outer-container td{
+    border: 1px solid;
+    padding: 0.5rem;
+}
+
+.outer-container th {
+    background-color: rgb(16, 128, 160);
+    color: white;
+    font-weight: bold;
+    border: 1px solid;
+    padding: 0.5rem;
+    border: 1px solid black;
+    padding: 0.5rem;
+}
+
+.sticky-top-header {
+    position: sticky;
+    top: -6%;
+    z-index: 10;
+}
+
+.header {
+    background-color: rgb(16, 128, 160);
+    border-radius: 4px;
+    font-size: 20px;
+    padding: 10px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+}
+
+.no-data-found {
+    background-color: black;
+    font-size: 20px;
+    padding: 10px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+}

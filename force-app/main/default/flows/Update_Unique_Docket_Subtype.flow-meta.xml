@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>57.0</apiVersion>
+    <assignments>
+        <name>Docket_Sub_Type</name>
+        <label>Docket+Sub Type</label>
+        <locationX>578</locationX>
+        <locationY>431</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Unique_Docket_Subtype__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varUDST1</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Docket_Sub_Type_Closed</name>
+        <label>Docket+Sub Type+Closed</label>
+        <locationX>314</locationX>
+        <locationY>551</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Unique_Docket_Subtype__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varUDST3</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Docket_Sub_Type_Open</name>
+        <label>Docket+Sub Type+Open</label>
+        <locationX>50</locationX>
+        <locationY>551</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Unique_Docket_Subtype__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varUDST2</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Check_Sub_Type</name>
+        <label>Check Sub Type</label>
+        <locationX>380</locationX>
+        <locationY>311</locationY>
+        <defaultConnector>
+            <targetReference>Docket_Sub_Type</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Other</defaultConnectorLabel>
+        <rules>
+            <name>STC_Colling_and_Non_Delivered</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Sub_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>NON DELIVERED</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Sub_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>STC COOLING</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Complaint_Status</targetReference>
+            </connector>
+            <label>STC Colling and Non Delivered</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Complaint_Status</name>
+        <label>Complaint Status?</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>Docket_Sub_Type_Closed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Closed</defaultConnectorLabel>
+        <rules>
+            <name>Open</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Complaint_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>O</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Docket_Sub_Type_Open</targetReference>
+            </connector>
+            <label>Open</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>isNewTest</name>
+        <dataType>Boolean</dataType>
+        <expression>IsNew()</expression>
+    </formulas>
+    <formulas>
+        <name>varUDST1</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Docket_Number__c}+ &quot;.&quot; + TEXT({!$Record.Sub_Type__c})</expression>
+    </formulas>
+    <formulas>
+        <name>varUDST2</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Docket_Number__c}+ &quot;.&quot; + TEXT({!$Record.Sub_Type__c})+ &quot;.O&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>varUDST3</name>
+        <dataType>String</dataType>
+        <expression>{!$Record.Docket_Number__c}+ &quot;.&quot; + TEXT({!$Record.Sub_Type__c})+ &quot;.C&quot;</expression>
+    </formulas>
+    <interviewLabel>Update Unique Docket Subtype {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Unique Docket Subtype</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>254</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Sub_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Docket_Number__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

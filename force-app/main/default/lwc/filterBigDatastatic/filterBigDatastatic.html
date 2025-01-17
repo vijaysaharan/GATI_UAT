@@ -1,0 +1,20 @@
+<template>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+    </template>
+    <lightning-card>
+        <div style="display: flex; flex-direction: column;">
+            <div style="display: flex; flex-direction: row;">
+                <lightning-input type="Date" value={fromDate} label="From Date" variant="label-stacked"
+                    onchange={fromDateChange}>
+                </lightning-input>
+                <lightning-input type="Date" value={toDate} label="To Date" variant="label-stacked"
+                    onchange={toDateChange}></lightning-input>
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: center;">
+                <lightning-button variant="brand" label="Submit" onclick={handelsubmit} disabled={disableSubmit}>
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>

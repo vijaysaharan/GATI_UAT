@@ -1,0 +1,378 @@
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-card title="Customer Detail" icon-name="utility:moneybag">
+        <div class="slds-var-p-around_medium">
+            <div class="slds-grid slds-wrap">
+                <div lwc:if={isZoneList} class="slds-var-p-around_small slds-size_1-of-2">
+                    <c-multi-select label="Zone" options={zoneList}
+                        oninputchange={handleZoneSelection}></c-multi-select>
+                </div>
+                <div lwc:if={isUserList} class="slds-var-p-around_small slds-size_1-of-2">
+                    <c-multi-select label="User" is-search="true" options={userOptions}
+                        oninputchange={handleUsersSelection}></c-multi-select>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-var-p-around_small slds-size_1-of-2">
+                    <lightning-input name="contractName" onchange={handleContractNameSearch}
+                        value={contractNameSearchString} label="Search Contract Name" type="search"></lightning-input>
+                </div>
+                <div class="slds-var-p-around_small slds-size_1-of-2">
+                    <lightning-input name="contractNumber" onchange={handleContractSearch} value={contractSearchString}
+                        label="Search Contract Number" type="search"></lightning-input>
+                </div>
+                <div class="slds-var-p-around_small slds-size_1-of-1"
+                    style="display: flex; justify-content: center; margin-top: auto;">
+                    <lightning-button variant="brand" label="Search" disabled={searchDisable} onclick={handleSearchClick}
+                        class="slds-m-left_x-small"></lightning-button>
+                </div>
+            </div>
+            <div class="slds-m-top_medium" lwc:if={isDashboardData}>
+                <div>
+                    <lightning-datatable key-field="AccountId" onrowselection={handleRowSelection}
+                        column-widths-mode="auto" columns={columns} data={dashboardData}></lightning-datatable>
+                </div>
+                <div class="slds-grid slds-m-top_medium" style="justify-content: center;">
+                    <div>
+                        <lightning-button-icon variant="brand" icon-name="utility:jump_to_left" alternative-text="First"
+                            class="slds-m-left_xx-small" disabled={isPervious}
+                            onclick={handleFirst}></lightning-button-icon>
+                    </div>
+                    <div
+                        style="background-color: #d9a661; font-size: medium; font-weight: bold; border-radius: 15px; padding: 5px; margin-left: 5px; margin-right: 5px;">
+                        {currPage} of {totalPage}
+                    </div>
+                    <div>
+                        <lightning-button-icon variant="brand" icon-name="utility:chevronright" alternative-text="Next"
+                            class="slds-m-left_xx-small" disabled={isNext} onclick={handleNext}></lightning-button-icon>
+                    </div>
+                </div>
+                <div lwc:if={isDetailedData} class="slds-m-top_medium">
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="slds-cell-wrap" scope="col">
+                                    <div class="slds-truncate" title="Column 1">Parameters</div>
+                                </th>
+                                <th class="slds-cell-wrap" scope="col">
+                                    <div class="slds-truncate" title="Column 2">MTD</div>
+                                </th>
+                                <th class="slds-cell-wrap" scope="col">
+                                    <div class="slds-truncate" title="Column 6">LMTD</div>
+                                </th>
+                                <th class="slds-cell-wrap" scope="col">
+                                    <div class="slds-truncate" title="Column 3">LM</div>
+                                </th>
+                                <th class="slds-cell-wrap" scope="col">
+                                    <div class="slds-truncate" title="Column 4">L3M</div>
+                                </th>
+                                <th class="slds-cell-wrap" scope="col">
+                                    <div class="slds-truncate" title="Column 5">YTD</div>
+                                </th>
+                                <th class="slds-cell-wrap" scope="col">
+                                    <div class="slds-truncate" title="Column 7">L12M</div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Docket
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.DocketMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate">{calculatedValues.DocketLMTD__c}</div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.DocketLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.DocketL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">{calculatedValues.DocketYTD__c}</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.DocketL12M__c}</div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Volume
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.VolumeMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate">{calculatedValues.VolumeLMTD__c}</div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.VolumeLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.VolumeL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">{calculatedValues.VolumeYTD__c}</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.VolumeL12M__c}</div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Revenue
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.RevenueMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate">{calculatedValues.Revenue_LMTD__c}</div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.RevenueLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.RevenueL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">{calculatedValues.RevenueYTD__c}</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.RevenueL12M__c}</div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Visits
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.VisitsMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate">{calculatedValues.VisitsLMTD__c}</div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.VisitsLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.VisitsL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">{calculatedValues.VisitsYTD__c}</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.VisitsL12M__c}</div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Complaints Open
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.CasesOpenMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate"></div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.CasesOpenLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.CasesOpenL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">{calculatedValues.CasesOpenYTD__c}</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.CasesOpenL12M__c}</div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Complaints Closed
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.CasesClosedMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate"></div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.CasesClosedLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.CasesClosedL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">{calculatedValues.CasesClosedYTD__c}</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.CasesClosedL12M__c}</div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">DIFOT
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.DIFOTMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate"></div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.DIFOTLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.DIFOTL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">NA</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.DIFOTL12M__c}</div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">ABSL
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.ABSLInboundMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate"></div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.ABSLInboundLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.ABSLInboundL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">NA</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.ABSLInboundL12M__c}</div>
+                                </td>
+                            </tr>
+                            <!-- <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">ABSL Outbound
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.ABSLOutboundMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate"></div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.ABSLOutboundLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.ABSLOutboundL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">NA</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.ABSLOutboundL12M__c}</div>
+                                </td>
+                            </tr> -->
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">O/S
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.OutstandingMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate"></div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">NA</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">NA</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">NA</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">NA</div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Collection (Excluding TDS)
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.CollectionMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate"></div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.CollectionLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.CollectionL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">NA</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.CollectionL12M__c}</div>
+                                </td>
+                            </tr>
+                            <tr class="slds-hint-parent">
+                                <td data-label="Column 1">
+                                    <div class="slds-truncate">Yield
+                                    </div>
+                                </td>
+                                <td data-label="Column 2">
+                                    <div class="slds-truncate">{calculatedValues.YieldMTD__c}</div>
+                                </td>
+                                <td data-label="Column 6">
+                                    <div class="slds-truncate">{calculatedValues.Yield_LMTD__c}</div>
+                                </td>
+                                <td data-label="Column 3">
+                                    <div class="slds-truncate">{calculatedValues.YieldLM__c}</div>
+                                </td>
+                                <td data-label="Column 4">
+                                    <div class="slds-truncate">{calculatedValues.YieldL3M__c}</div>
+                                </td>
+                                <td data-label="Column 5">
+                                    <div class="slds-truncate">{calculatedValues.YieldYTD__c}</div>
+                                </td>
+                                <td data-label="Column 7">
+                                    <div class="slds-truncate">{calculatedValues.YieldL12M__c}</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div lwc:if={isNoData} style="text-align: center; font-size: xx-large; font-weight: bold;">
+                NO DATA FOUND!
+            </div>
+            <div lwc:if={isSpinner}>
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </div>
+        </div>
+    </lightning-card>
+</template>

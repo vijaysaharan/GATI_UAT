@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <assignments>
+        <name>assignment</name>
+        <label>assignment</label>
+        <locationX>515</locationX>
+        <locationY>696</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Shipper_Location__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fetching_pickup_pin_code.Location__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.PickUp_OU__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fetching_pickup_pin_code.Parent__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>is_Prospect_Pickup</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Receiver_Pincode</name>
+        <label>Set Receiver Pincode</label>
+        <locationX>383</locationX>
+        <locationY>936</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Receiver_Pincode__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.Delivery_Pincode_Location__r.Name</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>updating_Record</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>Checking_pickup_pin_code</name>
+        <label>Checking pickup pin code</label>
+        <locationX>878</locationX>
+        <locationY>336</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>If_pickup_pincode_is_not_empty</name>
+            <conditionLogic>(2 AND 4) OR (1 AND 3)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Pick_Up_Pincode__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Pick_Up_Pincode__c</leftValueReference>
+                <operator>WasSet</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Pick_Up_Pincode__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Pick_Up_Pincode__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>fetching_pickup_pin_code</targetReference>
+            </connector>
+            <label>If pickup pincode is not empty</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>if_not_null</name>
+        <label>if not null</label>
+        <locationX>669</locationX>
+        <locationY>576</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>not_null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>fetching_pickup_pin_code</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assignment</targetReference>
+            </connector>
+            <label>not null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>is_Prospect_Pickup</name>
+        <label>is Prospect Pickup</label>
+        <locationX>515</locationX>
+        <locationY>816</locationY>
+        <defaultConnector>
+            <targetReference>updating_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Prospect Pickup</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Receiver_Pincode</targetReference>
+            </connector>
+            <label>yes</label>
+        </rules>
+    </decisions>
+    <interviewLabel>deriving location and pickup OU {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>deriving location and pickup OU</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>fetching_pickup_pin_code</name>
+        <label>fetching pickup pin code</label>
+        <locationX>669</locationX>
+        <locationY>456</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>if_not_null</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Pick_Up_Pincode__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Organization_Master__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>updating_Record</name>
+        <label>updating Record</label>
+        <locationX>515</locationX>
+        <locationY>1152</locationY>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>373</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Checking_pickup_pin_code</targetReference>
+        </connector>
+        <filterLogic>(1 OR 2) AND 3</filterLogic>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Pick Up</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Prospect Pickup</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Status</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

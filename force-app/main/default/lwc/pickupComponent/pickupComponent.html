@@ -1,0 +1,17 @@
+<template>
+    <div style="height:900px;">
+    <lightning-record-edit-form
+    record-id=""
+    object-api-name="Case">
+    <lightning-input-field field-name="Pick_Up_Pincode__c" onchange={pickupChange} required="true"> </lightning-input-field>
+    <lightning-input-field field-name="Pickup_Date__c" onchange={pickupDateChange} required="true"> </lightning-input-field>
+    <template if:true={isError}>
+    <span class="slds-text-color_error slds-align_absolute-center" role="alert">{errMsg}</span>
+    </template>
+</lightning-record-edit-form>
+<div class="slds-align_absolute-center slds-var-m-top_medium">
+    <lightning-button variant="brand" label="Cancel" title="Cancel" onclick={onCancel} class="slds-var-m-left_x-smallmall"></lightning-button>
+    <lightning-button variant="brand" label="Continue" title="Continue" onclick={navigateToNewPickupDefaults} class="slds-m-left_x-small" disabled={isDisabled}></lightning-button>
+</div>
+</div>
+</template>

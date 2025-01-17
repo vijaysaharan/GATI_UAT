@@ -1,0 +1,64 @@
+<template>
+    <div class="slds-m-around_small">
+        <template if:true={showspinner}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+
+        <lightning-card class="slds-m-around_small">
+            <div>
+                <h2 class="inlineTitle center-heading slds-p-top--small slds-p-horizontal--medium slds-p-bottom--medium slds-text-heading--medium" data-aura-rendered-by="2:755;a">NEW OJT FEEDBACK FORM</h2>
+            </div>
+
+            <div class="slds-container_center slds-container_large">
+                <lightning-record-edit-form object-api-name="OJT_Feedback_Form__c"  onsuccess={handleSuccess} onsubmit={handleSubmit}>
+                    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                        <lightning-accordion-section name="details" label="Information">
+                            <div class="slds-grid slds-wrap slds-m-around_large slds-gutters">
+                                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12">
+                                    <lightning-input-field field-name="Name" required></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12">
+                                    <lightning-input-field field-name="Date_of_Ride__c" ></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12">
+                                    <lightning-input-field data-accid field-name="Vertical__c"></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12">
+                                    <lightning-input-field field-name="Location__c"></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12">
+                                    <lightning-input-field field-name="Name_of_the_Trainer_Manager__c"></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12">
+                                    <lightning-input-field field-name="First_Call_Start_Time__c"></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12">
+                                    <lightning-input-field field-name="Manager_Trainer_Designation__c"></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12">
+                                    <lightning-input-field field-name="Last_Call_Start_Time__c"></lightning-input-field>
+                                </div>
+                                <div class="slds-col slds-large-size_6-of-12 slds-small-size_12-of-12">
+                                    <lightning-input-field field-name="Total_calls_for_the_day__c"></lightning-input-field>
+                                </div>
+                            </div>
+                        </lightning-accordion-section>
+
+                        <lightning-accordion-section name="calls" label="Add Call">
+                            <div class="slds-m-around_large">
+                                <c-add-call usrid={userId} factorform={form_factor}></c-add-call>
+                            </div>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </lightning-record-edit-form>
+            </div>
+
+            <footer slot="footer">
+                <button class="slds-button slds-button_neutral" onclick={closeModal}>Cancel</button>
+        
+                <lightning-button class="slds-m-top_small slds-m-left_small" name="update" label="Submit" variant="brand" onclick={handlesave}>
+                </lightning-button>
+            </footer>
+        </lightning-card>
+    </div>
+</template>

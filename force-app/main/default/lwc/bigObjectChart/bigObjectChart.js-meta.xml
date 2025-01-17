@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>55.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__RecordPage</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage,lightning__AppPage">
+            <property name="filedName" type="String" label="FieldName" description="Enter the API name of filed for which you want to see data count wise" placeholder="Enter filed api name..."/>
+            <property name="chartType" type="String" label="Chart Type" description="Enter the chart type such as line,pie etc." placeholder="Enter chart type..."/>
+            <property name="dateField" type="Boolean" label="Is Date Type" description="Enter that the fieldname is date type" />
+            <property name="relatedObject" type="String" label="Rlated Object Name" description="Enter that the fieldname is date type" />
+            <property name="relatedFieldAtObject" type="String" label="Lookup field at object" description="Enter that the fieldname is date type" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

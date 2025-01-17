@@ -1,0 +1,31 @@
+<aura:component  controller="OCRcontroller" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	
+	<aura:attribute name="filetype" type="List" default="['.png', '.jpg', '.jpeg']" />
+    <aura:attribute name="multiple" type="Boolean" default="false" />
+    <aura:attribute name="disabled" type="Boolean" default="true" />
+    <aura:attribute name="filename" type="string"/>
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="ocrData" type="object"/>
+    <aura:attribute name="cardDetails" type="object"/>
+    <aura:registerEvent name="ParentNotify" type="c:ParentNotify"/>
+    <div class="slds-container_large">
+     <lightning:card title="Business Card Lead" iconName="custom:custom19">
+         <div class="slds-m-around_medium slds-grid slds-gutters slds-wrap">
+    <div class="slds-large-size_6-of-12 slds-small-size_12-of-12"><lightning:fileUpload label="Upload Card"
+        name="fileUploader"
+        multiple="true"
+        accept="{!v.filetype}"
+       
+        onuploadfinished="{!c.handleUploadFinished}" />
+             </div>
+             <aura:if isTrue="{!not(empty(v.cardDetails))}">    
+             <div class=" slds-large-size_6-of-12 slds-small-size_12-of-12">
+                 
+               <lightning:fileCard fileId="{!v.cardDetails}" description="{!v.filename}"/></div>
+           
+             </aura:if></div>
+            
+             
+    </lightning:card>
+        </div>
+</aura:component>

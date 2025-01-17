@@ -1,0 +1,10 @@
+<aura:component implements="lightning:actionOverride,force:hasRecordId,force:hasSObjectName"> 
+    
+   
+        <div class="slds-text-align_center">
+            <div class="demo-only" style="padding: 0.5rem; background: rgb(22, 50, 92);">
+                <div class="slds-text-color_inverse"> You are not authorized to directly create an ACCOUNT, Create an Account by converting LEAD to ACCOUNT.</div>
+            </div>    
+        </div>
+   
+</aura:component>

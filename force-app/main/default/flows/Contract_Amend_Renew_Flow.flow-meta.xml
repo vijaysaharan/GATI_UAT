@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>52.0</apiVersion>
+    <choices>
+        <name>OpportunityType_AmendLaneAdd</name>
+        <choiceText>Contract Amendment - Lane addition</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Contract Amendment - Lane addition</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <description>Existing Contract - New customer code</description>
+        <name>OpportunityType_AmendNewCode</name>
+        <choiceText>Existing Contract - New customer code</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Existing Contract - New customer code</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>OpportunityType_AmendProdAdd</name>
+        <choiceText>Contract Amendment - Product addition</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Contract Amendment - Product addition</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>opportunityType_amendRateCrctin</name>
+        <choiceText>Contract Amendment- Rate Correction</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Contract Amendment- Rate Correction</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <name>OpportunityType_ammendBasicParametr</name>
+        <choiceText>Contract Amendment - Basic Parameters</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Contract Amendment - Basic Parameters</stringValue>
+        </value>
+    </choices>
+    <choices>
+        <description>Contract Renewal</description>
+        <name>OpportunityType_Renewal</name>
+        <choiceText>Contract Renewal</choiceText>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>Contract Renewal</stringValue>
+        </value>
+    </choices>
+    <decisions>
+        <name>check_record</name>
+        <label>check record</label>
+        <locationX>537</locationX>
+        <locationY>209</locationY>
+        <defaultConnector>
+            <targetReference>not_available</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>check_recordstage</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_latest_Sold_or_Committed_Opty.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Committed</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_latest_Sold_or_Committed_Opty.StageName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Sold</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Clone_opportunity</targetReference>
+            </connector>
+            <label>check recordstage</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>recordId_is_null</name>
+        <label>recordId is null?</label>
+        <locationX>139</locationX>
+        <locationY>302</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>record_Id_check</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Amend_Renew_Contract</targetReference>
+            </connector>
+            <label>record Id check</label>
+        </rules>
+    </decisions>
+    <description>THis will create a Amend or Renew Opportunity for Contract</description>
+    <dynamicChoiceSets>
+        <name>OptyTypepicklist</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Opportunity_Type_Contract__c</picklistField>
+        <picklistObject>Opportunity</picklistObject>
+    </dynamicChoiceSets>
+    <formulas>
+        <name>LinkCreate</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!$Api.Partner_Server_URL_260}, FIND( &apos;/services&apos;, {!$Api.Partner_Server_URL_260})) &amp; {!CreatedOptyID}</expression>
+    </formulas>
+    <formulas>
+        <name>OptyDate</name>
+        <dataType>Date</dataType>
+        <expression>{!$Flow.CurrentDate}+30</expression>
+    </formulas>
+    <interviewLabel>Contract Amend &amp; Renew Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Contract Amend &amp; Renew Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordLookups>
+        <name>Get_latest_Sold_or_Committed_Opty</name>
+        <label>Get latest Sold or Committed Opty</label>
+        <locationX>406</locationX>
+        <locationY>144</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>check_record</targetReference>
+        </connector>
+        <filterLogic>1 AND (2 OR 3)</filterLogic>
+        <filters>
+            <field>AccountId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>StageName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Sold</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>StageName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Committed</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Opportunity</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <screens>
+        <description>Amend or Renew your contract</description>
+        <name>Amend_Renew_Contract</name>
+        <label>Amend/Renew Contract</label>
+        <locationX>387</locationX>
+        <locationY>297</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Get_latest_Sold_or_Committed_Opty</targetReference>
+        </connector>
+        <fields>
+            <name>Select_type_of_Amendment_or_Renwal</name>
+            <choiceReferences>OpportunityType_AmendLaneAdd</choiceReferences>
+            <choiceReferences>OpportunityType_AmendProdAdd</choiceReferences>
+            <choiceReferences>opportunityType_amendRateCrctin</choiceReferences>
+            <choiceReferences>OpportunityType_ammendBasicParametr</choiceReferences>
+            <choiceReferences>OpportunityType_Renewal</choiceReferences>
+            <dataType>String</dataType>
+            <fieldText>Select type of Amendment or Renwal</fieldText>
+            <fieldType>RadioButtons</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>contract_created</name>
+        <label>contract created</label>
+        <locationX>824</locationX>
+        <locationY>57</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Congrats</name>
+            <fieldText>&lt;p&gt;New opportunity is been created for {!OptyTypepicklist}&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;{!LinkCreate}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Click Here&lt;/a&gt; to view.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>not_available</name>
+        <label>not available</label>
+        <locationX>728</locationX>
+        <locationY>203</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>not_possible</name>
+            <fieldText>&lt;p&gt;Can&apos;t Proceed this step no Opportunity with stage name &quot;Committed&quot; or &quot;Sold&quot; found.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>37</locationX>
+        <locationY>52</locationY>
+        <connector>
+            <targetReference>recordId_is_null</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>Create_Clone_opportunity</name>
+        <label>Create Clone opportunity</label>
+        <locationX>574</locationX>
+        <locationY>57</locationY>
+        <connector>
+            <targetReference>contract_created</targetReference>
+        </connector>
+        <flowName>Contract_Amend_Renew_Sub_Flow_Opty_creation</flowName>
+        <inputAssignments>
+            <name>AccountId</name>
+            <value>
+                <elementReference>recordId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>CloseDate</name>
+            <value>
+                <elementReference>OptyDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OpptyTypeContract</name>
+            <value>
+                <elementReference>Select_type_of_Amendment_or_Renwal</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>OptyName</name>
+            <value>
+                <elementReference>Get_latest_Sold_or_Committed_Opty.Name</elementReference>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>CreatedOptyID</assignToReference>
+            <name>NewOptyId</name>
+        </outputAssignments>
+    </subflows>
+    <variables>
+        <name>CreatedOptyID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>OpportunityClone</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Opportunity</objectType>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

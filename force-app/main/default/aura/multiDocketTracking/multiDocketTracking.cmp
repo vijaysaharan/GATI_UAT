@@ -1,0 +1,3 @@
+<aura:component implements="flexipage:availableforallpagetypes">
+    <c:GatiFrameData title="Multi Tracking" iframeUrl="https://pg-uat.gati.com/GSalesForce/Canvas/MULTIDKT/MULTIDKT.jsp?puser=sam_21163"/>
+</aura:component>

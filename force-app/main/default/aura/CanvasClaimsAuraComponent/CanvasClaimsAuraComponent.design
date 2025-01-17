@@ -1,0 +1,10 @@
+<design:component>
+	<design:attribute name="CanvasName" label="Canvas Name" />
+    <design:attribute name="isCMSCanvas" label="Is Canvas for CMS?" default="False" />
+    <design:attribute name="ObjectName" label="Object Name" datasource="Case,MIS__c"/>
+    <design:attribute name="CompanyCode" label="Company Code"/>
+    <design:attribute name="Type" label="Type"/>
+    <design:attribute name="CaseNumber" label="Case Number"/>
+    <design:attribute name="SequenceNumber" label="Sequence Number"/>
+    <design:attribute name="puser" label="puser"/>
+</design:component>

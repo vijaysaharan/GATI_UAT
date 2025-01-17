@@ -1,0 +1,12 @@
+<template>
+
+    <!-- <template if:true={showErrorButton}>
+        <lightning-button variant="destructive" label="Error CSV" onclick={handleErrorCsvClick}></lightning-button>
+    </template> -->
+
+    <lightning-datatable key-field="id" data={tableData} hide-checkbox-column="true" columns={tableColumns}>
+    </lightning-datatable>
+    <div>
+        <canvas class="chart"></canvas>
+    </div>
+</template>

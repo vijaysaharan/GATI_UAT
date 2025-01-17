@@ -1,0 +1,50 @@
+<template>
+  
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-labelledby="element-with-table-label other-element-with-table-label">
+            <thead>
+                <tr class="slds-line-height_reset">
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="Type of Customers">Type of<br/> Customers</div>
+                  </th>
+                  <th class="" scope="col" colspan="3">
+                    <div class="slds-truncate" title="Type of Customers">Daily Avge Sales call per <br/>BDE/BDM  ( From Customer<br/> Connect )</div>
+                  </th>
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="Type of Customers">Avge  size of Sign ups<br/> (Monthly Revenue)<br/> (Biz source Customer 360)</div>
+                  </th>
+                  <th class="" scope="col"  colspan="3">
+                    <div class="slds-truncate" title="Type of Customers">% of Sign ups VS Total<br/> Opportunities - Hit Rate(cut off -<br/> Last day of the month)<br/> (Opportunity =New Contract & <br/>Close one )</div>
+                  </th>
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="Type of Customers">Avge No of days from<br/> opportunities to Signup <br/>( Sign up date (Contract Activation <br/>Date) - Opportunity <br/>Created date )</div>
+                  </th>
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="Type of Customers">Sign-ups Vs Sold number % Trading<br/> (Cut off 60 days after code creation) <br/> (Velocity) (Sign-ups Vs Sold number % <br/>Trading (Cut off 60 days after <br/>code creation) First docket Booking date<br/> - Contract Activation date <br/>( Biz source customer 360 )</div>
+                  </th>
+                  <th class="" scope="col">
+                    <div class="slds-truncate" title="Type of Customers">Promised Revenue<br/> VS Actual Trading % <br/>(NBD Compliance)</div>
+                  </th>
+
+                </tr>
+            </thead>
+            <tbody>
+              <template if:true={recordList}>
+                <template for:each={tableList} for:item="item">
+                 <tr key={item.colList}>
+                  <template for:each={item.colList} for:item="data">
+                    <td key={data}>{data}</td>
+                  </template>
+
+<!-- <td>{item.retailData}</td>
+                  <td>{item.msmeData}</td>
+                  <td>{item.strategicData}</td>
+                  <td>{item.kealData}</td> -->
+</tr>
+
+</template>
+</template>
+</tbody>
+</table>
+
+
+</template>

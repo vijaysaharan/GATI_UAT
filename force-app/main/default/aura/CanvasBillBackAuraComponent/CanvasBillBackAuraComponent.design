@@ -1,0 +1,5 @@
+<design:component>
+	<design:attribute name="CanvasName" label="Canvas Name" />
+    <design:attribute name="isCMSCanvas" label="Is Canvas for CMS?" default="False" />
+    <design:attribute name="ObjectName" label="Object Name" datasource="Case,MIS"/>
+</design:component>

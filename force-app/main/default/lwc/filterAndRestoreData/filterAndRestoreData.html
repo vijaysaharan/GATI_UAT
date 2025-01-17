@@ -1,0 +1,84 @@
+<!-- sldsValidatorIgnore -->
+<!-- sldsValidatorIgnore -->
+<!-- sldsValidatorIgnore -->
+<template>
+    <lightning-card>
+        <div style="display: flex; justify-content: center; width: 100%;">
+            <div style="width: 50%;">
+                <lightning-combobox options={objNameToShow} label="Select Object to Restore" value={selectedObject}
+                    onchange={selectObjectOnChangeHandle} placeholder="Select object to restore"></lightning-combobox>
+            </div>
+        </div>
+        <template if:true={showSearchFields}>
+            <div
+                style="padding-left: 5%; display: flex; flex-direction: row; width: 100%; justify-content: space-between;">
+                <div style=" display: flex; flex-direction: row; width: 80%; justify-content: space-between;">
+                    <template for:each={searchFields} for:item="item">
+                        <div key={item.label} style="padding-top: 2%;">
+                            <div if:true={item.isCheck}>
+                                <lightning-input label={item.label} checked={item.value} type={item.typeOfField}
+                                    onchange={inputChangeHandle} data-id={item.index} disabled={item.isDisable}>
+                                </lightning-input>
+                            </div>
+                            <div if:false={item.isCheck}>
+                                <lightning-input label={item.label} value={item.value} type={item.typeOfField}
+                                    onchange={inputChangeHandle} data-id={item.index} disabled={item.isDisable}>
+                                </lightning-input>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <div style="width: 20%; display: flex; flex-direction: row; justify-content: center;">
+                    <div style="display: flex; flex-direction: column; justify-content: end; padding-top: 2%;">
+                        <lightning-button label="Search" variant="brand" onclick={handleSearchClick}></lightning-button>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template if:true={showDatatable}>
+            <div style="display: flex; flex-direction: column; padding-left: 1%; padding-right: 1%;">
+                <div
+                    style="display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding-top: 2%;">
+                    <div style="font-weight: bold; font-size: large;"> Total record selected : {totalselected} of
+                        {totalRecordCount}</div>
+                    <div>
+                        <lightning-button label="Deselect all" onclick={deselectAllHandle}></lightning-button>
+                        <lightning-button label="Select all" onclick={selectAllHandle}></lightning-button>
+                    </div>
+                </div>
+                <lightning-datatable key-field="index" data={filteredList} columns={columns} show-row-number-column
+                    row-number-offset={rowOffset} default-sort-direction={defaultSortDirection}
+                    sorted-direction={sortDirection} sorted-by={sortedBy} onsort={onHandleSort}
+                    onrowselection={handleSelect} selected-rows={selectedRecordsList}>
+                </lightning-datatable>
+                <div style="display: flex; justify-content: center; padding-top: 2%;">
+                    <div style="padding-right: 2.5%;">
+                        <lightning-button-icon icon-name="utility:chevronleft" label="First" onclick={handleFirst}
+                            disabled={disableFirst}>
+                        </lightning-button-icon>
+                        <lightning-button-icon icon-name="utility:left" label="Previous" onclick={handlePrevious}
+                            disabled={disablePrevious}>
+                        </lightning-button-icon>
+                    </div>
+                    <div style="display: flex; flex-direction: column; justify-content: center;">
+                        {selectedPage} of {noOfPages}
+                    </div>
+                    <div style="padding-left: 2.5%;">
+                        <lightning-button-icon icon-name="utility:right" label="Next" onclick={handleNext}
+                            disabled={disableNext}>
+                        </lightning-button-icon>
+                        <lightning-button-icon icon-name="utility:chevronright" label="Last" onclick={handleLast}
+                            disabled={disableLast}>
+                        </lightning-button-icon>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center; padding-top: 2%;">
+                    <lightning-button label="RESTORE"></lightning-button>
+                    <lightning-button label="DOWNLOAD CSV" onclick={createAndDownloadCsv}></lightning-button>
+                </div>
+            </div>
+        </template>
+
+    </lightning-card>
+</template>

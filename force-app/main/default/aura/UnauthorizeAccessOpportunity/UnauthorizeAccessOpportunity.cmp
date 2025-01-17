@@ -1,0 +1,9 @@
+<aura:component implements="lightning:actionOverride,force:hasRecordId,force:lightningQuickAction,force:hasSObjectName" access="global" >
+	   
+        <div class="slds-text-align_center">
+            <div class="demo-only" style="padding: 0.5rem; background: rgb(22, 50, 92);">
+                <div class="slds-text-color_inverse">You are not authorized to create new OPPORTUNITY from Opportunity page,
+You can create new OPPORTUNITY by converting LEAD to OPPORTUNITY (OR) Creating Amendment/Renewal Opportunity from Contract Account Page.</div>
+            </div>    
+        </div>
+</aura:component>

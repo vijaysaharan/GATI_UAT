@@ -1,0 +1,26 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global"
+                Controller="CreateEventHandler">
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'Planned', 'value': 'Planned'},
+    {'label': 'Postponed', 'value': 'Postponed'},
+    {'label': 'Cancel', 'value': 'Cancel'},
+    {'label': 'Visited', 'value': 'Visited'}
+    ]"/>
+    <aura:attribute name="visited" type="String"/>
+    <aura:attribute name="isSpinner" type="Boolean" default="false"/>
+    
+    <!-- spinner -->
+    <aura:if isTrue="{!v.isSpinner}">
+    <div class="exampleHolder">
+        <lightning:spinner alternativeText="Loading" size="large" />
+    </div>
+    </aura:if>
+        
+    <div class="slds-box">
+       <lightning:combobox name="visited" label="Visited" value="{!v.visited}" placeholder="Select Visited" options="{!v.options }" onchange="{! c.handleChange }"/>        
+    </div>
+    <div class="slds-m-top_medium slds-align_absolute-center">
+    <lightning:button variant="brand" label="Cancel" title="Cancel" onclick="{!c.handleCancel }" />
+     <lightning:button variant="brand" label="Save" title="Save" onclick="{!c.handleSave }" />
+    </div>
+</aura:component>

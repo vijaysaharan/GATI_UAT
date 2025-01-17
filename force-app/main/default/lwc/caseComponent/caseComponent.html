@@ -1,0 +1,150 @@
+<template>
+    <lightning-card>
+        <template if:true={loadingval}>
+            <lightning-spinner size="large"></lightning-spinner>
+
+        </template>
+        <div>
+            <h2 class="inlineTitle center-heading slds-p-top--small slds-p-horizontal--medium slds-p-bottom--medium slds-text-heading--medium"
+                data-aura-rendered-by="2:755;a">New Case</h2>
+        </div>
+        <div class="slds-container_center slds-container_large slds-container">
+            <lightning-accordion allow-multiple-sections-open class="accordion" active-section-name={activeSections}>
+                <lightning-record-edit-form object-api-name="Case" aura-id="caseform" onsuccess={handleSuccess}
+                    onsubmit={handleSubmit} record-type-id={recordTypeId}>
+                    <lightning-messages>
+                    </lightning-messages>
+                    <div class=" slds-grid slds-gutters slds-wrap">
+
+                        <template if:true={isError}>
+                            <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                                <span class="slds-assistive-text">error</span>
+                                <span class="slds-icon_container slds-icon-utility-error slds-m-right_x-small"
+                                    title="Description of icon when needed">
+                                    <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#error"></use>
+                                    </svg>
+                                </span>
+                                <h2>comlain already register against this docket.</h2>
+                            </div>
+                        </template>
+                        <div class="slds-col slds-large-size_12-of-12">
+                            <lightning-accordion-section name="basic" label="Basic Details">
+                                <div class="slds-grid slds-wrap">
+
+                                    <div class="slds-col slds-large-size_4-of-12">
+                                        <lightning-input-field field-name="Type" required value={type} name="Type"
+                                            onchange={handlechange}></lightning-input-field>
+                                    </div>
+                                    <div class="slds-col slds-large-size_4-of-12">
+                                        <lightning-input-field field-name="Sub_Type__c" value={subtype}
+                                            name="Sub_Type__c" onchange={handlechange}></lightning-input-field>
+                                    </div>
+                                    <template if:true={DocketValidate}>
+                                        <div class="slds-col slds-large-size_4-of-12">
+                                            <div>
+                                                <!-- <lightning-input-field message-when-bad-input="Please enter Valid Docket Number" class="docketno" required field-name="Docket_Number__c" value={docket} name="Docket_Number__c" onchange={assigndocket}></lightning-input-field> -->
+                                                <lightning-input type="text" read-only={docketValid} onblur={checkError}
+                                                    variant="label-inline" label="Docket Number"
+                                                    message-when-bad-input="Please enter Valid Docket Number"
+                                                    class="docketno" required value={docket} name="Docket_Number__c"
+                                                    onchange={assigndocket}></lightning-input>
+                                                <template if:true={invaliddocket}>Please enter valid docket
+                                                    number</template>
+                                                <template if:true={docketlength}>
+                                                    <template if:true={loadingval}>
+                                                        Please wait...Validating Docket number <img style="width: 5vh;"
+                                                            src={loadingicon} alt="">
+                                                    </template>
+
+                                                    <template if:true={docketValid}>
+                                                        Docket is Validated <img style="width: 3vh;" src={completedicon}
+                                                            alt="">
+                                                    </template>
+                                                </template>
+
+                                            </div>
+
+                                        </div>
+                                    </template>
+                                    <div class="slds-col slds-large-size_4-of-12">
+                                        <lightning-input-field field-name="RecordTypeId" value={recordTypeId} disabled>
+                                        </lightning-input-field>
+                                    </div>
+                                    <div class="slds-col slds-large-size_12-of-12">
+                                        <div class=" slds-align_absolute-center slds-p-bottom_medium slds-p-top_medium"
+                                            style="border-bottom: 1px solid rgb(221, 219, 218);">
+                                            <lightning-button variant="brand" type="submit" label="Continue"
+                                                disabled={disableContinue}>
+                                            </lightning-button>
+                                            <lightning-button class="slds-m-left_x-small" label="Cancel"
+                                                onclick={onCancel}>
+                                            </lightning-button>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </lightning-accordion-section>
+                        </div>
+                    </div>
+                </lightning-record-edit-form>
+            </lightning-accordion>
+
+        </div>
+    </lightning-card>
+    <template if:false={casePage}>
+        <lightning-card>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="modalSection slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width:70%;max-width:80%">
+                    <!--Modal Header Start-->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close">
+                            <lightning-icon variant="inverse" onclick={closeModal} alternative-text="close"
+                                icon-name="utility:close" size="small"></lightning-icon>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Prospect Pickup</h2>
+                    </header>
+                    <!--Modal Body Start-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <c-propect-pickup-create-request def-value={type} record-type-id={recordTypeId}
+                            onclosemodalchild={closeModal}></c-propect-pickup-create-request>
+                    </div>
+                    <!--Modal Fooer Start-->
+                </div>
+            </section>
+            <div class="backdropDiv slds-backdrop slds-backdrop_open"></div>
+        </lightning-card>
+    </template>
+
+    <!-- this section for pickup -->
+
+    <template if:false={pickupCase}>
+        <lightning-card>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                aria-describedby="modal-content-id-1" class="modalSection slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="width:70%;max-width:80%">
+                    <!--Modal Header Start-->
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            title="Close">
+                            <lightning-icon variant="inverse" onclick={onCancel} alternative-text="close"
+                                icon-name="utility:close" size="small"></lightning-icon>
+                        </button>
+                        <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Pickup</h2>
+                    </header>
+                    <!--Modal Body Start-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                        <c-pickup-component record-type-id={recordTypeId}></c-pickup-component>
+                    </div>
+                    <!--Modal Fooer Start-->
+                </div>
+            </section>
+            <div class="backdropDiv slds-backdrop slds-backdrop_open"></div>
+        </lightning-card>
+    </template>
+
+</template>

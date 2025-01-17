@@ -1,0 +1,45 @@
+<template>
+    <lightning-card icon-name="action:upload">
+        <h1 slot="title">Upload Document</h1>
+        <div>
+            <lightning-combobox
+            class="slds-p-around_medium"
+            label="Document Type"
+            value={documentType}
+            required
+            placeholder="Select Document Type ..."
+            options={documentTypes}
+            onchange={handleTypeChange} 
+            ></lightning-combobox>
+        </div>
+        <div lwc:if={isTypeSelected}>
+            <div>
+                <lightning-input 
+                    type="text" 
+                    class="slds-p-around_medium" 
+                    label="Document Number" 
+                    placeholder="Enter Document Number..." 
+                    value={documentNumber} 
+                    onchange={handleDocumentNumber}
+                    pattern={documentPattern}
+                    message-when-pattern-mismatch={errorMessage}
+                    required="true"
+                ></lightning-input>
+            </div>
+            <div>
+                <lightning-input 
+                    type="file" 
+                    class="slds-p-around_medium" 
+                    label="Document" 
+                    multiple="false" 
+                    disabled={isUploaderDisable} 
+                    onchange={handleFileUpload}
+                    required="true"
+                ></lightning-input>
+            </div>
+        </div>
+        <div slot="footer">
+            <lightning-button variant="brand" label="Send To AWS" disabled={isSendDisable} onclick={handleSendToAWS} class="slds-m-left_x-small"></lightning-button>
+        </div>
+    </lightning-card>
+</template>

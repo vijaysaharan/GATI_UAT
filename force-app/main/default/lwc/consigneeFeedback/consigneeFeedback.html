@@ -1,0 +1,134 @@
+<template>
+  <template if:false={loaded}>
+    <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+  </template>
+    <div class="slds-container_large slds-container_center" style="margin-top: 130px;">
+      <div>
+        <header class="slds-global-header_container branding-header oneHeader"
+          style="background: white; position: fixed; width: 100%; top: 0;">
+          <div class="logo new-logo">
+            <a href="https://www.gati.com"><img src={logoUrl} title="Gati"></a>
+          </div>
+          <div style="background: #0095b1; border-radius: 6px; text-align: center;">
+            <div class="slds-box slds-box_x-small slds-text-color_inverse slds-theme_alert-texture">
+              <dl class="slds-list_inline">HELP US SERVE YOU BETTER-GATIKWE PVT LTD</dl>
+            </div>
+          </div>
+        </header>
+        <br/>
+        <div class="slds-grid slds-wrap slds-gutters_large slds-m-around_small">
+          <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+            <lightning-input name="ConsigneeName__c" required value={ConsigneeFeedbackList.ConsigneeName__c}
+              label="Consignee Name" onchange={handleInput}></lightning-input>
+          </div>
+          <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+            <lightning-input type="email" name="Email__c" label="Email" value={ConsigneeFeedbackList.Email__c} required
+              onchange={handleInput}></lightning-input>
+          </div>
+          <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+            <lightning-input name="ContactPerson__c" required value={ConsigneeFeedbackList.ContactPerson__c}
+              label="Contact Person" onchange={handleInput}></lightning-input>
+          </div>
+          <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+            <lightning-input maxlength="10" minlength="10" name="MobilePhone__c" required
+              value={ConsigneeFeedbackList.MobilePhone__c} label="Phone/Mobile"
+              onchange={handleInput}></lightning-input>
+          </div>
+          <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+            <lightning-combobox name="Gati_Staff_or_Consignee__c" label="Gati Staff or Consignee"
+              options={feedbackPicklist} value={ConsigneeFeedbackList.Gati_Staff_or_Consignee__c}
+              onchange={handleInput}></lightning-combobox>
+          </div>
+          <template if:true={showStaff}>
+            <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+              <lightning-input minlength="5" maxlength="5" name="Staff_Code__c" required
+                value={ConsigneeFeedbackList.Staff_Code__c} label="Staff Code" onchange={handleInput}></lightning-input>
+            </div>
+          </template>
+        </div>
+        <br />
+        <div class="slds-m-around_medium">
+          <span style="font-size: 13px;">Thanks for patronage in our services.</span><br /><br />
+          <span style="font-size: 13px;">We would be grateful if you could spare a few minutes to complete this Customer
+            Satisfaction Questionnaire to help us ensure that our standard of customer care exceeds expectations
+            wherever possible. Please tick the appropriate box to indicate your degree of satisfaction.</span>
+        </div>
+        <!--Table Here-->
+      </div>
+    </div>
+    <template if:true={questions}>
+      <div class="slds-container_large slds-container_center">
+        <template for:each={questions} for:item="question">
+          <div key={question.Id} style="width: 100%; margin:4px 4px">
+            <c-questionnaire-each-question 
+            emailaddress={ConsigneeFeedbackList.Email__c} 
+            phonenumber={ConsigneeFeedbackList.MobilePhone__c} 
+            consigneename={ConsigneeFeedbackList.ConsigneeName__c} 
+            lastname={ConsigneeFeedbackList.ContactPerson__c} 
+            question-list={question} oninputchange={handleInputChange}
+              onotherchange={handleOthersChange} onleadchange={handleleadchange}></c-questionnaire-each-question>
+            <br />
+          </div>
+        </template>
+      </div>
+      <div class="slds-container_large slds-container_center">
+        <div class="slds-col slds-small-size_12-of-12 slds-large-size_12-of-12">
+          <lightning-input name="Strength__c" value={ConsigneeFeedbackList.Strength__c} label="Gati's Strength"
+            onchange={handleInput}></lightning-input>
+        </div>
+        <div class="slds-col slds-small-size_12-of-12 slds-large-size_12-of-12">
+          <lightning-input name="Comments__c" value={ConsigneeFeedbackList.Comments__c} label="Comments"
+            onchange={handleInput}></lightning-input>
+        </div>
+        <!--<div class="slds-grid slds-small-size_12-of-12 slds-large-size_12-of-12" style="margin: 15px 0px;">
+          <button onclick={handleSave} class="slds-col slds-size_12-of-12 slds-small-size_12-of-12"
+            style="background-color: rgba(0,149,177,1); color:White; background:rgba(0,149,177,1);">Save</button>
+        </div>-->
+        <div class="slds-grid slds-justify-center slds-small-size_12-of-12 slds-large-size_12-of-12" style="margin: 15px 0px;">
+          <div class="slds-col slds-align_absolute-center">
+            <button onclick={handleSave} class="slds-size_12-of-12 slds-small-size_2-of-12"
+              style="background-color: rgba(0,149,177,1); color:White; background:rgba(0,149,177,1); font-size: 20px;">Save</button>
+          </div>
+        </div>        
+      </div>
+    </template>
+    <template if:true={thankYouMessage}>
+      <div class="custom-toast">
+        <div class="custom-toast-header slds-grid slds-grid_align-spread">
+          <div class="custom-toast-title slds-col">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 1024 1024">
+              <path fill="#ffffff"
+                d="M512 64a448 448 0 1 1 0 896a448 448 0 0 1 0-896zm-55.808 536.384l-99.52-99.584a38.4 38.4 0 1 0-54.336 54.336l126.72 126.72a38.272 38.272 0 0 0 54.336 0l262.4-262.464a38.4 38.4 0 1 0-54.272-54.336L456.192 600.384z" />
+            </svg>
+            &nbsp;Thank You
+          </div>
+          <div class="slds-col slds-shrink">
+            <button class="custom-toast-close" onclick={handleClose}>&times;</button>
+          </div>
+        </div>
+        <div class="custom-toast-body">
+          <div class="custom-toast-message">Thank you for taken your time to provide us with your valuable feedback.
+          </div>
+        </div>
+      </div>
+    </template>
+    <template if:true={ErrorMessage}>
+      <div class="custom-toast-error">
+        <div class="custom-toast-header slds-grid slds-grid_align-spread">
+          <div class="custom-toast-title slds-col">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512">
+              <path fill="white"
+                d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM64 256c0-106.1 86-192 192-192c42.1 0 81 13.7 112.6 36.7L100.7 368.6C77.7 337 64 298.1 64 256zm192 192c-42.1 0-81-13.7-112.6-36.7l267.9-267.9c23 31.7 36.7 70.5 36.7 112.6c0 106.1-86 192-192 192z" />
+            </svg>
+            &nbsp;Error
+          </div>
+          <div class="slds-col slds-shrink">
+            <button class="custom-toast-close" onclick={handleErrorClose}>&times;</button>
+          </div>
+        </div>
+        <div class="custom-toast-body">
+          <div class="custom-toast-message">{errorDetail}</div>
+        </div>
+      </div>
+    </template>
+</template>

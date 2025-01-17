@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage,lightning__AppPage">
+            <property name="relatedObjectName" type="String" required="true" label="Related Object" description="Enter the API name of the related object that you want to see" placeholder="Enter reated object api name..."/>
+            <!-- <property name="relatedFieldList" type="String" required="true" label="Fields to show" description="Enter the api name of filelds that you want to see in the reated list comma seprated. If you wish to see a Big Object make sure that all indx field are included." placeholder="Enter comma seprated values..." /> -->
+            <property name="relatedLookup" type="String" required="true" label="Lookup fields" description="Enter the api name of lookup filed at the object you want to see." placeholder="Enter the lookup api name..." />
+            <property name="pageLimit" type="Integer" label="Record on page" description="Enter the number of record you want to see on one page"  />
+            <!-- <property name="bigObjectIndex" type="String" label="Index sequence" description="Enter the sequence of index for big object"  /> -->
+            <!-- <property name="restoreTo" type="String" label="Restore to object" description="Enter the object api to which archived record get restored" /> -->
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

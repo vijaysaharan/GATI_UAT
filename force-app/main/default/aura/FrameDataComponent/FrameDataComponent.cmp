@@ -1,0 +1,18 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	
+    <div>
+    <lightning:button label="Refresh" onclick="{!c.onRefreshView}" class="slds-button slds-button--brand"/>
+    </div>
+    
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="RecordFields" type="Object" />
+    <aura:attribute name="Url" type="String" />
+    <aura:attribute name="StaffCode" type="String" />
+    <aura:attribute name="Title" type="String" default=""/>
+    <force:recordData recordId="{!$SObjectType.CurrentUser.Id}"
+                      layoutType="FULL"
+                      targetFields="{!v.record}"
+                      recordUpdated="{!c.myAction}"/>   
+    <c:GatiFrameData iframeUrl="{!v.Url}" title="{!v.Title}"/>
+        
+</aura:component>

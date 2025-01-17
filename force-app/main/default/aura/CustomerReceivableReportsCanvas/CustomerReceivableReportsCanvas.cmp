@@ -1,0 +1,3 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <c:GatiFrameData title="Customer Receivable Dashboard" iframeUrl="https://pg-uat.gati.com/GSalesForce/CUSTRECEIVABLERPT.jsp?puser=sam_21163"/>
+</aura:component>

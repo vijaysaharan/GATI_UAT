@@ -1,0 +1,163 @@
+<template>
+    <lightning-card>
+
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+
+        <div style="display: flex; flex-direction: column;">
+            <template if:true={firstPage}>
+                <div style="display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: end; flex-direction: row;">
+                        <div style="padding-right: 2.5%;">
+                            <lightning-input type="search" placeholder="Search objects here..." variant="label-hidden"
+                                value={searchedObjectValue} onchange={handleObjectSearch}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                    <div style="width: 100%; display: flex; flex-direction: row; justify-content: center;">
+                        <div style="width: 95%;">
+                            <lightning-combobox label="Objects" value={selectedObject} placeholder="Select Object"
+                                options={searchedObjectList} onchange={handleObjectSelectionChange}>
+                            </lightning-combobox>
+                        </div>
+                    </div>
+                    <div style="padding-top:2%;">
+                        <template if:true={showFieldList}>
+                            <!-- <div
+                                style="display: flex; justify-content: space-between; flex-direction: row; padding-left: 2.5%; padding-right: 2.5%;">
+                                <lightning-input type="search" placeholder="Search fields by label here..."
+                                    variant="label-hidden" value={searchedFieldValue} onchange={handleFieldSearch}>
+                                </lightning-input>
+                                <lightning-button label="SelectAll" variant="brand" onclick={handleselectAllField}>
+                                </lightning-button>
+                            </div> -->
+                            <div style="display: flex; flex-direction: row; justify-content: center; width: 100%;">
+                                <div style="width: 95%;">
+                                    <!-- <lightning-dual-listbox label="Select Fields" source-label="Available Fields"
+                                        selected-label="Selected Fields" field-level-help="Select your field"
+                                        options={searchedFieldOption} onchange={handleFieldChange} min="1"
+                                        value={selectedFields}>
+                                    </lightning-dual-listbox> -->
+                                    <c-custom-data-table-type key-field="value" data={allFieldData} columns={columns}
+                                        oninputchange={handleChangeInput} oncheckboxchange={handleChangeSelection}
+                                        onrowselection={getSelectedValue} selected-rows={selectedFileds}
+                                        oncombochange={handleOrderChange}>
+                                    </c-custom-data-table-type>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; justify-content: center; width: 100%;">
+                                <div style="width: 95%;">
+                                    <lightning-input type="text" variant="label-stacked" value={bigObjectName}
+                                        onchange={hangleBigNameChange} label="Big Object Name" required>
+                                    </lightning-input>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: row; justify-content: center; padding-top: 2%;">
+                                <div>
+                                    <lightning-button label="Create Big Object" onclick={handleCreate} variant="brand"
+                                        disabled={disableCreateBigObj}>
+                                    </lightning-button>
+                                </div>
+                            </div>
+                            <!-- <div
+                                style="display: flex; flex-direction: row; justify-content: end; padding-top: 2%; padding-right: 2.5%;">
+                                <lightning-button label="Next" disabled={disableNext} onclick={handleNextClick}
+                                    variant="brand">
+                                </lightning-button>
+                            </div> -->
+                        </template>
+                    </div>
+                </div>
+            </template>
+            <!-- <template if:false={firstPage}>
+                <div style="width: 100%; display: flex; flex-direction: row; justify-content: start;">
+                    <div>
+                        <lightning-button label="Previous" onclick={handleNextPrevious}></lightning-button>
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <div
+                        style="width: 100%; display: flex; flex-direction: row; justify-content: center; padding-top: 2%;">
+                        <div style="width: 95%;">
+                            <lightning-dual-listbox label="Select Index" source-label="Available Fields"
+                                selected-label="Selected Fields" field-level-help="Select your Index in order you want"
+                                options={selectedFieldForIndex} onchange={handleIndexChange} min="1" max="5">
+                            </lightning-dual-listbox>
+                        </div>
+                    </div>
+                    <div style="width: 100%; display: flex; flex-direction: row; justify-content: center;">
+                        <div style="padding-top: 2%;">
+                            <lightning-button label="Select Order Direction" disabled={disableFinalNext}
+                                onclick={handleFinalNextClick} variant="brand">
+                            </lightning-button>
+                        </div>
+                    </div>
+                    <div style="width: 100%; display: flex; flex-direction: row; justify-content: center;">
+                        <div style="padding-top: 2%; width: 95%;">
+                            <template if:true={finalPage}>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped"
+                                    aria-label="Example table of Opportunities with striped rows">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th>
+                                                Field
+                                            </th>
+                                            <th>
+                                                Direction
+                                            </th>
+                                            <th>
+                                                Length
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={inputforFieldDirection} for:item="item">
+                                            <template if:true={item.indexed}>
+                                                <tr key={item.apiName} class="slds-hint-parent">
+                                                    <td>{item.labelName}</td>
+                                                    <td>
+                                                        <lightning-combobox variant="label-hidden"
+                                                            options={directionOption} value={item.sortDirection}
+                                                            data-id={item.apiName} onchange={handleTableInputChange}>
+                                                        </lightning-combobox>
+                                                    </td>
+                                                    <td>
+                                                        <lightning-input type="number" variant="label-hidden"
+                                                            data-id={item.apiName} onchange={handleLengthInputChange}
+                                                            value={item.lengthOfField}>
+                                                        </lightning-input>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </template>
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <div
+                                        style="display: flex; flex-direction: row; justify-content: center; padding-top: 2%; width: 100%;">
+                                        <div style="width: 60%;">
+                                            <lightning-input type="text" variant="label-stacked" value={bigObjectName}
+                                                onchange={hangleBigNameChange} label="Big Object Name" required>
+                                            </lightning-input>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    style="display: flex; flex-direction: row; justify-content: center; padding-top: 2%;">
+                                    <div>
+                                        <lightning-button label="Create Big Object" onclick={handleCreate}
+                                            variant="brand" disabled={disableCreateBigObj}>
+                                        </lightning-button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </template> -->
+        </div>
+    </lightning-card>
+</template>

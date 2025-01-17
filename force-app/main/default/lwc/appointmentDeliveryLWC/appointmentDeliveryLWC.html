@@ -1,0 +1,133 @@
+<template>
+    <template if:true={isSpninner}>
+    <div class="">
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </div>
+    </template>
+<div>
+    <lightning-card icon-name="action:new_case" title="Bulk Update Appointment Delivery by CSV">
+        <div slot="actions">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-large-size_12-of-12 slds-small-size_12-of-12">
+                    <lightning-button icon-name="utility:download" class="slds-m-around_medium" variant="brand" name="lead" label="Appointment Delivery Template" onclick={download} alternative-text="Show More" slot="actions"></lightning-button>
+                </div>
+
+            </div>
+        </div>
+
+        <div slot="footer">
+            <lightning-button onclick={cancel} label="Cancel"></lightning-button>
+
+        </div>
+        <lightning-spinner if:true={loading}></lightning-spinner>
+        <div class="slds-m-around_small">
+            <div class="slds-grid slds-wrap slds-gutters">
+
+                <div class="slds-col slds-size_6-of-12">
+                    <lightning-input type="file" label="CSV File" multiple="false" accept=".csv" onchange={handlecsvUpload}></lightning-input>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="slds-var-m-left_large">
+            <p style="color: #02a3d6;">Mandatory Field : Docket Number, Appointment Contact Number, Appointment Contact Person, Appointment Date</p>
+            <br/>
+            <p style="color: #02a3d6;">Format : Appointment Date (YYY-MM-DD hh:mm:ss eg: 2021-10-01 14:20:00)</p>
+            <br>
+
+        </div>
+
+
+
+        <div>
+
+            <template if:true={sho}>
+                    <lightning-card icon-name="utility:preview" title="Preview">
+
+                        <div slot="actions">
+                            <template if:true={showSave}>
+                                <lightning-button variant="brand" label="save" onclick={save}
+                                    alternative-text="Show More" slot="actions" disabled={dissave}></lightning-button>
+                            </template>
+        </div>
+
+
+        <lightning-datatable class="slds-max-medium-table_stacked" data={visiblerecords} columns={columns} key-field="ID" onrowselection={getSelectedName} hide-checkbox-column>
+        </lightning-datatable>
+        <div slot="footer" class="slds-var-m-vertical_medium">
+            <c-pagination-server records={rowsTotal} onupdate={updateData}></c-pagination-server>
+        </div>
+
+    </lightning-card>
+    </template>
+
+    <template if:true={isSuccessError}>
+    <div class="slds-float_right slds-var-m-bottom_medium">
+        <lightning-button variant="success" label="Success Log" title="Success Log" onclick={handleSuccessLog} class="slds-m-left_x-small"></lightning-button>
+        <lightning-button variant="destructive" label="Error Log" title="Error Log" onclick={handleErrorLog} class="slds-m-left_x-small"></lightning-button>
+    </div>
+    </template>
+
+
+    <template if:true={showtable}>
+                    <table class="slds-table slds-table_bordered slds-border_left slds-border_right">
+                        <thead>
+                            <tr class="slds-line-height_reset">
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Name">Failed/Success</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Error">Docket Number</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Error">Appointment Contact Number</div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Error">Appointment Contact Person </div>
+                                </th>
+                                <th class="" scope="col">
+                                    <div class="slds-truncate" title="Error">Appointment Date</div>
+                                </th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template iterator:obj={dataresults}>
+                                <tr key={obj.value.title}>
+                                    <td data-label="Some Custom Column">
+                                        <div class="slds-truncate">
+                                            {obj.value.title}
+                                        </div>
+                                    </td>
+                                    <td data-label="Some Custom Column">
+                                        <div class="slds-truncate">
+                                            {obj.value.obj.Docket_Number__c}
+                                        </div>
+                                    </td>
+                                    <td data-label="Some Custom Column">
+                                        <div class="slds-truncate">
+                                            {obj.value.obj.Appointment_Contact_Number__c}
+                                        </div>
+                                    </td>
+                                    <td data-label="Some Custom Column">
+                                        <div class="slds-truncate">
+                                            {obj.value.obj.Appointment_Contact_Person__c}
+                                        </div>
+                                    </td>
+                                    <td data-label="Some Custom Column">
+                                        <div class="slds-truncate">
+                                            {obj.value.obj.Appointment_Date__c}
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </template>
+    </tbody>
+    </table>
+    </template>
+</div>
+
+</lightning-card>
+</div>
+</template>

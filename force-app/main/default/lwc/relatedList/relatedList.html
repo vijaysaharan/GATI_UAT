@@ -1,0 +1,136 @@
+<template>
+    <div if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+    </div>
+    <lightning-card>
+        <div style="display: flex; justify-content: space-between; padding-right: 5%;">
+            <div style="display: flex; flex-direction: column;">
+                <div style="font-weight: bold; font-size: large;"> Total reocrd count : {totalRecordCount}</div>
+                <div style="height: 50%;">
+                    <lightning-button label="Download CSV" variant="brand" onclick={handleCsvClick}
+                        disabled={disableDownload}></lightning-button>
+                </div>
+            </div>
+            <div style="width: 40%;">
+                <div class="slds-form-element">
+                    <label class="slds-form-element__label" for="text-input-id-55" style="font-weight: bold;">Search
+                        Bar</label>
+                    <div style="display: flex; " class="slds-form-element__control">
+                        <input type="text" id="text-input-id-55" placeholder="Search…" class="slds-input"
+                            value={searchValue} style="width: 95%; border: none transparent; outline: none;"
+                            onchange={handleSearch} />
+                        <lightning-button-icon icon-name="utility:search" alternative-text="Search"
+                            class="slds-m-left_xx-small" title="Search"
+                            style="width: 5%; border: none transparent; outline: none;" onclick={handleSearchClick}>
+                        </lightning-button-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-scrollable" style="height: 300px;">
+            <template if:true={showTable}>
+                <lightning-datatable key-field="index" data={filteredList} columns={columns} show-row-number-column
+                    row-number-offset={rowOffset} default-sort-direction={defaultSortDirection}
+                    sorted-direction={sortDirection} sorted-by={sortedBy} onsort={onHandleSort}
+                    onrowaction={handleRowAction} onclick={handleDataTabelClick} hide-checkbox-column>
+                </lightning-datatable>
+            </template>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <div>
+                <lightning-button-icon icon-name="utility:chevronleft" label="First" onclick={handleFirst}
+                    disabled={disableFirst}>
+                </lightning-button-icon>
+                <lightning-button-icon icon-name="utility:left" label="Previous" onclick={handlePrevious}
+                    disabled={disablePrevious}>
+                </lightning-button-icon>
+            </div>
+            <div style="width: 10%; display: flex; justify-content: center;">
+                <div style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+                    {selectedPage} of {noOfPages}
+                </div>
+            </div>
+            <div>
+                <lightning-button-icon icon-name="utility:right" label="Next" onclick={handleNext}
+                    disabled={disableNext}>
+                </lightning-button-icon>
+                <lightning-button-icon icon-name="utility:chevronright" label="Last" onclick={handleLast}
+                    disabled={disableLast}>
+                </lightning-button-icon>
+            </div>
+        </div>
+    </lightning-card>
+    <template if:true={showModel}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">View Details</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                        <template for:each={dataToView} for:item="itemOut">
+                            <lightning-accordion-section name={itemOut.sectionLabel} label={itemOut.sectionLabel}
+                                key={itemOut.sectionLabel}>
+                                <template for:each={itemOut.sectionData} for:item="item">
+                                    <div style="padding-top: 2%;" key={item.label}>
+                                        <div if:true={item.isCheck}>
+                                            <lightning-input label={item.label} checked={item.data} type="checkbox"
+                                                disabled="true">
+                                            </lightning-input>
+                                        </div>
+                                        <div if:false={item.isCheck}>
+                                            <lightning-input label={item.label} value={item.data}
+                                                type={item.typeOfField} disabled="true">
+                                            </lightning-input>
+                                        </div>
+                                    </div>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+                    </lightning-accordion>
+
+                </div>
+                <div class="slds-modal__footer">
+
+
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                        onclick={handleModelClose}>Cancel</button>
+                    <!-- <template if:true={isBigObj}>
+                        <button class="slds-button slds-button_neutral" aria-label="Restore"
+                            onclick={handleResote}>Restore</button>
+                    </template> -->
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+    <template if:true={viewRelatedRecord}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-02"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width: 100%; max-width: 100%;">
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-02" class="slds-modal__title slds-hyphenate">View Related Record</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2"
+                    style="height: 70%; max-height: 70%;">
+                    <!-- <c-related-list related-object-name="CCECBIGOBJECT__b" related-field-list="Case__c,CreatedDate__c"
+                        related-lookup="Case__c" record-id={idToPass} big-object-index="Case__c,CreatedDate__c">
+                    </c-related-list> -->
+                    <c-call-related-for-child child-string={childData} record-id={idToPass}></c-call-related-for-child>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close"
+                        onclick={handleViewRelatedRecordCancel}>Cancel</button>
+                    <!-- <template if:true={isBigObj}>
+                        <button class="slds-button slds-button_neutral" aria-label="Restore"
+                            onclick={handleResote}>Restore</button>
+                    </template> -->
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+</template>

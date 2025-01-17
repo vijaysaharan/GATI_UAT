@@ -1,0 +1,40 @@
+<template>
+    <div lwc:if={LOCATION_CHECK}>
+        <div class="slds-var-p-around_medium" style="text-align: center;">
+            <lightning-record-edit-form
+                object-api-name={objectApiName}
+                record-id={recordId}
+            >
+            <div class="slds-var-m-bottom_small">
+                <div class="slds-var-m-bottom_small" style="margin: auto; text-align: left; font-weight: bold;">Accompanied</div>
+                <div>
+                    <lightning-input-field variant="label-hidden" field-name="Accompanied__c" required="true" value={inputData.Accompanied__c} onchange={handleAccompaniedChange}>
+                    </lightning-input-field>
+                </div>
+            </div>
+            <div lwc:if={isAccompanied} class="slds-var-m-bottom_small">
+                <div class="slds-var-m-bottom_small" style="margin: auto; text-align: left; font-weight: bold;">Acompanied With</div>
+                <div>
+                    <lightning-input-field variant="label-hidden" field-name="AcompaniedWith__c" required="true" value={inputData.AcompaniedWith__c} onchange={handleAccompaniedChange}>
+                    </lightning-input-field>
+                </div>
+            </div>
+            <div class="slds-var-m-bottom_small">
+                <div class="slds-var-m-bottom_small" style="margin: auto; text-align: left; font-weight: bold;">Key Discussion Description</div>
+                <div>
+                    <lightning-input-field variant="label-hidden" field-name="Key_Discussion_Description__c" required="true" value={inputData.Key_Discussion_Description__c} onchange={handleAccompaniedChange}>
+                    </lightning-input-field>
+                </div>
+            </div>
+            <div class="slds-var-m-bottom_small">
+                <div class="slds-var-m-bottom_small" style="margin: auto; text-align: left; font-weight: bold;">Closure Remarks</div>
+                <div>
+                    <lightning-input-field variant="label-hidden" field-name="Closure_Remarks__c" required="true" value={inputData.Closure_Remarks__c} onchange={handleAccompaniedChange}>
+                    </lightning-input-field>
+                </div>
+            </div>
+            <lightning-button lwc:if={isButtonVisible} variant="brand" disabled={isContinueDisable} label="Continue" onclick={handleContinueClick}></lightning-button>
+            </lightning-record-edit-form>
+        </div>
+    </div>
+</template>

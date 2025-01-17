@@ -1,0 +1,60 @@
+<template>
+    <lightning-card icon-name="action:new_person_account" alternative-text='change_owner' size='large' title=" Add Service Resources" >
+        <div slot="actions">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-large-size_12-of-12 slds-small-size_12-of-12">
+                    <lightning-button icon-name="utility:download" class="slds-m-around_medium" variant="brand" name="account" label="Owner Change Template" onclick={download} alternative-text="Show More" slot="actions"></lightning-button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="slds-p-horizontal_medium">
+            <span style="font-size: 1.1em;"><b>This screen allows you to Add Account Team Member and transfers Open cases of the previous Account Team Member to New Account Team Member Memeber.</b></span><br/><br/>
+            <li>You can Transfer all the Open Cases of Previous Account Team Member to New Account Team Member by checking below Provided Checkbox.</li>
+          <br>  
+        <!--<div class="slds-p-horizontal_medium">
+            <lightning-input type="checkbox" label="Transfer Owned Open Cases" 
+                onchange={handleTransferOwnedOpenCases} checked disabled={isDisabled}></lightning-input>
+        </div>-->
+        </div>
+    <lightning-card title="Add Service Resources">
+        <lightning-tabset>
+            <lightning-tab label="Via CSV" class="slds-theme_shade" variant="vertical">
+                <div class="slds-p-horizontal_medium">
+                    <c-reuseable-csv-convertor label-to-api={labelToApi} onuploadcomplete={handleFileUpload}></c-reuseable-csv-convertor>
+                </div>
+                <template if:true={showTabe}>
+                    <div class="slds-p-horizontal_medium">
+                        <c-pagination-in-data-table page-limit="10" columns={columnData} for-table={tableData}>
+                        </c-pagination-in-data-table>
+                    </div>
+                </template>
+            </lightning-tab>
+        </lightning-tabset>
+
+        <br>
+        <div class="slds-p-horizontal_medium">
+            <lightning-input type="checkbox" label="Enforce New Owner Has Read Access"
+                value={} onchange={handleRecordSelectionFirst} checked disabled={isDisabled}></lightning-input>
+        </div>
+        <div class="slds-p-horizontal_medium">
+            <lightning-input type="checkbox" label="Transfer Owned Open Cases" value={}
+                onchange={handleRecordSelectionNineth} checked disabled={isDisabled}></lightning-input>
+        </div>
+        <br>
+        <div class="slds-m-top_medium slds-text-align_center">
+            <lightning-button-group>
+                <lightning-button label="Transfer" onclick={handleTransfer} variant="brand"
+                    class="slds-button slds-border_radius"></lightning-button>
+                <lightning-button label="Cancel" onclick={handleCancel} variant="neutral"
+                    class="slds-button slds-p-left_small slds-border_radius"></lightning-button>
+            </lightning-button-group>
+        </div>
+    </lightning-card>
+</lightning-card>
+    <template if:true={showProgressChart}>
+    <lightning-card title="Apex Jobs And Progress Chart">
+        <c-progress-chart batch-job-id={BatchJobId} oncomplete={handlecomplete} onerrorcsvdemand={handleDownloadErrorCSV}></c-progress-chart>
+    </lightning-card>
+</template>
+</template>

@@ -1,0 +1,180 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" controller="SendMOMController">
+    <aura:html tag="style">
+        <!-- .slds-modal__container{ 
+        height : auto; 
+        width: 65%; 
+        max-width: 70%; } -->
+        .modal-body{ 
+            height : 60% !important;
+            max-height: 85vh !important; 
+            padding: 0%; 
+        }
+        .slds-modal__footer{ 
+            display: inline !important; 
+        }
+        .last{
+            text-align: left; vertical-align: middle;
+        }
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        }
+        .slds-modal__content{
+            overflow:initial !important;
+            height:unset !important;
+        }
+        .slds-modal__container{
+            max-width: 90rem !important;
+            width:90% !important;
+            border-box : 2px;
+        }
+
+    </aura:html>
+    <!-- end -->
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:attribute name="Response" type="string" />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:attribute name="UniqueId" type="string" access="public" />
+    <aura:attribute name="listOfSubject" type="String[]" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="EmailSubject" type="string" />
+    <aura:attribute name="fileData" type="object[]" />
+    <aura:attribute name="EmailBody" type="string" />
+    <aura:attribute name="mailStatus" type="boolean" default="false" />
+    <aura:attribute name="IsSuccess" type="boolean" default="false" />
+    <aura:attribute name="IsError" type="boolean" default="false" />
+    <aura:attribute name="toSelectedLookUpRecords" type="sObject[]" default="[]" />
+    <aura:attribute name="CCselectedLookUpRecords" type="sObject[]" default="[]" />
+    <aura:attribute name="BCCSelectedLookUpRecords" type="sObject[]" default="[]" />
+    <aura:attribute name="EmailTemplate" type="sObject[]" />
+    <aura:attribute Name="selItem" type="object" access="public" />
+    <aura:attribute name="lstTemplate" type="sObject[]" />
+    <aura:attribute name="lstToEnteredEmail" type="string[]" />
+    <aura:attribute name="lstCCEnteredEmail" type="string[]" default="[]" />
+    <aura:attribute name="lstBCCEnteredEmail" type="string[]" default="[]" />
+    <aura:attribute name="contentVersionIds" type="String" />
+    <aura:attribute name="contentDocumentIds" type="String" />
+    <aura:attribute name="openViaAction" type="Boolean" default="false" />
+    <aura:handler event="c:DynamicReUseableLookUp_Event" action="{!c.getValueFormEvent}" />
+
+    <div class="slds-modal__header">
+        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">Send MOM</h1>
+    </div>
+
+    <div class="slds-modal__content slds-p-around_medium slds-p-top_medium" id="modal-content-id-1">
+        <div style="height:100%;  padding: 0%;">
+            <!-- padding-block-end: 25vh; -->
+            <aura:if isTrue="{!v.mailStatus}">
+                <div role="alertdialog" tabindex="-1" aria-labelledby="prompt-heading-id"
+                    aria-describedby="promp t-message-wrapper" class="slds-modal slds-fade-in-open slds-modal--prompt">
+                    <div class="slds-modal__container">
+                        <aura:if isTrue="{!v.IsSuccess}">
+                            <div class="slds-modal__header slds-theme--success slds-theme--alert-texture">
+                                <h2 class="slds-text-heading--medium" id="prompt-heading-id">Mail Status</h2>
+                            </div>
+                            <div class="slds-modal__content slds-p-around--medium">
+                                <div>
+                                    <p>{!v.Response}</p>
+                                </div>
+                            </div>
+                        </aura:if>
+                        <aura:if isTrue="{!v.IsError}">
+                            <div class="slds-modal__header slds-theme--error slds-theme--alert-texture">
+                                <h2 class="slds-text-heading--medium" id="prompt-heading-id">Mail Status</h2>
+                            </div>
+                            <div class="slds-modal__content slds-p-around--medium">
+                                <div>
+                                    <p>{!v.Response}</p>
+                                </div>
+                            </div>
+                        </aura:if>
+
+                        <div class="slds-modal__footer slds-theme--default">
+                            <button class="slds-button slds-button--brand" onclick="{!c.closeMessage}">Close</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-backdrop slds-backdrop--open"></div>
+            </aura:if>
+            <div class="slds-form--stacked stacked_padding">
+                <div class="slds-form-element slds_margin_bottom">
+                    <label class="slds-form-element__label slds_left_label"><strong>To</strong></label>
+                    <div class="slds-form-element__control slds_right_div">
+                        <c:reUsableMultiSelectLookup objectAPIName="Contact" IconName="standard:contact"
+                            lstSelectedRecords="{!v.toSelectedLookUpRecords}"
+                            lstEnteredEmail="{!v.lstToEnteredEmail}" />
+                    </div>
+                </div>
+                <div class="slds-form-element slds_margin_bottom">
+                    <label class="slds-form-element__label slds_left_label"><strong>CC</strong></label>
+                    <div class="slds-form-element__control slds_right_div">
+                        <c:reUsableMultiSelectLookup objectAPIName="Contact" IconName="standard:contact"
+                            lstSelectedRecords="{!v.CCselectedLookUpRecords}"
+                            lstEnteredEmail="{!v.lstCCEnteredEmail}" />
+                    </div>
+                </div>
+                <!-- <div class="slds-form-element slds_margin_bottom">
+                    <label class="slds-form-element__label slds_left_label"><strong>BCC</strong></label>
+                    <div class="slds-form-element__control slds_right_div">
+                        <c:reUsableMultiSelectLookup objectAPIName="Contact" IconName="standard:contact"
+                            lstSelectedRecords="{!v.BCCselectedLookUpRecords}"
+                            lstEnteredEmail="{!v.lstBCCEnteredEmail}" />
+                    </div>
+                </div> -->
+
+                <!-- Email template start-->
+                <div class="slds-form-element slds_margin_bottom">
+                    <label class="slds-form-element__label slds_left_label"><strong>Template</strong></label>
+                    <div class="slds-form-element__control slds_right_div">
+                        <c:DynamicReUseableLookUp objectName="EmailTemplate" field_API_text="Name" field_API_val="Id"
+                            limit="10" field_API_search="Name" lookupIcon="standard:template" selItem="{!v.selItem}"
+                            placeholder="Enter space after text to search template" />
+                    </div>
+                </div>
+                <!-- Email template End-->
+                <div class="slds-form-element slds_margin_bottom">
+                    <label class="slds-form-element__label slds_left_label"><strong>Subject</strong></label>
+                    <div class="slds-form-element__control slds_right_div">
+                        <ui:inputText class="slds-input" aura:id="subject" value="{!v.EmailSubject}"
+                            placeholder="Subject" />
+                    </div>
+                </div>
+
+                <div class="slds-form-element slds_margin_bottom">
+                    <label class="slds-form-element__label slds_left_label" for="textareaSample2"><strong>Mail Body
+                        </strong></label>
+                    <div class="slds-form-element__control slds_right_div">
+                        <lightning:inputRichText aura:id="body" value="{!v.EmailBody}" formats="['font', 'size', 'bold', 'italic', 'underline',
+                                                          'strike', 'list', 'indent', 'align',
+                                                          'clean', 'table', 'header', 'color']" />
+                    </div>
+                </div>
+
+                <div class="slds-form-element slds_margin_bottom slds-grid slds-gutters"
+                    style="padding-top: 2%;justify-content: center;">
+
+                </div>
+
+
+            </div>
+        </div>
+        <c:generateMomExcel recordId="{!v.recordId}" aura:id="xlsx"></c:generateMomExcel>
+    </div>
+    <div class="slds-docked-form-footer slds-float_left" style="position: sticky;">
+        <lightning:button class="slds-button slds-button_neutral slds-float_right slds-p-left_medium"
+            onclick="{!c.closeQuickAction}">Cancel</lightning:button>
+        <lightning:button class="slds-button slds-button_brand slds-float_right slds-p-right_medium"
+            onclick="{!c.sendMail}">Send</lightning:button>
+    </div>
+</aura:component>

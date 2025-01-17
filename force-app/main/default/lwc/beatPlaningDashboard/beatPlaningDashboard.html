@@ -1,0 +1,111 @@
+<template>
+    <div class="outer-container slds-p-around_medium slds-grid slds-grid_vertical" style="position: relative;">
+        <lightning-spinner lwc:if={showSpinner} variant="brand"></lightning-spinner>
+        <div class="slds-grid slds-grid_align-spread slds-wrap">
+            <div class="slds-col slds-size_12-of-12 header">
+                Beat Planning Dashboard
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <lightning-combobox label="Zones" options={zoanPickListValue} value={selectedZone}
+                    onchange={handleZoneFilter}></lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <lightning-combobox label="Account Type" options={accountType} value={selectedAccountType}
+                    onchange={handleTypeFilter}></lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <lightning-combobox label="Gati Potential" options={potential} value={selectedPotential}
+                    onchange={handlePotentialFilter}></lightning-combobox>
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <lightning-combobox label="Show" options={userFilters} value={selectedUserType}
+                    onchange={handleUserFilter}></lightning-combobox>
+            </div>
+        </div>
+        <div lwc:if={showAccountData} class="slds-m-top_medium table-container slds-scrollable_y">
+            <table>
+                <tr class="sticky-top-header">
+                    <th> <div class="flex-header"> <span>Account Name </span> <span> <lightning-icon icon-name="utility:sort"
+                                onclick={handleSort} size="xx-small" variant="inverse" data-label="Name"></lightning-icon></span> </div> </th>
+                    <th> <div class="flex-header"> <span>Account Type </span> <span> <lightning-icon icon-name="utility:sort"
+                                onclick={handleSort} size="xx-small" variant="inverse" data-label="categoryName"></lightning-icon></span> </div> </th>
+                    <th> <div class="flex-header"> <span>RPO Name</span> <span> <lightning-icon icon-name="utility:sort"
+                                onclick={handleSort} size="xx-small" variant="inverse" data-label="rpoOwnerName"></lightning-icon></span> </div> </th>
+                    <th> <div class="flex-header"> <span>Owner Name </span> <span> <lightning-icon icon-name="utility:sort"
+                                onclick={handleSort} size="xx-small" variant="inverse" data-label="ownerName"></lightning-icon></span> </div> </th>
+                    <th> <div class="flex-header"> <span>Gati Potential </span> <span> <lightning-icon icon-name="utility:sort"
+                                onclick={handleSort} size="xx-small" variant="inverse" data-label="GatiPotential"></lightning-icon></span> </div> </th>
+                    <th> <div class="flex-header"> <span>Last Visited Date </span> <span> <lightning-icon
+                                icon-name="utility:sort" onclick={handleSort} size="xx-small"
+                                variant="inverse" data-label="lastVisitedDate"></lightning-icon></span> </div> </th>
+                    <th> <div class="flex-header"> <span>Last Visited By </span> <span> <lightning-icon
+                                icon-name="utility:sort" onclick={handleSort} size="xx-small"
+                                variant="inverse" data-label="lastVisitedBy"></lightning-icon></span> </div> </th>
+                    <th> <div class="flex-header"> <span>Days Since </span> <span> <lightning-icon icon-name="utility:sort"
+                                onclick={handleSort} size="xx-small" variant="inverse" data-label="DaysSince"></lightning-icon></span> </div> </th>
+                    <th> <div class="flex-header"> <span>Current Business </span></div> </th>
+                    <th> <div class="flex-header"> <span>Action </span></div> </th>
+                </tr>
+                <tr for:each={filterAccountData} for:item="account" key={account.Id} class="data-container">
+                    <td>
+                        <a onclick={handleAccountRedirect} data-id={account.Id}>{account.Name}</a>
+                    </td>
+                    <td>
+                        {account.categoryName}
+                    </td>
+                    <td>
+                        {account.rpoOwnerName}
+                    </td>
+                    <td>
+                        {account.ownerName}
+                    </td>
+                    <td>
+                        {account.GatiPotential}
+                    </td>
+                    <td>
+                        {account.lastVisitedDate}
+                    </td>
+                    <td>
+                        {account.lastVisitedBy}
+                    </td>
+                    <td>
+                        {account.DaysSince}
+                    </td>
+                    <td>
+                        <a onclick={handleShowCurrentBusiness} data-id={account.Id}>Show</a>
+                    </td>
+                    <td>
+                        <a onclick={handleRedirectCustomerConnect} data-id={account.Id}>Schedule a meeting!</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div lwc:else class="slds-m-top_medium no-data-found">
+            No Data Found!
+        </div>
+        <div lwc:if={showAccountData} class="slds-m-top_medium footer-dashboard">
+            Number of Accounts : {numberOfAccount}
+        </div>
+
+        <div lwc:if={showModal}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+                class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container" style="min-width: 60vw;">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+                        <lightning-icon icon-name="utility:close" size="x-small" variant="inverse"
+                            onclick={handleCloseModel}></lightning-icon>
+                        <span class="slds-assistive-text">Cancel and close</span>
+                    </button>
+                    <div class="slds-modal__header" style="padding: 0px;">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate header"
+                            style="border-radius: 0px;" tabindex="-1">{selectedAccountFor360.Name}</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <c-beat-planing-dashboard-popover account360-data-api={data360} account-data-api={selectedAccountFor360}></c-beat-planing-dashboard-popover>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <decisions>
+        <name>apiuser</name>
+        <label>apiuser</label>
+        <locationX>455</locationX>
+        <locationY>372</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>not</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Profile.Name</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>API User</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>updatestatus</targetReference>
+            </connector>
+            <label>not</label>
+        </rules>
+    </decisions>
+    <interviewLabel>crosssellleadcreatedfromgaticrm {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>crosssellleadcreatedfromgaticrm</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>updatestatus</name>
+        <label>updatestatus</label>
+        <locationX>680</locationX>
+        <locationY>370</locationY>
+        <inputAssignments>
+            <field>Cross_Sell_Lead_Created_From__c</field>
+            <value>
+                <stringValue>Gati CRM</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>341</locationX>
+        <locationY>25</locationY>
+        <connector>
+            <targetReference>apiuser</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>LeadSource</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Cross Sell</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Cross_Sell_Lead_Created_From__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Lead</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,25 @@
+.header-title{
+    font-size: large;
+    font-weight: bold;
+}
+.footer-class{
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+}
+.loading-class{
+    position: relative;
+    display: inline-block;
+    width: 100vw;
+    height: 100vh;
+}
+.result-tabel{
+    background-color: aliceblue;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+}
+.font-color-red{
+    color: red;
+}

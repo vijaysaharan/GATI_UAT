@@ -1,0 +1,3 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" >
+    <c:GatiFrameData iframeUrl="https://pg-uat.gati.com/GSalesForce/Canvas/DKTListing/DKTListing.jsp?puser=sam_21163"/>
+</aura:component>

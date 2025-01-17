@@ -1,0 +1,28 @@
+<aura:component controller="CanvasDetailsForClaims" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="canvasParameters" type="string" default=""/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="ObjectName" type="String"/>
+    <aura:attribute name="isCMSCanvas" type="Boolean"/>
+    <aura:attribute name="requid" type="string" default=""/>
+    <aura:attribute name="CanvasName" type="string" default=""/>
+    <aura:attribute name="authorization" type="string" default=""/>
+    <aura:attribute name="puser" type="string" default=""/>
+    <aura:attribute name="action" type="string"/>
+    <aura:attribute name="callServer" type="Boolean" default="true"/>  
+    <aura:attribute name="CompanyCode" type="string" default=""/>
+    <aura:attribute name="Type" type="string" default=""/>
+    <aura:attribute name="CaseNumber" type="string" default=""/>
+    <aura:attribute name="SequenceNumber" type="string" default=""/>
+    <aura:attribute name="cid" type="string"/>
+    <aura:attribute name="p1" type="string"/>
+    <aura:attribute name="p2" type="string"/>
+    <aura:attribute name="p3" type="string"/>
+    <aura:attribute name="p4" type="string"/>
+    <aura:attribute name="serverCallSuccess" type="Boolean" default="false"/>    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <aura:if  isTrue="{!v.serverCallSuccess}" >
+        <div id="CanvasFrame">
+            <c:CanvasAuraComponent canvasParameters="{!v.canvasParameters}"/>
+        </div>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,48 @@
+<template>
+    <div style="font-size: 25px; font-weight: 700; color: #1080a0; text-align: center; margin-bottom : 15px;">Customer Connects</div>
+    <div class="slds-grid" style="margin-bottom: 10px;">
+        <div class="slds-col slds-m-horizontal_xxx-small">
+            <lightning-input class="slds-custom-class" max={whereClauseData.endDate} data-name="startDate" type="date" value={whereClauseData.startDate} onchange={handleInputChange} label="Start Date"></lightning-input>
+            <div style="text-align: right;"><span style="cursor: pointer; color : #1080a0;" data-id="startDate" onclick={handleClear}>Clear</span></div>
+        </div>
+        <div class="slds-col slds-m-horizontal_xxx-small">
+            <lightning-input data-name="endDate" min={whereClauseData.startDate} type="date" value={whereClauseData.endDate} onchange={handleInputChange} label="End Date"></lightning-input>
+            <div style="text-align: right;"><span style="cursor: pointer; color : #1080a0;" data-id="endDate" onclick={handleClear}>Clear</span></div>
+        </div>
+        <template if:true={isData}>
+        <div class="slds-col slds-m-horizontal_xxx-small">
+            <c-multipul-select-combo-box
+            label = "Users"
+            options = {userOptionList}
+            onchange = {handleUserChange}
+            ></c-multipul-select-combo-box>
+            <div style="text-align: right;"><span style="cursor: pointer; color : #1080a0;" data-id="User" onclick={handleUserClear}>Clear</span></div>
+        </div>
+        </template>
+        <template if:true={isAccount}>
+            <div class="slds-col slds-m-horizontal_xxx-small">
+                <lightning-combobox
+                data-name="category"
+                label="Account Category"
+                value={whereClauseData.category}
+                placeholder="Select category"
+                options={customerCategoryOptions}
+                onchange={handleInputChange} 
+                ></lightning-combobox>
+                <div style="text-align: right;"><span style="cursor: pointer; color : #1080a0;" data-id="category" onclick={handleClear}>Clear</span></div>
+            </div>
+        </template>
+        <div class="slds-col slds-m-horizontal_xxx-small">
+            <c-multipul-select-combo-box
+            label = "Account/Lead"
+            options = {accountLeadOption}
+            onchange = {handleAccountLeadChange}
+            ></c-multipul-select-combo-box>
+            <div style="text-align: right;"><span style="cursor: pointer; color : #1080a0;" data-id="accLead" onclick={handleClear}>Clear</span></div>
+        </div>
+    </div>
+    <div style="margin-bottom: 10px;">
+        <lightning-map map-markers={mapMarkers} markers-title="Visit Map" onmarkerselect={handleMarkerSelect}
+          selected-marker-value={selectedMarkerValue} zoom-level="13" list-view="visible" center={center}> </lightning-map>
+      </div>
+</template>

@@ -1,0 +1,33 @@
+<template>
+    <div class="slds-scrollable" style="height: 300px;">
+        <template if:true={showTable}>
+            <lightning-datatable key-field="key" data={filteredList} columns={columns} show-row-number-column
+                row-number-offset={rowOffset} default-sort-direction={defaultSortDirection}
+                sorted-direction={sortDirection} sorted-by={sortedBy} onsort={onHandleSort}
+                onrowaction={handleRowAction} onclick={handleDataTabelClick} hide-checkbox-column>
+            </lightning-datatable>
+        </template>
+    </div>
+    <div style="display: flex; justify-content: center;">
+        <div>
+            <lightning-button-icon icon-name="utility:chevronleft" label="First" onclick={handleFirst}
+                disabled={disableFirst}>
+            </lightning-button-icon>
+            <lightning-button-icon icon-name="utility:left" label="Previous" onclick={handlePrevious}
+                disabled={disablePrevious}>
+            </lightning-button-icon>
+        </div>
+        <div style="width: 10%; display: flex; justify-content: center;">
+            <div style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
+                {selectedPage} of {noOfPages}
+            </div>
+        </div>
+        <div>
+            <lightning-button-icon icon-name="utility:right" label="Next" onclick={handleNext} disabled={disableNext}>
+            </lightning-button-icon>
+            <lightning-button-icon icon-name="utility:chevronright" label="Last" onclick={handleLast}
+                disabled={disableLast}>
+            </lightning-button-icon>
+        </div>
+    </div>
+</template>

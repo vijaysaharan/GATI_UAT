@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Overdue_o_s_beyond_agreed_credit_days_or_credit_amount</fullName>
+        <description>Overdue o/s beyond agreed credit days or credit amount</description>
+        <protected>false</protected>
+        <recipients>
+            <field>LastModifiedById</field>
+            <type>userLookup</type>
+        </recipients>
+        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Overdue_o_s_beyond_agreed_credit_days_or_credit_amount</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>DOA</fullName>
+        <description>date of approval</description>
+        <field>Date_of_Approval__c</field>
+        <formula>TODAY()</formula>
+        <name>DOA</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>DOA1</fullName>
+        <description>date of approval</description>
+        <field>Date_of_Approval__c</field>
+        <formula>TODAY()</formula>
+        <name>DOA</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>DOA_NULL</fullName>
+        <field>Date_of_Approval__c</field>
+        <name>DOA NULL</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>DOA_NULL1</fullName>
+        <field>Date_of_Approval__c</field>
+        <name>DOA NULL1</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ExtensionDateNull</fullName>
+        <field>Extension_Date__c</field>
+        <name>ExtensionDateNull</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ExtensionNumber</fullName>
+        <field>ExtensionNumber__c</field>
+        <formula>ExtensionNumber__c  + 1</formula>
+        <name>ExtensionNumber</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>ExtensionStatusChange</fullName>
+        <field>Contract_Status__c</field>
+        <literalValue>Extended</literalValue>
+        <name>ExtensionStatusChange</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Populate_ou_zone</fullName>
+        <field>Zone_Name_Backend__c</field>
+        <formula>Associated_OU__r.Parent__r.Parent__r.Parent__r.Name</formula>
+        <name>Populate ou zone</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Previous_record</fullName>
+        <field>Credit_Days__c</field>
+        <formula>Prior_Credit_Days__c</formula>
+        <name>Previous record</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>RejectionStatus</fullName>
+        <field>Contract_Status__c</field>
+        <literalValue>Active</literalValue>
+        <name>RejectionStatus</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Set_Accounteid_as_record_Id_if_Account_S</fullName>
+        <description>Set Accounteid as record Id if Account Subtype is Mobile or Counter</description>
+        <field>Account_eid__c</field>
+        <formula>Id</formula>
+        <name>Set Accounteid as record Id if Account S</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Unblock_account</fullName>
+        <field>Blocked__c</field>
+        <literalValue>0</literalValue>
+        <name>Unblock account</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Credit_days</fullName>
+        <field>Credit_Days__c</field>
+        <formula>Prior_Credit_Days__c</formula>
+        <name>Update Credit days</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>unblocked</fullName>
+        <field>Blocked__c</field>
+        <literalValue>0</literalValue>
+        <name>unblocked</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Overdue o%2Fs beyond agreed credit days or credit amount</fullName>
+        <actions>
+            <name>Overdue_o_s_beyond_agreed_credit_days_or_credit_amount</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <formula>IF(RecordType.DeveloperName = &apos;Contract&apos; || RecordType.DeveloperName = &apos;Retail&apos;|| RecordType.DeveloperName = &apos;Customer_Code&apos; , Credit_Period__c &gt; Credit_Days__c  ||  Amount__c &gt; Credit_Amount__c,False)</formula>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Populate ou zone</fullName>
+        <actions>
+            <name>Populate_ou_zone</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Account.OU_Zone__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Accounteid as record Id if Account Subtype is Mobile or Counter</fullName>
+        <actions>
+            <name>Set_Accounteid_as_record_Id_if_Account_S</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <booleanFilter>(1 OR 2) AND 3</booleanFilter>
+        <criteriaItems>
+            <field>Account.Partner_Sub_Category__c</field>
+            <operation>equals</operation>
+            <value>Mobile Kiosk</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Account.Partner_Sub_Category__c</field>
+            <operation>equals</operation>
+            <value>Counter Kiosk</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Account.Customer_Category__c</field>
+            <operation>equals</operation>
+            <value>Partner</value>
+        </criteriaItems>
+        <description>Set Accounteid as record Id if Account Subtype is Mobile or Counter</description>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+    <rules>
+        <fullName>z</fullName>
+        <active>false</active>
+        <criteriaItems>
+            <field>Account.ATF_Index__c</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+</Workflow>

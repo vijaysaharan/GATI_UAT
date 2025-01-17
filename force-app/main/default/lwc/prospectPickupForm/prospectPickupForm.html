@@ -1,0 +1,59 @@
+<template>
+    <lightning-record-edit-form object-api-name={objectApiName} record-type-id={recordTypeID} onsuccess={handleSuccess}
+        onerror={handleError} onsubmit={handleSubmit}>
+        <div class="slds-col slds-size_1-of-1">
+            <lightning-messages> </lightning-messages>
+        </div>
+        <div class="slds-grid">
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="OwnerId" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Type" variant="label-stacked" value="Prospect Pickup"
+                    disabled="true">
+                </lightning-input-field>
+                <lightning-input-field field-name="Mobile__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="ProspectSource__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Cargo_Purpose__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Delivery_Pincode_Location__c" variant="label-stacked">
+                </lightning-input-field>
+                <lightning-input-field field-name="Actual_Weight__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Volume__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Risk_Coverage_Prospect__c" variant="label-stacked">
+                </lightning-input-field>
+                <lightning-input-field field-name="COD_Amt__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Warehouse_Delivery__c" variant="label-stacked">
+                </lightning-input-field>
+                <lightning-input-field field-name="Description" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field class="slds-hide" field-name="Sub_Type__c" variant="label-stacked"
+                    value={subtype}>
+                </lightning-input-field>
+            </div>
+            <div class="slds-col slds-size_1-of-2">
+                <lightning-input-field field-name="CaseNumber" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Customer_Name__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Customer_Email__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Booking_Basis__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Pick_Up_Pincode__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="No_Of_Packages__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Unit_of_Measurement__c" variant="label-stacked">
+                </lightning-input-field>
+                <lightning-input-field field-name="Pickup_Date__c" variant="label-stacked">
+                </lightning-input-field>
+                <lightning-input-field field-name="Decl_Cargo_value__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="Value__c" variant="label-stacked"></lightning-input-field>
+                <lightning-input-field field-name="COD__c" variant="label-stacked"></lightning-input-field>
+
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-1 slds-align_absolute-center">
+                <lightning-button variant="brand" class="slds-m-top_small slds-p-around_xx-small" label="Cancel"
+                    onclick={closeModalchild}>
+                </lightning-button>
+                <lightning-button variant="brand" class="slds-m-top_small slds-p-around_xx-small" type="submit"
+                    label="Save" disabled={loadingval}>
+                </lightning-button>
+            </div>
+        </div>
+
+    </lightning-record-edit-form>
+</template>

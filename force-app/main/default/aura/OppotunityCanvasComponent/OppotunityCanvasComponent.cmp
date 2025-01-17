@@ -1,0 +1,3 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,lightning:actionOverride,lightning:isUrlAddressable" access="global" >
+    <c:GatiFrameData iframeUrl="https://www.gati.net/GSalesForce/BDFS/INVOICEPRINT/INVOICEPRINT.jsp" />
+</aura:component>

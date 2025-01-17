@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <decisions>
+        <name>check_which</name>
+        <label>check which</label>
+        <locationX>370</locationX>
+        <locationY>312</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>if_post_issue</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Post Issue Resolution Feedback</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_case</targetReference>
+            </connector>
+            <label>if post issue</label>
+        </rules>
+        <rules>
+            <name>if_frontline</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Front Line Feedback</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>get_user</targetReference>
+            </connector>
+            <label>if frontline</label>
+        </rules>
+    </decisions>
+    <interviewLabel>feedback agetn {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>feedback agent assign</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>get_case</name>
+        <label>get case</label>
+        <locationX>600</locationX>
+        <locationY>238</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>case_owner_assign</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>CaseNumber</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.caseno__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>get_user</name>
+        <label>get user</label>
+        <locationX>600</locationX>
+        <locationY>432</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>user_assign</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Staff_Code__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.staffcode__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>case_owner_assign</name>
+        <label>case owner assign</label>
+        <locationX>784</locationX>
+        <locationY>207</locationY>
+        <inputAssignments>
+            <field>User__c</field>
+            <value>
+                <elementReference>get_case.Owner:User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>user_assign</name>
+        <label>user assign</label>
+        <locationX>788</locationX>
+        <locationY>400</locationY>
+        <inputAssignments>
+            <field>User__c</field>
+            <value>
+                <elementReference>get_user.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>check_which</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>staffcode__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>caseno__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Customer_Feedback_Process__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

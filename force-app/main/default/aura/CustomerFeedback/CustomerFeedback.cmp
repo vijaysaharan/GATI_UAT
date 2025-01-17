@@ -1,0 +1,283 @@
+<aura:component implements="force:hasRecordId,force:hasSObjectName,flexipage:availableForAllPageTypes">
+    <aura:attribute name="Questions" type="List"/>
+    <aura:attribute name="Desktop" type="String" access="global" default='DESKTOP'/>
+    <aura:attribute name="Experience" type="MAP" />
+    <aura:attribute name="loaded" type="Boolean" default="false" />
+    <aura:attribute name="disable" type="Boolean" default="false"/>
+    <aura:attribute name="headers" type="list" default="['SRno','Feedback Questionnaire','Rating']"/>
+    <aura:handler name="init" value="this" action="{!c.doinit}"/>
+    <aura:attribute name="feedbackRecord" type="Object"/>
+    <aura:attribute name="feedbackFields" type="Object"/>
+    <aura:attribute name="feedbackError" type="String"/>
+    <aura:attribute name="AllowInput" type="boolean" default="true"/>
+    <aura:handler name="EmojiVal" event="c:EmojiVal" action="{!c.GetValFromChild}"/>
+    <aura:attribute name="recommendgati" type="String"/>
+    <aura:attribute name="accountId" type="String"/>
+    <aura:attribute name="contactId" type="String"/>
+    <aura:attribute name="accountName" type="String"/>
+    <aura:attribute name="contactName" type="String"/>
+    <aura:attribute name="Designation" type="String"/>
+    <aura:attribute name="contactEmail" type="String"/>
+    <aura:attribute name="contactPhone" type="String"/>
+    <aura:html tag='style'>
+        .emoji{
+        height:35px!important;
+        widhth:35px!important;
+        
+        }
+        .emoji-mobile{
+        height:5rem !important;
+        width:5rem !important;    
+        } /*
+        .slds-scope{
+        margin-right: 350px !important;
+        }*/
+        .emoji {
+        max-width:36px !important;
+        }
+        
+    </aura:html>
+    <force:recordData aura:id="CustomerFeedback" 
+                      fields="Organization_Name__c,Account__c,Contact__c,Type__c,Email__c,Rate_us_on_our_ability_and_respond_time__c,Business_needs_and_requirements_overtime__c,Rate_ease_of_navigation_on_our_website__c,Rate_your_overall_experience_with_Gati_s__c,Recommend_Gati__c,Rate_Gati_Service__c,Transit_Time_Experience__c,Safety_Response_Rate__c,Gati_Branch_Response_Rate__c,Feedback_Given_By__c,Designation__c,Date__c,Strength1__c,Strength2__c,Strength3__c,Pick_up_Experience__c,Delivery_Experience__c,Invoicing_Experience__c,Customer_Service_Response_Rate__c,Sales_Representative_Response_Rate__c,Area1__c,Area2__c,Area3__c,Rate_your_experience_with_GATI_Services__c"
+                      targetRecord="{!v.feedbackRecord}"
+                      targetFields="{!v.feedbackFields}"
+                      targetError="{!v.feedbackError}" />
+    <aura:if isTrue='{! v.AllowInput == false}'>
+        <div class="slds-align_absolute-center" style="height: 100%; margin-top: 20%;">
+            <lightning:badge class="slds-theme_warning" label="Thankyou for submitting the feedback." />
+        </div>   
+        <aura:set attribute="else">
+            <aura:if isTrue='{!$Browser.formFactor == v.Desktop}'>
+                <aura:if isTrue="{! v.loaded }">
+                    <div class=" slds-container_large slds-container_center" style="margin-top:130px;">
+                        <div>
+                            <header class="slds-global-header_container branding-header oneHeader" style="background: white;position: fixed;width: 100%;top: 0">
+                                <div class="logo new-logo">
+                                    <a href="https://www.gati.com"><img src="{!$Resource.gati}" title="Gati"></img></a></div>
+                                <div style="background:#0095b1;border-radius:6px">
+                                    <div class="slds-box slds-box_x-small slds-text-color_inverse slds-theme_alert-texture"><center>  <dl class="slds-list_inline">CUSTOMER FEEDBACK PROCESS</dl></center></div>
+                                </div>
+                            </header>	
+                             <div >
+                                <div class="slds-grid slds-wrap slds-gutters_large slds-m-around_medium">
+                                    <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+                                        <lightning:input aura:id="feedbackfield" name="Organisation" required="true" value="{!v.feedbackFields.Organization_Name__c}" label="Organization Name" maxlength="255" />
+                                    </div>
+                                    <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+                                        <lightning:input aura:id="feedbackfield" name="Feedback_Given_By__c" required="true" value="{!v.feedbackFields.Feedback_Given_By__c}" label="Feedback Given By" maxlength="255" /> 
+                                    </div>
+                                    
+                                    <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+                                        <lightning:input aura:id="feedbackfield" name="Email__c" label="Email" value="{!v.feedbackFields.Email__c}" required="true" maxlength="255" /> 
+                                    </div>
+                                    
+                                    <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+                                        <lightning:input aura:id="feedbackfield" name="Designation__c" required="true" value="{!v.feedbackFields.Designation__c}" label="Designation" maxlength="255" />
+                                    </div>
+                                    
+                                    <div class="slds-col slds-small-size_12-of-12 slds-large-size_6-of-12">
+                                        <lightning:input aura:id="feedbackfield" name="Mobile_no__c" required="true" value="{!v.feedbackFields.Mobile_no__c}" label="Mobile/Phone" maxlength="10" /> 
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-col"><b>Kindly share your rating on scale  1 to 5 with 5 being excellent  and 1 being poor w.r.t your experience</b>
+                                <br/><br/>
+                                <div class="slds-grid slds-wrap" >
+                                    <div class="slds-col slds-large-size_12-of-12 slds-table_fixed-layout">
+                                        <table border="1" class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">    	
+                                            <thead>
+                                                <tr class="slds-text-heading--label-">            	
+                                                    <aura:iteration items="{!v.headers}" var="col">                     
+                                                        <th scope="col"  style="background-color:#0095b1"> <div class="slds-truncate" ><center><span class="slds-truncate" style="color:white;">{!col}</span></center></div> </th>
+                                                    </aura:iteration> 
+                                                </tr>        	 
+                                            </thead>
+                                            <tbody>
+                                                <tr class="slds-text-heading--label">
+                                                    <th scope="col" colspan="3"> &nbsp;</th>               
+                                                </tr>
+                                                <tr class="slds-text-heading--label">            	
+                                                    <th scope="col"><b></b></th>       
+                                                    <th scope="col" colspan="2"> <div class="servicerating">What is primary reason of your score?<span class="slds-truncate"></span></div></th>
+                                                </tr>
+                                                <aura:iteration items="{!v.Questions}" var="A" indexVar="index">
+                                                    <tr class="slds-hint-parent">
+                                                        <td >Q{!(index+1)}.</td>
+                                                        <td >{!A.label}</td>
+                                                        <td>
+                                                            <div class="slds-truncate" >
+                                                                <center>
+                                                                    <div class='centerContent'>
+                                                                        <lightning:buttonGroup class="slds-col slds-size_1-of-1">  
+                                                                            <!--img src="{!$Resource.one}" class="emoji"/-->
+                                                                            <lightning:button label="1"
+                                                                                              onclick='{! c.handleLikeButtonClick }'
+                                                                                              aura:id='rating1'
+                                                                                              class="{! A.Rating == '1' ? 'slds-button_brand1':'slds-button_neutral'}"
+                                                                                              title="{!index}" />
+                                                                            <lightning:button label="2"
+                                                                                              onclick='{! c.handleLikeButtonClick }'
+                                                                                              aura:id='rating2'
+                                                                                              class="{! A.Rating == '2' ? 'slds-button_brand1':'slds-button_neutral'}"
+                                                                                              title="{!index}" />
+                                                                            <lightning:button label="3"
+                                                                                              onclick='{! c.handleLikeButtonClick }'
+                                                                                              aura:id='rating3'
+                                                                                              class="{! A.Rating == '3' ? 'slds-button_brand3':'slds-button_neutral'}"
+                                                                                              title="{!index}" />
+                                                                            <lightning:button label="4"
+                                                                                              onclick='{! c.handleLikeButtonClick }'
+                                                                                              aura:id='rating4'
+                                                                                              class="{! A.Rating == '4' ? 'slds-button_brand5':'slds-button_neutral'}"
+                                                                                              title="{!index}" />
+                                                                            <lightning:button label="5"
+                                                                                              onclick='{! c.handleLikeButtonClick }'
+                                                                                              aura:id='rating5'
+                                                                                              class="{! A.Rating == '5' ? 'slds-button_brand5':'slds-button_neutral'}"
+                                                                                              title="{!index}" />
+                                                                            <!--
+                                                                            <lightning:button label="6" onclick='{! c.handleLikeButtonClick }' aura:id='rating6' class="{! A.Rating == '6' ? 'slds-button_brand1':'slds-button_neutral'}" title="{!index}"/>
+                                                                            <lightning:button label="7" 
+                                                                                              onclick='{! c.handleLikeButtonClick }' 
+                                                                                              aura:id='rating7' 
+                                                                                              class="{! A.Rating == '7' ? 'slds-button_brand2':'slds-button_neutral'}" 
+                                                                                              title="{!index}"/>
+                                                                            <lightning:button label="8" 
+                                                                                              onclick='{! c.handleLikeButtonClick }' 
+                                                                                              aura:id='rating8' 
+                                                                                              class="{! A.Rating == '8' ? 'slds-button_brand3':'slds-button_neutral'}" 
+                                                                                              title="{!index}"/>
+                                                                            <lightning:button label="9" 
+                                                                                              onclick='{! c.handleLikeButtonClick }' 
+                                                                                              aura:id='rating9' 
+                                                                                              class="{! A.Rating == '9' ? 'slds-button_brand4':'slds-button_neutral'}" 
+                                                                                              title="{!index}"/>
+                                                                            <lightning:button label="10" 
+                                                                                              onclick='{! c.handleLikeButtonClick }' 
+                                                                                              aura:id='rating10' 
+                                                                                              class="{! A.Rating == '10' ? 'slds-button_brand5':'slds-button_neutral'}" 
+                                                                                              title="{!index}"/>-->                                         
+                                                                            <aura:renderIf isTrue="{!A.Rating>0}">
+                                                                                <aura:renderIf isTrue="{!A.Rating lt 3 &amp;&amp; A.Rating gt 1}">
+                                                                                    <img src="{!A.Rating lt 3 &amp;&amp; A.Rating gt 1?$Resource.three:$Resource.two}" class="emoji" />
+                                                                                    <aura:set attribute="else">
+                                                                                        <aura:renderIf isTrue="{!A.Rating lt 3}">
+                                                                                            <img src="{!$Resource.one}" class="emoji" />
+                                                                                        </aura:renderIf>
+                                                                                    </aura:set>
+                                                                                </aura:renderIf>
+                                                                                <aura:renderIf isTrue="{!A.Rating>2}">
+                                                                                    <img src="{!A.Rating>3?$Resource.five:$Resource.four}" class="emoji" />
+                                                                                </aura:renderIf>
+                                                                            </aura:renderIf>
+                                                                        </lightning:buttonGroup> 
+                                                                    </div> 
+                                                                </center>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </aura:iteration> 
+                                                <tr><th colspan="3"> <center>  <lightning:button disabled="{!v.disable}" label='Submit Feedback' onclick='{!c.handleSubmit}' variant="destructive"/></center>
+                                                    </th></tr>
+                                            </tbody>    
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <aura:set attribute="else">
+                        <lightning:spinner alternativeText="Loading" size="large" />
+                    </aura:set>
+                </aura:if>
+                <aura:set attribute="else">
+                    <article class="slds-card" style="font-size: 2.5rem;" >
+                        <header class="slds-media slds-media_center slds-has-flexi-truncate slds-align_absolute-center"  style="padding:15px;background: #967196;color:white;height:3em;position: fixed;z-index: 2;width: 100%;top: 0;">
+                            <h1 style="text-align: center;"><span> Customer Feedback</span></h1>
+                        </header>
+                        <table class="slds-table" style="height:100% !important;margin-top:50px;margin-bottom:50px;margin-left:75px;">
+                            <thead>
+                                <tr>
+                                    <th scope="col"><span class="slds-truncate"> Feedback Question</span></th>                                                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="slds-border_top ">
+                                    <td style="text-align: left; font-size: 2.5rem;">
+                                    <lightning:input class="slds-input_Mobile" aura:id="feedbackfield" placeholder="Organization" name="Organisation" required="true" value="{!v.feedbackFields.Organization_Name__c}" label="Organization Name" maxlength="10" />
+                                    </td>
+                                </tr>
+                                <tr class="slds-border_top ">
+                                    <td style="text-align: left; font-size: 2.5rem;">
+                                    <lightning:input aura:id="feedbackfield" class="slds-input_Mobile"  placeholder="Feedback given by" required="true" value="{!v.feedbackFields.Feedback_Given_By__c}" label="Feedback Given By" maxlength="10" />
+                                    </td>
+                                </tr>
+                                <tr class="slds-border_top">
+                                    <td style="text-align: left;">
+                                    <lightning:input class="slds-input_Mobile" aura:id="feedbackfield"  placeholder="Designation" required="true" value="{!v.feedbackFields.Designation__c}" label="Designation" maxlength="10" />
+                                    </td>
+                                </tr>
+                                <tr class="slds-border_top">
+                                    <td style="text-align: left;">
+                                    <lightning:input class="slds-input_Mobile" aura:id="feedbackfield"  placeholder="Email" required="true" value="{!v.feedbackFields.Email__c}" label="Email"  maxlength="10" />
+                                    </td>
+                                </tr>
+                                <tr class="slds-border_top">
+                                    <td style="text-align: left;">
+                                    <lightning:input class="slds-input_Mobile" aura:id="feedbackfield"  placeholder="Mobile/Phone" required="true" value="{!v.feedbackFields.Mobile_no__c}" label="Mobile" maxlength="10" />
+                                    </td>
+                                </tr>
+                                <br/>
+                                <aura:iteration items="{!v.Questions}" var="A" indexVar='index'>
+                                    <tr class="slds-border_top">  
+                                        <td style="text-align: left;padding-top: 3rem; padding-bottom: 3rem;" >
+                                            {!A.label}
+                                            <tr>
+                                                <td style="text-align: left" class="slds-p-around_small">
+                                                    <div class='centerContent '>
+                                                        <lightning:buttonGroup class="slds-col slds-size_1-of-1">  
+                                                            <lightning:button label="1" onclick='{! c.handleLikeButtonClick }' aura:id='rating1' class="{! A.Rating == '1' ? 'slds-button_brand_Mobile_1':'slds-button_neutral_Mobile'}" title="{!index}"/>
+                                                            <lightning:button label="2" onclick='{! c.handleLikeButtonClick }' aura:id='rating2' class="{! A.Rating == '2' ? 'slds-button_brand_Mobile_1':'slds-button_neutral_Mobile'}" title="{!index}"/>
+                                                            <lightning:button label="3" onclick='{! c.handleLikeButtonClick }' aura:id='rating3' class="{! A.Rating == '3' ? 'slds-button_brand_Mobile_2':'slds-button_neutral_Mobile'}" title="{!index}"/>
+                                                            <lightning:button label="4" onclick='{! c.handleLikeButtonClick }' aura:id='rating4' class="{! A.Rating == '4' ? 'slds-button_brand_Mobile_3':'slds-button_neutral_Mobile'}" title="{!index}"/>
+                                                            <lightning:button label="5" onclick='{! c.handleLikeButtonClick }' aura:id='rating5' class="{! A.Rating == '5' ? 'slds-button_brand_Mobile_3':'slds-button_neutral_Mobile'}" title="{!index}"/>
+                                                            <!--<lightning:button label="6" onclick='{! c.handleLikeButtonClick }' aura:id='rating6' class="{! A.Rating == '6' ? 'slds-button_brand_Mobile_2':'slds-button_neutral_Mobile'}" title="{!index}"/>
+                                                            <lightning:button label="7" onclick='{! c.handleLikeButtonClick }' aura:id='rating7' class="{! A.Rating == '7' ? 'slds-button_brand_Mobile_2':'slds-button_neutral_Mobile'}" title="{!index}"/>
+                                                            <lightning:button label="8" onclick='{! c.handleLikeButtonClick }' aura:id='rating8' class="{! A.Rating == '8' ? 'slds-button_brand_Mobile_3':'slds-button_neutral_Mobile'}" title="{!index}"/>
+                                                            <lightning:button label="9" onclick='{! c.handleLikeButtonClick }' aura:id='rating9' class="{! A.Rating == '9' ? 'slds-button_brand_Mobile_3':'slds-button_neutral_Mobile'}" title="{!index}"/>
+                                                            <lightning:button label="10" onclick='{! c.handleLikeButtonClick }' aura:id='rating10' class="{! A.Rating == '10' ? 'slds-button_brand_Mobile_3':'slds-button_neutral_Mobile'}" title="{!index}"/>-->                                       
+                                                            
+                                                            <div class="" style="display:inline">
+                                                                <aura:renderIf isTrue="{!A.Rating>0}">
+                                                                    <aura:renderIf isTrue="{!A.Rating lt 3 &amp;&amp; A.Rating gt 1}"> <img src="{!A.Rating lt 3 &amp;&amp; A.Rating gt 1?$Resource.three:$Resource.two}" class="emoji-mobile"/>
+                                                                        <aura:set attribute="else">
+                                                                            <aura:renderIf isTrue="{!A.Rating lt 3}">
+                                                                                <img src="{!$Resource.one}" class="emoji-mobile"/> 
+                                                                            </aura:renderIf>
+                                                                        </aura:set>
+                                                                    </aura:renderIf>
+                                                                    <aura:renderIf isTrue="{!A.Rating>2}"> <img src="{!A.Rating>3?$Resource.five:$Resource.four}" class="emoji-mobile"/>
+                                                                    </aura:renderIf>
+                                                                </aura:renderIf>
+                                                            </div>
+                                                        </lightning:buttonGroup>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </td>
+                                    </tr> 
+                                </aura:iteration>
+                            </tbody>
+                            <br/>
+                            <br/>
+                        </table>
+                        <footer class="slds-card__footer slds-align_absolute-center" style="background: #967196;position: fixed;z-index: 2;width: 100%;bottom: 0;height: 9rem;font-size: 3rem;">
+                            <center>  <lightning:button label='Submit Feedback' onclick='{!c.handleSubmit}' variant="destructive" class="ActionButton"/></center>
+                        </footer>
+                    </article>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+    </aura:if>
+</aura:component>

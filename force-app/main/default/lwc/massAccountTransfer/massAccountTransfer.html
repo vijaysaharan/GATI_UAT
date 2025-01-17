@@ -1,0 +1,139 @@
+<template>
+    <lightning-card icon-name="action:change_owner" style="zoom: 105%" alternative-text='change_owner' size='large' title="Mass Transfer Accounts" >
+        <div slot="actions">
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-large-size_12-of-12 slds-small-size_12-of-12">
+                    <lightning-button icon-name="utility:download" class="slds-m-around_medium" variant="brand" name="account" label="Owner Change Template" onclick={download} alternative-text="Show More" slot="actions"></lightning-button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="slds-p-horizontal_medium">
+            This screen allows you to transfer an account from one user to another. When you transfer ownership of an account, the new owner will also gain ownership of the following records related to the transferred account:
+            <div class="slds-p-horizontal_medium">
+                <li>Any notes that belong to the existing owner.</li>
+                <li>All contacts that belong to the existing owner.</li>
+                <li>All opportunities (including closed opportunities if you select the Transfer closed opportunities checkbox below) that belong to the existing owner.</li>
+                <li>All open activities assigned to the existing owner. Note that completed activities will not be transferred.</li>
+                <li>The new owner might need to edit sharing.</li>
+            </div>
+        </div>
+        <lightning-card title="Mass Transfer Accounts">
+            <div class="slds-p-around_medium">
+                <lightning-combobox
+                name="AccountType"
+                label="Account Type"
+                variant="label-hidden"
+                value={accountTypeValue}
+                placeholder="Select Account Type..."
+                options={accountTypeList}
+                onchange={handleAccountTypeChange} >
+                </lightning-combobox>
+            </div>
+            <lightning-tabset>
+                <lightning-tab label="Via CSV" class="slds-theme_shade" variant="vertical">
+                    <div class="slds-p-horizontal_medium">
+                        <c-reuseable-csv-convertor label-to-api={labelToApi} ongettingerror={handleCsvError} onuploadcomplete={handleFileUpload} is-contract={accountTypeValue}></c-reuseable-csv-convertor>
+                    </div>
+                    <template if:true={showTabe}>
+                        <div class="slds-p-horizontal_medium">
+                            <c-pagination-in-data-table page-limit="10" columns={columnData} for-table={tableData}>
+                            </c-pagination-in-data-table>
+                        </div>
+                    </template>
+                </lightning-tab>
+                <!--<lightning-tab label="Manual">
+                    <div class="slds-p-horizontal_medium">
+                        <c-reuseable-look-up label="Transfer From"  object-label="User"
+                        object-api-name="User" field-api-name="Name" other-field-api-name=""
+                        onvalueselected={handleValueSelectedFromUser} disabled={isDisabled}>
+                    </c-reuseable-look-up>
+                    </div>
+                    <br>
+                    <div class="slds-p-horizontal_medium">
+                        <c-reuseable-look-up label="Transfer To"  object-label="User"
+                        object-api-name="User" field-api-name="Name" other-field-api-name=""
+                        onvalueselected={handleValueSelectedToUser} disabled={isDisabled}>
+                        </c-reuseable-look-up>
+                    </div>
+                </lightning-tab>-->
+            </lightning-tabset>
+
+            
+            <!-- <div class="slds-p-horizontal_medium">
+                <lightning-combobox label="Transfer from" options={userOptions} value={selectedUserIdforTransfer}
+                    onchange={handleUserSelectionforTransfer}>
+                </lightning-combobox>
+            </div>
+            <div class="slds-p-horizontal_medium">
+                <lightning-combobox label="Transfer to" required="true" options={userOptions}
+                    value={selectedUserIdToTransfer} onchange={handleUserSelectionToTransfer}>
+                </lightning-combobox>
+            </div> -->
+            <br>
+            <div class="slds-p-horizontal_medium">
+                <lightning-input type="checkbox" label="Enforce New Owner Has Read Access"
+                    value={check.First} onchange={handleRecordSelectionFirst} checked disabled={isDisabled}></lightning-input>
+            </div>
+            <div class="slds-p-horizontal_medium">
+                <lightning-input type="checkbox" label="Keep Account Team" value={check.Second}
+                    onchange={handleRecordSelectionSecond} checked disabled={isDisabled}></lightning-input>
+            </div>
+            <div class="slds-p-horizontal_medium">
+                <lightning-input type="checkbox" label="Keep Sales Team"
+                    value={check.Third} onchange={handleRecordSelectionThird} checked disabled={isDisabled}></lightning-input>
+            </div>
+            <div class="slds-p-horizontal_medium">
+                <lightning-input type="checkbox" label="Transfer Contacts" value={check.Fourth}
+                    onchange={handleRecordSelectionFourth} checked disabled={isDisabled}></lightning-input>
+            </div>
+            <!--<div class="slds-p-horizontal_medium">
+                <lightning-input type="checkbox" label="Transfer Contracts" value={check.Fifth}
+                    onchange={handleRecordSelectionFifth} checked disabled={isDisabled}></lightning-input>
+            </div>-->
+            <div class="slds-p-horizontal_medium">
+                <lightning-input type="checkbox" label="Transfer Notes And Attachments" value={check.Sixth}
+                    onchange={handleRecordSelectionSixth} checked disabled={isDisabled}></lightning-input>
+            </div>
+            <div class="slds-p-horizontal_medium">
+                <lightning-input type="checkbox" label="Transfer Open Activities" value={check.Seventh}
+                    onchange={handleRecordSelectionSeventh} checked disabled={isDisabled}></lightning-input>
+            </div>
+            <!--<div class="slds-p-horizontal_medium">
+                <lightning-input type="checkbox" label="Transfer Orders" value={check.Eighth}
+                    onchange={handleRecordSelectionEighth} checked disabled={isDisabled}></lightning-input>
+            </div>-->
+            <!--<div class="slds-p-horizontal_medium">
+                <lightning-input type="checkbox" label="Transfer Owned Open Cases" value={check.Nineth}
+                    onchange={handleRecordSelectionNineth} checked disabled={isDisabled}></lightning-input>
+            </div>-->
+            <div class="slds-p-horizontal_medium">
+                <lightning-input type="checkbox" label="Transfer Owned Open Opportunities" value={check.Tenth}
+                    onchange={handleRecordSelectionTenth} checked disabled={isDisabled}></lightning-input>
+            </div>
+            <br>
+            <div class="slds-m-top_medium slds-text-align_center">
+                <lightning-button-group>
+                    <lightning-button label="Transfer" onclick={handleTransfer} variant="brand"
+                        class="slds-button slds-border_radius"></lightning-button>
+                    <lightning-button label="Cancel" onclick={handleCancel} variant="neutral"
+                        class="slds-button slds-p-left_small slds-border_radius"></lightning-button>
+                    <template if:true={showErrorButton}>
+                        <lightning-button class="slds-p-left_small slds-border_radius" variant="destructive" label="Error CSV" onclick={handleDownloadErrorCSV}></lightning-button>
+                    </template>
+                </lightning-button-group>
+                <!--<template if:true={isSuccessError}>
+                    <div class="slds-float_right slds-var-m-bottom_medium">
+                        <lightning-button variant="success" label="Success Log" title="Success Log" onclick={handleSuccessLog} class="slds-m-left_x-small"></lightning-button>
+                        <lightning-button variant="destructive" label="Error Log" title="Error Log" onclick={handleErrorLog} class="slds-m-left_x-small"></lightning-button>
+                    </div>
+                </template>-->
+            </div>
+        </lightning-card>
+    </lightning-card>
+    <template if:true={showProgressChart}>
+    <lightning-card title="Apex Jobs And Progress Chart">
+        <c-progress-chart batch-job-id={BatchJobId} oncomplete={handlecomplete} onerrorcsvdemand={handleDownloadErrorCSV}></c-progress-chart>
+    </lightning-card>
+</template>
+</template>

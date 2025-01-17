@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>CCEC_Auto_Creation</name>
+        <label>CCEC Auto Creation</label>
+        <locationX>446</locationX>
+        <locationY>623</locationY>
+        <actionName>Send_Complaint_CCEC_Records</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>caseid</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>Checkbox</name>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>Send_Complaint_CCEC_Records</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>52.0</apiVersion>
+    <decisions>
+        <name>Check</name>
+        <label>Check For Type And RecordType</label>
+        <locationX>446</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>Other</defaultConnectorLabel>
+        <rules>
+            <name>If_Record_type_is_complaint</name>
+            <conditionLogic>1 AND (2 OR 3 OR 4 OR 5 OR 6 OR 7)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Complaint</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Pending Pickup</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Delayed Connection</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Partial Delivery</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Claims</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Undelivered</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Origin</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IVR</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>create_ccec1</targetReference>
+            </connector>
+            <label>Complaint Record Type Cond-I</label>
+        </rules>
+        <rules>
+            <name>If_Record_type_is_complaint2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Complaint</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Invoicing and Others</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>create_ccec2</targetReference>
+            </connector>
+            <label>Complaint Record Type Cond-II</label>
+        </rules>
+        <rules>
+            <name>Query_RecordType</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Query</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>CCEC_Creation_For_Queries</targetReference>
+            </connector>
+            <label>Query RecordType</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>fillinstruction</name>
+        <dataType>String</dataType>
+        <expression>IF(
+ AND(ISPICKVAL( {!$Record.Type}, &apos;Pending Pickup&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;MISSED PICKUP&apos; )) , &apos;Arrange Pickup and Share GA details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Pending Pickup&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;LATE PICKUP&apos; )) , &apos;Arrange Pickup and Share GA details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Pending Pickup&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;INVALID DOCKET NUMBER&apos; )) , &apos;Connect the Shipment and Share connectivity details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Delayed Connection&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;INTERCHANGED/WRONG&apos; )) , &apos;Collect the wrongly delivered shipment and connect to OU&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Delayed Connection&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;MISROUTE&apos; )) , &apos;Connect the shipment and share connectivity details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Delayed Connection&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;SEIZED AT CHECKPOST&apos; )) , &apos;Connect the shipment and share connectivity details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Delayed Connection&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;BLANK ENROUTE&apos; )) , &apos;Connect the shipment and share connectivity details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Delayed Connection&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;SHORT&apos; )) , &apos;Connect the short shipment and share connectivity details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Delayed Connection&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;STC COOLING&apos; )) , &apos;Connect the shipment and share the connectivity details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Undelivered&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;INCOMPLETE ADDRESS&apos; )) , &apos;Arrange delivery on the address given in Description&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Undelivered&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;ESS RELATED ISSUE&apos; )) , &apos;Arrange delivery on the address given in Description&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Undelivered&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;LATE DELIVERY&apos; )) , &apos;Arrange delivery and Share GA details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Undelivered&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;NON DELIVERED&apos; )) , &apos;Connect Shipment/Arrange Delivery and share GA Details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Undelivered&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;WRONG DELIVERY UPDATED&apos;)) , &apos;Arrange Correct delivery and share GA details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Partial Delivery&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;SHORT AT DELIVERY OU&apos; )) , &apos;Arrange delivery of Short shipment and Share GA details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Claims&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;CLAIM&apos; )) , &apos;Collect the hard copies and Send to Claim cell HO and share the FOC dkt no&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Claims&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;DAMAGE&apos; )) , &apos;Please complete the OBN process and Issue OBN&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Claims&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;LOST&apos; )) , &apos;Please complete the OBN process and Issue OBN&apos;, 
+IF(ISPICKVAL( {!$Record.Origin}, &apos;IVR&apos;) , &apos;IVR related complaints&apos;,&apos;&apos;) ))))))))))))))))))</expression>
+    </formulas>
+    <formulas>
+        <name>fillinstructions2</name>
+        <dataType>String</dataType>
+        <expression>IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;DOCUMENT MISSING&apos; )) , &apos;Connect/Deliver the relevant documents and share the details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;EXCESS FREIGHT CHARGES&apos; )) , &apos;Return excess amount received from Customer&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;DISCREPANCY IN BILLS&apos; )) , &apos;Share correct Bill with Customer&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;MISBEHAVIOUR BY GATIITE&apos; )) , &apos;Misbehaviour by Staff- Check facts, Apologies and update with CAPA&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;NON RECIEPT OF POD&apos; )) , &apos;Upload/Share POD copy&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;OTHERS&apos; )) , &apos;Complaint Nature Others: Read CS remarks Carefully and resolve&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;FREIGHT REFUND&apos; )) , &apos;Issue GATI miles Coupon&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;NON RECIEPT OF COD AMOUNT&apos; )) ,&apos;Connect the COD and share connectivity details/ Remit COD amount to customer and share details&apos;,
+IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;COD DD LOST&apos; )) ,&apos;Connect the COD and share connectivity details/ Remit COD amount to customer and share details&apos;,
+ &apos;&apos;)))))))))</expression>
+    </formulas>
+    <formulas>
+        <name>fillinstructions3</name>
+        <dataType>String</dataType>
+        <expression>IF( ISPICKVAL( {!$Record.Type}, &apos;DELIVERY REQUESTED BEFORE ADD&apos;) , &apos;Arrange delivery and share GA details&apos;,
+IF( ISPICKVAL( {!$Record.Type}, &apos;REBOOKING WITHOUT INFORMATION&apos;) , &apos;Share E-Mail communication received for Re-booking of shipment&apos;,
+IF( ISPICKVAL( {!$Record.Type}, &apos;VARIANCE IN ADD&apos;) , &apos;Resolve ADD Variance concern&apos;,
+&apos;&apos;)))</expression>
+    </formulas>
+    <interviewLabel>testccec ceration {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>ccec creation for complaint/query</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>CCEC_Creation_For_Queries</name>
+        <label>CCEC Creation For Queries</label>
+        <locationX>578</locationX>
+        <locationY>431</locationY>
+        <connector>
+            <targetReference>CCEC_Auto_Creation</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Auto_CCEC_Creation__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Auto_CCEC_Flag__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCEC_Instructions__c</field>
+            <value>
+                <elementReference>fillinstructions3</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCEC_OU_Assignment_Logic__c</field>
+            <value>
+                <elementReference>$Record.CCEC_Action_OU__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>OP</stringValue>
+            </value>
+        </inputAssignments>
+        <object>CCEC__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>create_ccec1</name>
+        <label>Create CCEC For Complaint CON-I</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <connector>
+            <targetReference>CCEC_Auto_Creation</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Auto_CCEC_Creation__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Auto_CCEC_Flag__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCEC_Instructions__c</field>
+            <value>
+                <elementReference>fillinstruction</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCEC_OU_Assignment_Logic__c</field>
+            <value>
+                <elementReference>$Record.CCEC_Action_OU__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>OP</stringValue>
+            </value>
+        </inputAssignments>
+        <object>CCEC__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>create_ccec2</name>
+        <label>Create CCEC For Complaint CON-II</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <connector>
+            <targetReference>CCEC_Auto_Creation</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Auto_CCEC_Creation__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Auto_CCEC_Flag__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCEC_Instructions__c</field>
+            <value>
+                <elementReference>fillinstructions2</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCEC_OU_Assignment_Logic__c</field>
+            <value>
+                <elementReference>$Record.CCEC_Action_OU__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>OP</stringValue>
+            </value>
+        </inputAssignments>
+        <object>CCEC__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>320</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Docket_Validation__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Valid</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Total_CCEC__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>check_key</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>Complaint</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>checkkey1</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>Claim</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>Instruction_pendingpickup</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue>Arrange Pickup and Share GA details.</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>new</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>New</stringValue>
+        </value>
+    </variables>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

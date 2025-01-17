@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <assignments>
+        <name>change_status</name>
+        <label>change status</label>
+        <locationX>501</locationX>
+        <locationY>347</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>update_status</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>record_type</name>
+        <label>record type</label>
+        <locationX>321</locationX>
+        <locationY>387</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>claim</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Claim</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>change_status</targetReference>
+            </connector>
+            <label>claim</label>
+        </rules>
+    </decisions>
+    <interviewLabel>claim status close {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>claim status close</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>update_status</name>
+        <label>update status</label>
+        <locationX>758</locationX>
+        <locationY>365</locationY>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>record_type</targetReference>
+        </connector>
+        <filterLogic>3 AND 2 AND (1 OR (4 AND 5))</filterLogic>
+        <filters>
+            <field>Risk_Coverage__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>OWNERS RISK</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>OBN_No__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Type</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Claim</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Risk_Coverage__c</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>CARRIERS RISK</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>CMS_No__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

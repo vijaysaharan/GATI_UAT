@@ -1,0 +1,5 @@
+<design:component>
+    <design:attribute name="Url" label="Url"/>
+    <design:attribute name="StaffCode" label="StaffCode" />
+    <design:attribute name="Title" label="Title" />
+</design:component>

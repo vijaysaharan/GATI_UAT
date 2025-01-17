@@ -1,0 +1,22 @@
+<template>
+    <!-- <template if:true={showCombo}>
+        <lightning-combobox options={options} label="Child to show" onchange={handleChildSelectCombo}>
+        </lightning-combobox>
+    </template>
+    <template if:true={showRelatedList}>
+        <c-related-list related-object-name={bigObjApiName} related-field-list={listToShow}
+            related-lookup={relatedLookup} record-id={idToPass} big-object-index={indexOfB}>
+        </c-related-list>
+    </template> -->
+    <div style="padding-left: 2.5%;padding-right: 2.5%;">
+        <lightning-accordion allow-multiple-sections-open>
+            <template for:each={options} for:item="item">
+                <lightning-accordion-section key={item.bigObjApiName} name={item.bigObjApiName} label={item.label}>
+                    <c-related-list related-object-name={item.bigObjApiName} related-field-list={item.listToShow}
+                        related-lookup={item.relatedLookup} record-id={item.idToPass} big-object-index={item.indexOfB}>
+                    </c-related-list>
+                </lightning-accordion-section>
+            </template>
+        </lightning-accordion>
+    </div>
+</template>

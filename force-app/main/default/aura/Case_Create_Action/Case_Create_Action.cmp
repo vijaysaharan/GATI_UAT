@@ -1,0 +1,8 @@
+<aura:component implements="lightning:actionOverride,lightning:hasPageReference">
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:attribute name="recordtypeid" type="string"/>
+    <aura:attribute name="focusedTabId" type="string"/>
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.refresh}"/>
+    <aura:handler name="init" value="this" action="{!c.doint}"></aura:handler>
+    <c:caseComponent recordTypeId="{!v.recordtypeid}" oncloseclicked="{!c.closeFocusedTab}"/>
+</aura:component>

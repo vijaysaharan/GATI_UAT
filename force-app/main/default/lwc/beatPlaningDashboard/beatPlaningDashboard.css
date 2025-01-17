@@ -1,0 +1,66 @@
+.outer-container {
+    background-color: white;
+    border-radius: 10px;
+}
+
+.outer-container td{
+    border: 1px solid;
+    padding: 0.5rem;
+}
+
+.table-container {
+    max-height: 50vh;
+}
+
+.outer-container th {
+    background-color: rgb(16, 128, 160);
+    color: white;
+    font-weight: bold;
+    border: 1px solid;
+    padding: 0.5rem;
+    border: 1px solid black;
+    padding: 0.5rem;
+}
+
+.flex-header{   
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.header {
+    background-color: rgb(16, 128, 160);
+    border-radius: 4px;
+    font-size: 20px;
+    padding: 10px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+}
+
+.footer-dashboard {
+    background-color: rgb(16, 128, 160);
+    border-radius: 4px;
+    font-size: 20px;
+    padding: 10px;
+    font-weight: 700;
+    color: white;
+    text-align: start;
+}
+
+.no-data-found {
+    background-color: black;
+    border-radius: 4px;
+    font-size: 20px;
+    padding: 10px;
+    font-weight: 700;
+    color: white;
+    text-align: center;
+}
+
+.sticky-top-header {
+    position: sticky;
+    top: -2%;
+    z-index: 10;
+}

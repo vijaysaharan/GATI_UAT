@@ -1,0 +1,21 @@
+.multi-select-label{
+    font-weight: 700;
+    font-size: 12px;
+    margin-left: 5px;
+}
+.multi-select-container{
+    width: 100%;
+    margin-bottom: 10px;
+}
+.multi-select-label-PE{
+    color: black;
+    font-weight: 700;
+    font-size: 12px;
+    margin-left: 5px;
+}
+.inputStyleOverload {
+    --slds-c-input-shadow : none;
+    --slds-c-input-shadow-focus : none;
+    --slds-c-input-color-border : white;
+    --slds-c-input-color-border-focus : white;
+}

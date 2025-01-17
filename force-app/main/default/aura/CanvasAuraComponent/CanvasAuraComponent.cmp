@@ -1,0 +1,11 @@
+<aura:component  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+<aura:attribute name="canvasParameters" type="string" default=""/>
+<aura:attribute name="CanvasName" type="string" default=""/>
+   
+ <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>   	
+    <force:canvasApp developerName="GATICanvas"
+         height="640px" width="100%" 
+         parameters="{!v.canvasParameters}"
+        />	
+
+</aura:component>
