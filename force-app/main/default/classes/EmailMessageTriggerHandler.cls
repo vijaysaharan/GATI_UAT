@@ -10,7 +10,6 @@ public class EmailMessageTriggerHandler {
     }
     
     public static void updateEmailAddressInCase(Map<Id,EmailMessage> caseToEmailMessage){
-        System.debug('caseToEmailMessage'+caseToEmailMessage);
         Boolean isUpdate = false;
         List<Case> caseList = [SELECT Id,Email_Address_For_Assignment__c,OwnerId 
                                FROM Case 
@@ -20,15 +19,15 @@ public class EmailMessageTriggerHandler {
         if(caseList != null && caseList.size()>0){
             for(Case cs : caseList){
                 if(caseToEmailMessage.containsKey(cs.Id)){
-                 	/*List<String> emailList = caseToEmailMessage.get(cs.Id).ToAddress.split(';');
+                 	List<String> emailList = caseToEmailMessage.get(cs.Id).ToAddress.split(';');
                     String emailToCheck = '';
                     for(String em : emailList){
-                        if(em.contains('@allcargologistics.com')){
+                        if(em.contains('@allcargologistics.com') || em.contains('@gati')){
                             emailToCheck = em.trim();
                             break;
                         }
-                    }*/
-                    cs.Email_Address_For_Assignment__c = caseToEmailMessage.get(cs.Id).ToAddress;  
+                    }
+                    cs.Email_Address_For_Assignment__c = emailToCheck;  
                     isUpdate = true; 
                 }
             }
