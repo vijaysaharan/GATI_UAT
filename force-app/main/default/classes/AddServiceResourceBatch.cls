@@ -1,314 +1,56 @@
 /*
 Author     : Shahid Imam (simam@kloudrac.com)
 Date       : Feb 02, 2023
-Desc       : 
 Test Class Name : AddServiceResourceBatch
+Updated By : Vijay Saharan(vijay@kloudrac.com)
+Updated Date : 20-JAN-2025
 */
-
 public class AddServiceResourceBatch implements Database.Batchable<SObject> {
     public string recordId;
     public string userId;
+    
     public Database.QueryLocator start(Database.BatchableContext bc) {
         String msg = '';
-        
-        List<AccountTeamMember> accTeamList = [select Id, AccountId FROM AccountTeamMember WHERE AccountId=:recordId AND TeamMemberRole='Service Resource'];
-        if(!accTeamList.isEmpty() && accTeamList.size()>0){
-            delete accTeamList;
+        List<AccountTeamMember> accountTeamMemberList = [SELECT Id, AccountId FROM AccountTeamMember 
+                                                         WHERE AccountId = :recordId AND TeamMemberRole = 'Service Resource'
+                                                        ];
+        if(!accountTeamMemberList.isEmpty() && accountTeamMemberList.size()>0){
+            delete accountTeamMemberList;
         }
         
-        AccountTeamMember acctemObj = new AccountTeamMember();
-        acctemObj.AccountId = recordId;
-        acctemObj.UserId = userId;
-        acctemObj.AccountAccessLevel = 'Read';
-        acctemObj.CaseAccessLevel = 'Edit';
-        acctemObj.OpportunityAccessLevel = 'None';
-        acctemObj.TeamMemberRole = 'Service Resource';
-        if(acctemObj!=null){
+        AccountTeamMember newAccountTeamMember = new AccountTeamMember();
+        newAccountTeamMember.AccountId = recordId;
+        newAccountTeamMember.UserId = userId;
+        newAccountTeamMember.AccountAccessLevel = 'Read';
+        newAccountTeamMember.CaseAccessLevel = 'Edit';
+        newAccountTeamMember.OpportunityAccessLevel = 'None';
+        newAccountTeamMember.TeamMemberRole = 'Service Resource';
+        if(newAccountTeamMember!=null){
             try{
-                insert acctemObj;
-            }catch(Exception ex){
-                
-            }
+                insert newAccountTeamMember;
+            }catch(Exception ex){}
             
         }
-        return Database.getQueryLocator([SELECT Id,OwnerId FROM CASE WHERE AccountId =:recordId AND Status!='Closed']);
-        //return Database.getQueryLocator(roleId);
-        
+        return Database.getQueryLocator([SELECT Id,OwnerId FROM CASE WHERE AccountId = :recordId AND Status != 'Closed']);
     }
     
     public void execute(Database.BatchableContext bc, List<Case> caseList) {
-        Map<Id,Case> mapOfCaseOwner = new Map<Id,Case>();
-        for(Case cc:caseList){
+        Map<Id,Case> caseToCaseOwner = new Map<Id,Case>();
+        for(Case cc : caseList){
             cc.OwnerId = userId;
-            if(!mapOfCaseOwner.containsKey(cc.Id)){
-                mapOfCaseOwner.put(cc.Id,cc);
+            if(!caseToCaseOwner.containsKey(cc.Id)){
+                caseToCaseOwner.put(cc.Id,cc);
             }
         }
-        if(!mapOfCaseOwner.isEmpty() && mapOfCaseOwner.size()>0){
+        if(!caseToCaseOwner.isEmpty() && caseToCaseOwner.size() > 0){
             try{
                 CheckRecursive.runAfterUpdate=false;
-                database.update(mapOfCaseOwner.values());
-            }catch(Exception ex){
-                
-            }
+                database.update(caseToCaseOwner.values());
+            }catch(Exception ex){}
         }
     }
     
     public void finish(Database.BatchableContext bc) {
-        // code to execute after the batch finishes
-    }
-
-    Integer i=0;{
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        i++;
-        i++;
-        i++;
-        i++;
-        
-        
+        //Batch Finish
     }
 }
