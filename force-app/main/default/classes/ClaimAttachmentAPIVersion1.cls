@@ -1,113 +1,71 @@
 @RestResource(urlMapping='/CaseAttachmentv1/*')
 global without sharing class ClaimAttachmentAPIVersion1 {
     @HttpPost
-    global static Wrapperclass doPost() {
-        CaseAndAttachment caseAndAttachmentObj = (CaseAndAttachment)System.JSON.deserialize(RestContext.request.requestBody.tostring(),CaseAndAttachment.class);
+    global static ResponseWrapper doPost() {
         Case caseRecordObj;
-        List<case> clist;
+        List<case> newCaseRecord;
+        CaseAndAttachment caseAndAttachmentObj = (CaseAndAttachment)System.JSON.deserialize(RestContext.request.requestBody.tostring(),CaseAndAttachment.class);
         try{
             if(caseAndAttachmentObj != null && caseAndAttachmentObj.caseObj != null){
                 caseRecordObj = caseAndAttachmentObj.caseObj;
-                System.debug('caseRecordObj'+caseRecordObj);
                 if(caseRecordObj.CaseNumber == null || caseRecordObj.CaseNumber ==''){
-                    if(CaseAndAttachmentObj.callrecievedOU!=null){
-                        List<Organization_Master__c> om = [select id from Organization_Master__c where REF_Code__c=:CaseAndAttachmentObj.callrecievedOU];
-                        if(om.size()>0){
-                            caseRecordObj.Call_received_OU__c = om[0].id;
-                        }else{
-                            caseRecordObj.Call_received_OU__c = null;  
-                        }    
+                    Set<String> refCodes = new Set<String>();
+                    Map<String, Organization_Master__c> refCodeToOrganizationMaster = new Map<String,Organization_Master__c>();
+                    List<Organization_Master__c> organizationMasters = new List<Organization_Master__c>();
+                    if(CaseAndAttachmentObj.callrecievedOU != null){
+                        refCodes.add(CaseAndAttachmentObj.callrecievedOU);
                     }
                     if(CaseAndAttachmentObj.Companyof != null){
-                        List<Organization_Master__c> om = [select id from Organization_Master__c where REF_Code__c=:CaseAndAttachmentObj.Companyof];
-                        if(om.size()>0){
-                            caseRecordObj.Company_of__c = om[0].id;
-                        }else{
-                            caseRecordObj.Company_of__c = null;  
-                        }    
+                        refCodes.add(CaseAndAttachmentObj.Companyof);
                     } 
                     if(CaseAndAttachmentObj.Gemrefno != null){
-                        List<Organization_Master__c> om = [select id from Organization_Master__c where REF_Code__c=:CaseAndAttachmentObj.Gemrefno];
-                        if(om.size()>0){
-                            caseRecordObj.Gems_Ref_No__c = om[0].id;
-                        }else{
-                            caseRecordObj.Gems_Ref_No__c = null;  
-                        }    
+                        refCodes.add(CaseAndAttachmentObj.Gemrefno);
                     }
                     if(CaseAndAttachmentObj.callforwardedOU !=null){
-                        list<Organization_Master__c> om = [select id from Organization_Master__c where REF_Code__c=:CaseAndAttachmentObj.callforwardedOU];
-                        if(om.size()>0){
-                            caseRecordObj.Call_forwarded_OU__c =om[0].id;
-                        }else{
-                            caseRecordObj.Call_forwarded_OU__c=null;  
-                        }
+                        refCodes.add(CaseAndAttachmentObj.callforwardedOU);
                     }
-                    
-                    // code is changed here for Stock OU / Stock Receving OU and Delivery OU
-                    if(caseRecordObj.Stock_OU__c != null){
-                        List<Organization_Master__c> om = [select id from Organization_Master__c where REF_Code__c =: caseRecordObj.Stock_OU__c];
-                        if(!om.isEmpty()){
-                            caseRecordObj.Stock_OU__c = om[0].id;
-                        }else{
-                            caseRecordObj.Stock_OU__c = null;
-                        }
+                    /*if(caseRecordObj.Stock_OU__c != null){
+                        refCodes.add(caseRecordObj.Stock_OU__c);
                     }
                     if(caseRecordObj.Stock_Receiving_OU__c != null){
-                        List<Organization_Master__c> om = [select id from Organization_Master__c where REF_Code__c =: caseRecordObj.Stock_Receiving_OU__c];
-                        if(!om.isEmpty()){
-                            caseRecordObj.Stock_Receiving_OU__c = om[0].id;
-                        }else{
-                            caseRecordObj.Stock_Receiving_OU__c = null;
-                        }
+                        refCodes.add(caseRecordObj.Stock_Receiving_OU__c);
                     }
                     if(caseRecordObj.Delivery_OU__c != null){
-                        List<Organization_Master__c> om = [select id from Organization_Master__c where REF_Code__c =: caseRecordObj.Delivery_OU__c];
-                        if(!om.isEmpty()){
-                            caseRecordObj.Stock_Receiving_OU__c = om[0].id;
-                        }else{
-                            caseRecordObj.Delivery_OU__c = null;
-                        }
-                    }
-                    
+                        refCodes.add(caseRecordObj.Delivery_OU__c);
+                    }*/                 
                     if(CaseAndAttachmentObj.ccecActionOU !=null) {
-                        System.debug(CaseAndAttachmentObj.ccecActionOU);
-                        list<Organization_Master__c> om = [select id from Organization_Master__c where REF_Code__c=:CaseAndAttachmentObj.ccecActionOU];
-                        if(om.size()>0){
-                            System.debug(om[0].id);
-                            caseRecordObj.CCEC_Action_OU__c=om[0].id; 
-                        }else{
-                            caseRecordObj.CCEC_Action_OU__c=null;  
-                        }
+                        refCodes.add(caseAndAttachmentObj.ccecActionOU);
                     }  
                     if(CaseAndAttachmentObj.complaintActionOU !=null) {
-                        list<Organization_Master__c> om = [select id from Organization_Master__c where REF_Code__c=:CaseAndAttachmentObj.complaintActionOU];
-                        if(om.size()>0){
-                            caseRecordObj.Complaint_Actionable_OU__c=om[0].id; 
-                        }else{
-                            caseRecordObj.Complaint_Actionable_OU__c=null;  
-                        }
+                        refCodes.add(caseAndAttachmentObj.complaintActionOU);
                     }  
                     if(CaseAndAttachmentObj.PickUpPincode !=null){
-                        // Organization_Master__c om = new Organization_Master__c(REF_Code__c=CaseAndAttachmentObj.PickUpPincode);
-                        list<Organization_Master__c> om = [select id from Organization_Master__c where REF_Code__c=:CaseAndAttachmentObj.PickUpPincode];
-                        caseRecordObj.Pick_Up_Pincode__c =om[0].id;
+                        refCodes.add(caseAndAttachmentObj.pickUpPincode);
                     }
                     if(CaseAndAttachmentObj.customercode!=null){
-                        //  Account acc = new Account(Customer_Code__c= Decimal.valueof(CaseAndAttachmentObj.customercode));
-                        List<account> acc = [select id from account where Customer_Code__c = : Decimal.valueof(CaseAndAttachmentObj.customercode)];
-                        if(acc != null && acc.size() > 0){
-                            caseRecordObj.AccountId = acc[0].id; 
-                        }
-                    }   
-                    
+                        List<account> accRecord = [SELECT Id FROM Account WHERE Customer_Code__c = :Decimal.valueof(CaseAndAttachmentObj.customercode)];
+                        caseRecordObj.AccountId = (accRecord != null && accRecord.size() > 0) ? accRecord[0].Id : null;
+                    }
                     if(CaseAndAttachmentObj.caseObj.Pick_Up_Ref_No__c != null){
-                        //caseRecordObj.Pick_Up_Ref_ID__r = new Case(CaseName = CaseAndAttachmentObj.caseObj.Pick_Up_Ref_No__c);
-                        List<Case> ca = [select Id, PickUp_OU__c from Case where CaseNumber =: CaseAndAttachmentObj.caseObj.Pick_Up_Ref_No__c];
-                        if(ca != null && ca.size()>0){
-                            caseRecordObj.Pick_Up_Ref_ID__c = ca[0].Id;
-                            caseRecordObj.PickUp_OU__c = ca[0].PickUp_OU__c;   
+                        List<Case> pickupCase = [SELECT Id, PickUp_OU__c FROM Case WHERE CaseNumber = :CaseAndAttachmentObj.caseObj.Pick_Up_Ref_No__c];
+                        caseRecordObj.Pick_Up_Ref_ID__c = (pickupCase != null && pickupCase.size() > 0) ? pickupCase[0].Id : null;
+                        caseRecordObj.PickUp_OU__c = (pickupCase != null && pickupCase.size() > 0) ? pickupCase[0].PickUp_OU__c : null;
+                    }                    
+                    if(refCodes != null && refCodes.size() > 0){
+                        organizationMasters = [SELECT Id, REF_Code__c FROM Organization_Master__c WHERE REF_Code__c IN :refCodes];
+                        if(organizationMasters != null && organizationMasters.size() > 0){
+                            for(Organization_Master__c om : organizationMasters){
+                                refCodeToOrganizationMaster.put(om.REF_Code__c, om);
+                            }
                         }
                     }
+                    caseRecordObj.Call_received_OU__c = CaseAndAttachmentObj.callrecievedOU != null ? (refCodeToOrganizationMaster.containsKey(CaseAndAttachmentObj.callrecievedOU) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.callrecievedOU).Id) : null) : null;
+                    caseRecordObj.Company_of__c = CaseAndAttachmentObj.Companyof != null ? (refCodeToOrganizationMaster.containsKey(CaseAndAttachmentObj.Companyof) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.Companyof).Id) : null) : null;
+                    caseRecordObj.Gems_Ref_No__c = CaseAndAttachmentObj.Gemrefno != null ? (refCodeToOrganizationMaster.containsKey(CaseAndAttachmentObj.Gemrefno) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.Gemrefno).Id) : null) : null;
+                    caseRecordObj.Call_forwarded_OU__c = CaseAndAttachmentObj.callforwardedOU != null ? (refCodeToOrganizationMaster.containsKey(CaseAndAttachmentObj.callforwardedOU) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.callforwardedOU).Id) : null) : null;
+                    caseRecordObj.CCEC_Action_OU__c = caseAndAttachmentObj.ccecActionOU != null ? (refCodeToOrganizationMaster.containsKey(caseAndAttachmentObj.ccecActionOU) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.ccecActionOU).Id) : null) : null;
+                    caseRecordObj.Complaint_Actionable_OU__c = caseAndAttachmentObj.complaintActionOU != null ? (refCodeToOrganizationMaster.containsKey(caseAndAttachmentObj.complaintActionOU) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.complaintActionOU).Id) : null) : null;
+                    caseRecordObj.Pick_Up_Pincode__c = caseAndAttachmentObj.pickUpPincode != null ? (refCodeToOrganizationMaster.containsKey(caseAndAttachmentObj.pickUpPincode) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.pickUpPincode).Id) : null) : null;
                     
                     if(CaseAndAttachmentObj.recordType!=null){
                         if(CaseAndAttachmentObj.recordType.containsIgnoreCase('Complaint')){
@@ -129,8 +87,7 @@ global without sharing class ClaimAttachmentAPIVersion1 {
                         else if(CaseAndAttachmentObj.recordType.containsIgnoreCase('Service Request')) {
                             Id recordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName().get('Service_Request').getRecordTypeId();
                             caseRecordObj.recordTypeId = recordTypeId;
-                        }
-                        
+                        }                        
                     }
                     else { 
                         Id recordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName().get('Query').getRecordTypeId();
@@ -140,152 +97,176 @@ global without sharing class ClaimAttachmentAPIVersion1 {
                     if(CaseAndAttachmentObj.recordType != null && (CaseAndAttachmentObj.recordType.containsIgnoreCase('Complaint') || CaseAndAttachmentObj.recordType.containsIgnoreCase('Query')) && (CaseAndAttachmentObj.caseObj.Pick_Up_Ref_No__c != null || CaseAndAttachmentObj.caseObj.Docket_Number__c != null)){
                         caseRecordObj.Docket_Validation__c = 'Valid';
                     }
-                    Database.SaveResult result = Database.insert(caseRecordObj,false);
-                    if(result.errors!=null && !result.errors.isEmpty()){
-                        System.debug(result.geterrors().toString());
-                        wrapperclass wc = new wrapperclass();
-                        wc.Status ='Not Inserted';
-                        // wc.error = result.geterrors().toString();
-                        Integration_Log__c ic = new Integration_Log__c();
-                        for(Database.Error er: result.geterrors()) {
-                            wc.error= er.getMessage() ;
-                            ic.Error_Message__c=wc.error;
-                        }
-                        
-                        ic.Component_Name__c='Case Insertion - G2C';
-                        ic.IsIntegration__c=false;
-                        
-                        ic.eObject__c = 'Case';
-                        ic.Inbound_JSON__c=RestContext.request.requestBody.tostring();
-                        ic.Outbound_JSON__c=JSON.serialize(wc);
-                        insert ic;
-                        System.debug(JSON.serialize(wc));
-                        System.debug(ic);
-                        return wc;    
+                    Database.SaveResult caseInsertResult = Database.insert(caseRecordObj,false);
+                    if(caseInsertResult.errors != null && !caseInsertResult.errors.isEmpty()){
+                        ResponseWrapper responseWrap = new ResponseWrapper();
+                        responseWrap.Status = 'Not Inserted';
+
+                        Integration_Log__c logMessage = new Integration_Log__c();
+                        for(Database.Error er: caseInsertResult.geterrors()) {
+                            responseWrap.error = er.getMessage() ;
+                            logMessage.Error_Message__c=responseWrap.error;
+                        }                        
+                        logMessage.Component_Name__c = 'Case Insertion - G2C';
+                        logMessage.IsIntegration__c = false;                        
+                        logMessage.eObject__c = 'Case';
+                        logMessage.Inbound_JSON__c =  RestContext.request.requestBody.tostring().length() > 131070 ? RestContext.request.requestBody.tostring().substring(0,131070) : RestContext.request.requestBody.tostring();
+                        logMessage.Outbound_JSON__c = JSON.serialize(responseWrap);
+                        insert logMessage;
+
+                        return responseWrap;    
                     }                    
                     if(caseRecordObj.Id!=null){
-                        List<ContentDocumentLink> attachmentToInsert = new List<ContentDocumentLink>();                        
+                        List<ContentDocumentLink> contentLinkToInsert = new List<ContentDocumentLink>();                       
                         if(caseAndAttachmentObj.attachments != null && caseAndAttachmentObj.attachments.size() > 0){
+                            List<ContentVersion> newContentVersionList = new List<ContentVersion>();
+                            Set<Id> contentVersionIds = new Set<Id>();
+                            List<ContentVersion> contentVersions = new List<ContentVersion>();                            
                             for(Attach attachObj : caseAndAttachmentObj.attachments){
-                                ContentVersion conVer = new ContentVersion();
-                                conVer.ContentLocation = 'S'; 
-                                conVer.PathOnClient =attachObj.ContentType ; 
-                                conVer.Title = attachObj.name; 
-                                conVer.VersionData = EncodingUtil.base64Decode(attachObj.body); 
-                                insert conVer;
-                                
-                                Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:conVer.Id].ContentDocumentId;                               
-                                
-                                ContentDocumentLink cDe = new ContentDocumentLink();
-                                cDe.ContentDocumentId = conDoc;
-                                cDe.LinkedEntityId = caseRecordObj.Id; 
-                                cDe.ShareType = 'I';
-                                cDe.Visibility = 'AllUsers';
-                                attachmentToInsert.add(cDe);                                
-                            }                            
-                        }                        
-                        if(!attachmentToInsert.isEmpty()){
-                            insert attachmentToInsert;
+                                ContentVersion newContentVersion = new ContentVersion();
+                                newContentVersion.contentLocation = 'S'; 
+                                newContentVersion.pathOnClient =attachObj.ContentType ; 
+                                newContentVersion.title = attachObj.name; 
+                                newContentVersion.versionData = EncodingUtil.base64Decode(attachObj.body); 
+                                newContentVersionList.add(newContentVersion);                   
+                            }
+                            if(newContentVersionList != null && newContentVersionList.size() > 0){
+                                insert newContentVersionList;
+                                for(ContentVersion cv : newContentVersionList){
+                                    if(cv.Id != null){
+                                        contentVersionIds.add(cv.Id);
+                                    }
+                                }
+                            }
+                            if(contentVersionIds != null && contentVersionIds.size() > 0){
+                                contentVersions = [SELECT ContentDocumentId FROM ContentVersion WHERE Id IN :contentVersionIds];
+                            }  
+                            if(contentVersions != null && contentVersions.size() > 0){
+                                for(ContentVersion cv : contentVersions){
+                                    ContentDocumentLink newContentDocumentLink = new ContentDocumentLink();
+                                    newContentDocumentLink.ContentDocumentId = cv.ContentDocumentId;
+                                    newContentDocumentLink.LinkedEntityId = caseRecordObj.Id; 
+                                    newContentDocumentLink.ShareType = 'I';
+                                    newContentDocumentLink.Visibility = 'AllUsers';
+                                    contentLinkToInsert.add(newContentDocumentLink);
+                                }
+                            }                       
+                        }                                                
+                        if(contentLinkToInsert != null && contentLinkToInsert.size() > 0){
+                            insert contentLinkToInsert;
                         }
                     }
-                    if(result.isSuccess()){
-                        Case cs = [select CaseNumber,id from case where  id=:result.id]; 
-                        //Case cs = [select Case_Name__c from case where  id=:result.id]; 
-                        wrapperclass wc = new wrapperclass();
-                        wc.CaseName=cs.CaseNumber;
-                        wc.Status ='Inserted';
-                        Integration_Log__c ic = new Integration_Log__c();
-                        ic.Component_Name__c='Case Insertion - G2C';
-                        ic.IsIntegration__c=true;
-                        ic.CaseNumber__c=cs.CaseNumber;
-                        ic.eRecordID__c = cs.id;
-                        ic.eObject__c = 'Case';
-                        ic.Inbound_JSON__c=RestContext.request.requestBody.tostring();
-                        ic.Outbound_JSON__c=JSON.serialize(wc);
-                        insert ic;
-                        System.debug(JSON.serialize(wc));
-                        System.debug(ic);
-                        return wc;
+                    if(caseInsertResult.isSuccess()){
+                        Case newCaseCreated = [SELECT CaseNumber, Id FROM Case WHERE  Id= :caseInsertResult.Id]; 
+                        ResponseWrapper responseWrap = new ResponseWrapper();
+                        responseWrap.caseId = newCaseCreated.Id;
+                        responseWrap.CaseName = newCaseCreated.CaseNumber;
+                        responseWrap.Status ='Inserted';
+
+                        Integration_Log__c logMessage = new Integration_Log__c();
+                        logMessage.Component_Name__c = 'Case Insertion - G2C';
+                        logMessage.IsIntegration__c = true;
+                        logMessage.CaseNumber__c = newCaseCreated.CaseNumber;
+                        logMessage.eRecordID__c = newCaseCreated.Id;
+                        logMessage.eObject__c = 'Case';
+                        logMessage.Inbound_JSON__c =  RestContext.request.requestBody.toString().length() > 131070 ? RestContext.request.requestBody.toString().substring(0,131070) : RestContext.request.requestBody.toString();
+                        logMessage.Outbound_JSON__c = JSON.serialize(responseWrap);
+                        insert logMessage;
+
+                        return responseWrap;
                     }
                 }
                 else if(caseRecordObj.CaseNumber != null) {
-                    clist = [select id,CaseNumber from case where CaseNumber =:caseRecordObj.CaseNumber ];
-                    if(clist.size()>0 ){
-                        List<ContentDocumentLink> attachmentToInsert = new List<ContentDocumentLink>();
-                        
+                    newCaseRecord = [SELECT Id, CaseNumber FROM Case WHERE CaseNumber = :caseRecordObj.CaseNumber];
+                    if(newCaseRecord.size()>0 ){
+                        List<ContentDocumentLink> contentLinkToInsert = new List<ContentDocumentLink>();
                         if(caseAndAttachmentObj.attachments != null && caseAndAttachmentObj.attachments.size() > 0){
-                            for(Attach attachObj : caseAndAttachmentObj.attachments){
-                                ContentVersion conVer = new ContentVersion();
-                                conVer.contentLocation = 'S'; 
-                                conVer.pathOnClient =attachObj.ContentType ; 
-                                conVer.title = attachObj.name; 
-                                conVer.versionData = EncodingUtil.base64Decode(attachObj.body); 
-                                insert conVer;
-                                Id conDoc = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =:conVer.Id].ContentDocumentId;                                
-                                ContentDocumentLink cDe = new ContentDocumentLink();
-                                cDe.ContentDocumentId = conDoc;
-                                cDe.LinkedEntityId = clist[0].Id; 
-                                cDe.ShareType = 'I';
-                                cDe.Visibility = 'AllUsers';
-                                attachmentToInsert.add(cDe);
-                            }
+                            List<ContentVersion> newContentVersionList = new List<ContentVersion>();
+                            Set<Id> contentVersionIds = new Set<Id>();
+                            List<ContentVersion> contentVersions = new List<ContentVersion>();
                             
+                            for(Attach attachObj : caseAndAttachmentObj.attachments){
+                                ContentVersion newContentVersion = new ContentVersion();
+                                newContentVersion.contentLocation = 'S'; 
+                                newContentVersion.pathOnClient =attachObj.ContentType ; 
+                                newContentVersion.title = attachObj.name; 
+                                newContentVersion.versionData = EncodingUtil.base64Decode(attachObj.body); 
+                                newContentVersionList.add(newContentVersion);
+                            }
+                            if(newContentVersionList != null && newContentVersionList.size() > 0){
+                                insert newContentVersionList;
+                                for(ContentVersion cv : newContentVersionList){
+                                    if(cv.Id != null){
+                                        contentVersionIds.add(cv.Id);
+                                    }
+                                }
+                            }
+                            if(contentVersionIds != null && contentVersionIds.size() > 0){
+                                contentVersions = [SELECT ContentDocumentId FROM ContentVersion WHERE Id IN :contentVersionIds];
+                            }  
+                            if(contentVersions != null && contentVersions.size() > 0){
+                                for(ContentVersion cv : contentVersions){
+                                    ContentDocumentLink newContentDocumentLink = new ContentDocumentLink();
+                                    newContentDocumentLink.ContentDocumentId = cv.ContentDocumentId;
+                                    newContentDocumentLink.LinkedEntityId = newCaseRecord[0].Id; 
+                                    newContentDocumentLink.ShareType = 'I';
+                                    newContentDocumentLink.Visibility = 'AllUsers';
+                                    contentLinkToInsert.add(newContentDocumentLink);
+                                }
+                            }                          
                         }
-                        if(!attachmentToInsert.isEmpty()){
-                            insert attachmentToInsert;
+                        if(contentLinkToInsert != null && contentLinkToInsert.size() > 0){
+                            insert contentLinkToInsert;
                         }
-                        wrapperclass wc = new wrapperclass();
-                        wc.CaseName=clist[0].CaseNumber;
+                        ResponseWrapper wc = new ResponseWrapper();
+                        wc.CaseName=newCaseRecord[0].CaseNumber;
                         wc.Status ='Updated';
                         return wc;
                     }
                     else{
-                        wrapperclass wc = new wrapperclass();
-                        wc.CaseName=null;
-                        wc.Status ='Not Updated';
-                        wc.error ='Invalid Case Number';
-                        Integration_Log__c ic = new Integration_Log__c();
-                        ic.Component_Name__c='Case Insertion - G2C';
-                        ic.IsIntegration__c=false;
-                        ic.Error_Message__c=wc.error;
-                        ic.eObject__c = 'Case';
-                        ic.Inbound_JSON__c=RestContext.request.requestBody.tostring();
-                        ic.Outbound_JSON__c=JSON.serialize(wc);
-                        insert ic;
-                        System.debug(JSON.serialize(wc));
-                        System.debug(ic);
-                        return wc;
+                        ResponseWrapper responseWrap = new ResponseWrapper();
+                        responseWrap.CaseName = null;
+                        responseWrap.Status ='Not Updated';
+                        responseWrap.error ='Invalid Case Number';
+
+                        Integration_Log__c logMessage = new Integration_Log__c();
+                        logMessage.Component_Name__c = 'Case Insertion - G2C';
+                        logMessage.IsIntegration__c = false;
+                        logMessage.Error_Message__c = responseWrap.error;
+                        logMessage.eObject__c = 'Case';
+                        logMessage.Inbound_JSON__c =  RestContext.request.requestBody.tostring().length() > 131070 ? RestContext.request.requestBody.tostring().substring(0,131070) : RestContext.request.requestBody.tostring();
+                        logMessage.Outbound_JSON__c = JSON.serialize(responseWrap);
+                        insert logMessage;
+
+                        return responseWrap;
                     } 
                 }
             }    
         }
-        catch(Exception e)
-        {
-            Integration_Log__c ic = new Integration_Log__c();
-            ic.Component_Name__c='Case Insertion - G2C';
-            ic.IsIntegration__c=true;
-            ic.Error_Message__c=e.getMessage();
-            if (ic.Error_Message__c.length() > 250) {
-                ic.Split_Error_Message__c = ic.Error_Message__c.substring(250);
-                ic.Error_Message__c = ic.Error_Message__c.substring(0, 250);
+        catch(Exception e){
+            Integration_Log__c logRecord = new Integration_Log__c();
+            logRecord.Component_Name__c='Case Insertion - G2C';
+            logRecord.IsIntegration__c=true;
+            logRecord.Error_Message__c=e.getMessage();
+            if (logRecord.Error_Message__c.length() > 250) {
+                logRecord.Split_Error_Message__c = logRecord.Error_Message__c.substring(250);
+                logRecord.Error_Message__c = logRecord.Error_Message__c.substring(0, 250);
             }
-            ic.eObject__c = 'Case';
-            ic.Inbound_JSON__c=RestContext.request.requestBody.tostring();
-            ic.Outbound_JSON__c = RestContext.request.requestBody.tostring();
-            insert ic;
-            System.debug(ic);
-            //New Changes If Not inserted
-            wrapperclass wc = new wrapperclass();
-            wc.Status ='Not Inserted';
-            wc.error= e.getMessage();
-            return wc; 
+            logRecord.eObject__c = 'Case';
+            logRecord.Inbound_JSON__c= RestContext.request.requestBody.tostring().length() > 131070 ? RestContext.request.requestBody.tostring().substring(0,131070) : RestContext.request.requestBody.tostring();
+            logRecord.Outbound_JSON__c =  RestContext.request.requestBody.tostring().length() > 131070 ? RestContext.request.requestBody.tostring().substring(0,131070) : RestContext.request.requestBody.tostring();
+            insert logRecord;
+            ResponseWrapper responseWrap = new ResponseWrapper();
+            responseWrap.Status ='Not Inserted';
+            responseWrap.error= e.getMessage();
+            return responseWrap; 
         }
         return null;
     }
     
     private class CaseAndAttachment {
         Case caseObj;
-        list<Attach> attachments;
+        List<Attach> attachments;
         String customercode;
         String recordType;
         String callrecievedOU;
@@ -295,7 +276,6 @@ global without sharing class ClaimAttachmentAPIVersion1 {
         String pickUpPincode;
         String Companyof;
         String Gemrefno;
-        //  String Type;
     } 
     private class Attach {
         String body;
@@ -303,7 +283,8 @@ global without sharing class ClaimAttachmentAPIVersion1 {
         String name;
     }
     
-    global class Wrapperclass {
+    global class ResponseWrapper {
+        String caseId {get;set;}
         String caseName {get;set;}
         String status {get;set;}
         String error {get;set;}  

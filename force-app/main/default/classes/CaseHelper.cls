@@ -118,7 +118,7 @@ public without sharing class CaseHelper{
         }
     }   
     
-    /*NOT Called From Trigger Or Any Class*/
+    //NOT Called From Trigger Or Any Class
     public static void dupCaseError(List <Case> caseList) {
         Set<String> casedocket = new set<String>();
         Set<String> casetype = new set<String>();
@@ -220,7 +220,7 @@ public without sharing class CaseHelper{
         }  
     }
     
-    /*NOT Call By Trigger Or Any Class*/
+    //NOT Call By Trigger Or Any Class
     public static void exceptionCreation(List<Case> caseList){
         Map<String, String> docketNumberWithSubType = new Map<String, String>();
 
@@ -384,7 +384,7 @@ public without sharing class CaseHelper{
         }
     }
        
-    /*Preventing Qurey Cases with same docket number if Status is not closed*/
+    //Preventing Qurey Cases with same docket number if Status is not closed
     public static void PreventDuplicateCasesForQuery(List<Case> caseList){
         Set<String> docketNumberSet = new Set<String>();
         Map<String,List<Case>> docketNumberToCase = new Map<String,List<Case>>();
@@ -418,7 +418,7 @@ public without sharing class CaseHelper{
         }
     }
     
-    /*Prevent Cases Of Service Request Type And same docket Number And Status is Open*/
+    //Prevent Cases Of Service Request Type And same docket Number And Status is Open
     public static void PreventDuplicateCasesForServiceRequest(List<Case> caseList){
         Set<String> docketNumberSet = new Set<String>();
         Map<String,List<Case>> docketNumberToCase = new Map<String,List<Case>>();
@@ -456,7 +456,7 @@ public without sharing class CaseHelper{
         }
     }
     
-    /*CLOSE CASE AND CCEC*/
+    //Close Case And CCEC
     public static void closeCCECAndCaseStatus(List<Case> caseList){
         List<CCEC__c> ccecList = New List<CCEC__c>();
         ccecList = [SELECT Id, Status__c FROM CCEC__c WHERE Case__c IN: caseList AND Status__c = 'OP'];
@@ -468,7 +468,7 @@ public without sharing class CaseHelper{
         }
     }
     
-    /*Prevent Case Creation With Wrong Case Type*/
+    //Prevent Case Creation With Wrong Case Type
     public static void stopCreateCaseWithWrongType(List<Case> caseList){
         List<String> typeValues = new List<String>();
 
@@ -568,5 +568,51 @@ public without sharing class CaseHelper{
                 }
             }
         }
+    }
+
+    //Case Owner Assignment According to Account Associated OU
+    public static void CaseOwnerAssignment(List<Case> caseList){
+        Set<Id> accountIds = new Set<Id>();
+        List<AccountTeamMember> accountTeamList = new List<AccountTeamMember>();
+        Map<Id, Account> accountToId = new Map<Id, Account>();
+        Map<Id, List<AccountTeamMember>> accountIdToTeamMap = new Map<Id, List<AccountTeamMember>>();
+
+        for(Case cs : caseList){
+            if(cs.AccountId != null){
+                accountIds.add(cs.AccountId);
+            }
+        }
+        if(accountIds != null && accountIds.size() > 0){
+            accountToId = new Map<Id, Account>([SELECT Id, Associated_OU__c, Associated_OU__r.Parent__r.Parent__r.Parent__r.CSUser__c,
+                                                Customer_Category__c 
+                                                FROM Account 
+                                                WHERE Id IN :accountIds 
+                                                AND Customer_Category__c IN ('Strategic','KEA','MSME') 
+                                                AND Associated_OU__c != null
+                                                AND Associated_OU__r.Parent__r.Parent__r.Parent__r.RecordType.DeveloperName  = 'EDC' 
+                                                AND Associated_OU__r.Parent__r.Parent__r.Parent__r.CSUser__c != null 
+                                                AND Associated_OU__r.Parent__r.Parent__r.Parent__r.CSUser__r.IsActive = true
+                                              ]);
+            if(accountToId.keySet() != null && accountIds.size() > 0){
+                accountTeamList = [SELECT Id,AccountId FROM AccountTeamMember WHERE AccountId IN :accountToId.keySet() AND TeamMemberRole = 'Service Resource'];
+            }
+            if(accountTeamList != null && accountTeamList.size() > 0){
+                for(AccountTeamMember member : accountTeamList){
+                    if(accountIdToTeamMap.containsKey(member.AccountId)){
+                        accountIdToTeamMap.get(member.AccountId).add(member);
+                    }
+                    else{
+                        accountIdToTeamMap.put(member.AccountId, new List<AccountTeamMember>{member});
+                    }
+                }
+            }
+            if(accountToId.keySet() != null && accountIds.size() > 0){
+                for(Case cs : caseList){
+                    if(cs.AccountId != null && accountToId.containsKey(cs.AccountId) && !accountIdToTeamMap.containsKey(cs.AccountId)){
+                        cs.OwnerId = accountToId.get(cs.AccountId).Associated_OU__r.Parent__r.Parent__r.Parent__r.CSUser__c;
+                    }
+                }
+            }
+        }            
     }
 }

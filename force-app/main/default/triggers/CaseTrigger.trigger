@@ -1,10 +1,10 @@
-trigger CaseTrigger on Case (Before Insert,After Insert,Before Update, After Update)
-{
-    List<Case> caseidsPickup = new List<Case>();
+trigger CaseTrigger on Case (Before Insert,After Insert,Before Update, After Update){
+    /*Before Insert*/
+    if(Trigger.isBefore && Trigger.isInsert){
+        Id complaintRecordType = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Complaint').getRecordTypeId();
+        List<Case> complaintCaseList = new List<Case>();
 
-    if(Trigger.isInsert && Trigger.isBefore){
-        CaseHelper.stopCreateCaseWithWrongType(Trigger.New);
-        for(Case cc: Trigger.new){
+        for(Case cc : Trigger.new){
             if(cc.CCEC_Action_OU__c == null){
                 if(cc.Stock_OU__c!=null){
                     cc.CCEC_Action_OU__c = cc.Stock_OU__c;
@@ -14,25 +14,31 @@ trigger CaseTrigger on Case (Before Insert,After Insert,Before Update, After Upd
                     cc.CCEC_Action_OU__c = cc.Delivery_OU__c;
                 }
             } 
-        }
-        if(UserInfo.getName() == 'Integration User'){
-            CaseHelper.checkPickupRefno(Trigger.New); 
-        }
-        Id complaintRecordType = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Complaint').getRecordTypeId();
-        List<Case> complaintCaseList = new List<Case>();
-        
-        for(Case c : trigger.new)
-        {
-            if(complaintRecordType == c.recordTypeId){
-                complaintCaseList.add(c);
+            if(cc.recordTypeId == complaintRecordType){
+                complaintCaseList.add(cc);
             }
         }
         if(complaintCaseList.size()>0){
             HolidaysChecking.esclation(complaintCaseList); 
-        }   
+        } 
+        if(UserInfo.getName() == 'Integration User'){
+            CaseHelper.checkPickupRefno(Trigger.New); 
+        }
+        
+        CaseHelper.stopCreateCaseWithWrongType(Trigger.New);
         CaseHelper.derivingLocationPickupOU(Trigger.new);
+        CaseHelper.checkDuplicateDocketNumber(Trigger.new);
+        CaseHelper.PreventDuplicateCasesForQuery(Trigger.new);
+        CaseHelper.PreventDuplicateCasesForServiceRequest(Trigger.new);
+        CaseHelper.CaseOwnerAssignment(Trigger.new);
+    }
+
+    /*After Insert*/
+    if(Trigger.isAfter && Trigger.isInsert){
+        FetchDataFromDocketController.deleteAssignmentCase(Trigger.New);
     }
     
+    /*Before Update*/
     if(Trigger.isBefore && Trigger.isUpdate){
         List<case> caseForAttachmentError = new List<case>();
         for(case c : Trigger.new){
@@ -43,11 +49,24 @@ trigger CaseTrigger on Case (Before Insert,After Insert,Before Update, After Upd
         if(caseForAttachmentError != null && caseForAttachmentError.size()>0){
             CaseHelper.gaveErrorForAttachment(caseForAttachmentError);
         }
+        if(UserInfo.getName() == 'Integration User'){
+            CaseHelper.checkPickupRefno(Trigger.new); 
+        }
+        CaseHelper.changeCaseOwner(Trigger.new, Trigger.oldMap);
+        CaseHelper.prospectPickupToPuckup(Trigger.new,Trigger.oldMap);
+        FetchDataFromDocketController.handleUserAssignment(Trigger.newMap,Trigger.oldMap);
     }
 
+    /*Before Insert Or Before Update*/
     if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)){  
         List<Case> caseList = new List<Case>();
         for(Case c : Trigger.new){
+            if(Trigger.isInsert && c.Complaint_Status__c == 'C' && c.Status != 'Closed'){
+                c.Status = 'Closed';
+            }
+            else if(Trigger.isUpdate && (Trigger.oldMap.get(c.Id).Complaint_Status__c != c.Complaint_Status__c && c.Complaint_Status__c == 'C' && c.Status != 'Closed')){
+                c.Status = 'Closed';
+            }
             if(c.AccountId == null && c.CustomerCode__c != null){
                 caseList.add(c);
             }
@@ -55,49 +74,20 @@ trigger CaseTrigger on Case (Before Insert,After Insert,Before Update, After Upd
         if(caseList != null && caseList.size()>0){
             CaseHelper.blukExceptionHandle(caseList);
         }
+        CaseHelper.complaintCloseCheck(Trigger.new, Trigger.oldMap);
     }
 
-    if(trigger.isUpdate && trigger.isAfter){ 
+    /*After Update*/
+    if(Trigger.isAfter && Trigger.isUpdate){
+        Map<Id,Profile> apiProfile = new Map<Id,Profile>([SELECT Id FROM Profile WHERE Name IN: new List<String>{'API User','User API'}]);
         CaseHelper.callClaimRegApiUpdate(Trigger.new);
-    }
-
-    if(trigger.isUpdate && trigger.isBefore){       
-        CaseHelper.changeCaseOwner(Trigger.New, Trigger.oldMap);
-        if(UserInfo.getName() == 'Integration User'){
-            CaseHelper.checkPickupRefno(trigger.new); 
+        if(!apiProfile.containsKey(UserInfo.getProfileId())){
+            CaseHelper.shareCase(Trigger.newMap, Trigger.oldMap);
         }
-    }
+    } 
 
-    if(trigger.isAfter && trigger.isUpdate){  
-        try{
-            Map<Id,Profile> apiProfile = new Map<Id,Profile>([SELECT Id FROM Profile WHERE Name IN: new List<String>{'API User','User API'}]);
-            if(!apiProfile.containsKey(UserInfo.getProfileId())){
-                CaseHelper.shareCase(Trigger.newMap, Trigger.oldMap);
-            }
-        }
-        catch(Exception e){}
-    }
-
-    if(Trigger.isAfter && (Trigger.isInsert || Trigger.isUpdate)){
-        if(CheckRecursive.runAfterUpdate==true && !system.isBatch()){
-            CheckRecursive.runAfterUpdate=false;
-            CaseHelper.pickupOutboundCallout(Trigger.new);
-        }
-        CaseHelper.complaintClosedRelatedToPickup(Trigger.new, Trigger.oldMap);
-    }
-     
-    if(Trigger.isBefore && (Trigger.isInsert)){
-        CaseHelper.checkDuplicateDocketNumber(Trigger.new);        
-        /*Query,Complaint,Service Request Changes For Preventing Duplicate Records*/
-        CaseHelper.PreventDuplicateCasesForQuery(Trigger.New);
-        CaseHelper.PreventDuplicateCasesForServiceRequest(Trigger.New);
-    }
-        
-    if(Trigger.isBefore && Trigger.isUpdate){
-        CaseHelper.prospectPickupToPuckup(Trigger.new,Trigger.oldMap);
-    }
-
-    if(Trigger.isAfter && Trigger.isUpdate && CheckRecursive.smsApiCall==true){
+    /*After Update And Avoid Recursion*/
+    if(Trigger.isAfter && Trigger.isUpdate && CheckRecursive.smsApiCall == true){
         CheckRecursive.smsApiCall=false;
         List<RecordType> rtType = [select Id,name, DeveloperName FROM RecordType WHERE DeveloperName = 'Complaint'];
         Map<Id,Case> caseMap = Trigger.oldMap;
@@ -129,41 +119,26 @@ trigger CaseTrigger on Case (Before Insert,After Insert,Before Update, After Upd
             }
         }
     }
-    
-    /*CLOSE CASE AND CCEC*/
-    if(Trigger.isBefore && (Trigger.isUpdate || Trigger.isInsert)){
+
+    /*After Insert Or After Update*/
+    if(Trigger.isAfter && (Trigger.isInsert || Trigger.isUpdate)){
         List<case> caseToBeHandle = New List<Case>();
-        for(Case cs : Trigger.New){
-            if(Trigger.isInsert && cs.Complaint_Status__c == 'C' && cs.Status != 'Closed'){
-                cs.Status = 'Closed';
-            }else if(Trigger.isUpdate && (Trigger.oldMap.get(cs.Id).Complaint_Status__c != cs.Complaint_Status__c && cs.Complaint_Status__c == 'C' && cs.Status != 'Closed')){
-                cs.Status = 'Closed';
-            }
-        }
-        CaseHelper.complaintCloseCheck(Trigger.new, Trigger.oldMap);
-    }
-    
-    /*CLOSE CASE AND CCEC*/
-    if(Trigger.isAfter && (Trigger.isUpdate || Trigger.isInsert)){
-        List<case> caseToBeHandle = New List<Case>();
+        
         for(Case cs : Trigger.New){
             if(Trigger.isInsert && (cs.Complaint_Status__c == 'C' || cs.Status == 'Closed')){
                 caseToBeHandle.add(cs);
-            }else if(Trigger.isUpdate && ((Trigger.oldMap.get(cs.Id).Complaint_Status__c != cs.Complaint_Status__c && cs.Complaint_Status__c == 'C') || (Trigger.oldMap.get(cs.Id).Status != cs.Status && cs.Status == 'Closed'))){
+            }
+            else if(Trigger.isUpdate && ((Trigger.oldMap.get(cs.Id).Complaint_Status__c != cs.Complaint_Status__c && cs.Complaint_Status__c == 'C') || (Trigger.oldMap.get(cs.Id).Status != cs.Status && cs.Status == 'Closed'))){
                 caseToBeHandle.add(cs);
             }
+        }
+        if(CheckRecursive.runAfterUpdate==true && !system.isBatch()){
+            CheckRecursive.runAfterUpdate=false;
+            CaseHelper.pickupOutboundCallout(Trigger.new);
         }
         if(caseToBeHandle != null && caseToBeHandle.size()>0){
             CaseHelper.closeCCECAndCaseStatus(caseToBeHandle);
         }
-    }
-    
-    /*Docket Number From Subject And Description*/
-    if(Trigger.isBefore && Trigger.isUpdate){
-        FetchDataFromDocketController.handleUserAssignment(Trigger.newMap,Trigger.oldMap);
-    }
-    /*Delete After Insert Case Of Assignment*/
-    if(Trigger.isAfter && Trigger.isInsert){
-        FetchDataFromDocketController.deleteAssignmentCase(Trigger.New);
+        CaseHelper.complaintClosedRelatedToPickup(Trigger.new, Trigger.oldMap);
     }
 }
