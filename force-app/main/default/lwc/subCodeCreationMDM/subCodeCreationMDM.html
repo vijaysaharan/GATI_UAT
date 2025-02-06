@@ -1,0 +1,18 @@
+<template>
+    <div style="min-height: 100px;" class="slds-var-m-around_medium">
+        <div style="text-align: center;font-size: x-large;color: #16576C;font-weight: bold;">
+            Sub Code Creation
+        </div>
+        <div class="slds-var-m-top_medium" lwc:if={responseStatus} style="text-align: center;font-size: large;color: #981A20;">
+            <div lwc:if={isSuccess}>
+                Customer Code sent successfully.
+            </div>
+            <div lwc:else>
+                Some error occurred in sending Customer Code, Status Code : {responseStatus}
+            </div>
+        </div>
+        <div lwc:else>
+            <lightning-spinner alternative-text="Processing..." size="medium"></lightning-spinner>
+        </div>
+    </div>
+</template>

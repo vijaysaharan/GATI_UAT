@@ -13,7 +13,6 @@ public with sharing class PickupBulkUploadController {
             Set<Id> caseIds = new Set<Id>();
             Boolean allDocketCheck = false;      
             string docts='';
-
             for(map<string,string> sc:data){
                 Boolean eachCheck = false;
                 String customError = '';
@@ -69,13 +68,8 @@ public with sharing class PickupBulkUploadController {
                 Datetime nowTime = Datetime.parse(Datetime.now().format());
                 Decimal diffMins =  ((pickupDatetime.getTime())/1000/60) - ((nowTime.getTime())/1000/60);
                 Decimal distance = 0;
-
-                if(!Test.isRunningTest()){
-                    distance = mapOfShipperPinCodeWithDistance.get((String)sobjectRecord.get('Shipper_Pincode__c'));
-                }
-
+                distance = mapOfShipperPinCodeWithDistance.get((String)sobjectRecord.get('Shipper_Pincode__c'));
                 Integer days_difference = nowTime.Date().daysBetween(pickupDatetime.Date());
-                
                 if (distance >= 0 && distance <= 25 && days_difference != 0 && days_difference > 7) {
                     customError = 'You can raise pickup today or within 7 days';
                     eachCheck = true;
@@ -145,6 +139,7 @@ public with sharing class PickupBulkUploadController {
             }
 
             if(objects.size()>0){
+                System.debug('objects '+objects);
                 List<Database.SaveResult> sveResult = Database.insert(objects, false);
                 for(Database.SaveResult sr : sveResult){
                     if(sr.isSuccess()){
@@ -156,7 +151,6 @@ public with sharing class PickupBulkUploadController {
 
                 for(Integer i = 0; i < sveResult.size(); i++){
                     DatatoReturn ret= new DatatoReturn();
-
                     if (sveResult.get(i).isSuccess()){                        
                         ret.done=true;
                         ret.title = (caseIdToCaseNumber.containsKey(sveResult.get(i).getId()) ? caseIdToCaseNumber.get(sveResult.get(i).getId()).CaseNumber : sveResult.get(i).getId()) +' Success';                                              
@@ -228,77 +222,5 @@ public with sharing class PickupBulkUploadController {
         public SObject obj;
         @AuraEnabled
         public boolean done;      
-    }
-    @TestVisible
-    private static void dummy(){
-        Integer i=1;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
     }
 }

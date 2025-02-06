@@ -6,7 +6,7 @@ public without sharing class CaseHelper{
         Map<String,Group> nameToGroup = new Map<String,Group>();
         List<String> groupNameList = new List<String>{'Approvals','Exception Team','Prospective Pickup Team','Pickup Team','Issue resolution Team'};
         List<Group> groupList = [SELECT Id, Type, Name FROM Group WHERE Type = 'Queue' AND Name IN: groupNameList];
-        List<Account> excludeAccount = [SELECT Id FROM Account WHERE GATI_Customer_Code__c =:label.SpecialGatiCustomerCode];
+        //List<Account> excludeAccount = [SELECT Id FROM Account WHERE GATI_Customer_Code__c =:label.SpecialGatiCustomerCode];
 
         for (Case caseObj : caseList){
             if(caseObj.Docket_Validation__c == 'Valid' && 
@@ -583,15 +583,15 @@ public without sharing class CaseHelper{
             }
         }
         if(accountIds != null && accountIds.size() > 0){
-            accountToId = new Map<Id, Account>([SELECT Id, Associated_OU__c, Associated_OU__r.Parent__r.Parent__r.Parent__r.CSUser__c,
+            accountToId = new Map<Id, Account>([SELECT Id, Associated_OU__c, Associated_OU__r.Parent__r.Parent__r.CSUser__c,
                                                 Customer_Category__c 
                                                 FROM Account 
                                                 WHERE Id IN :accountIds 
                                                 AND Customer_Category__c IN ('Strategic','KEA','MSME') 
                                                 AND Associated_OU__c != null
-                                                AND Associated_OU__r.Parent__r.Parent__r.Parent__r.RecordType.DeveloperName  = 'EDC' 
-                                                AND Associated_OU__r.Parent__r.Parent__r.Parent__r.CSUser__c != null 
-                                                AND Associated_OU__r.Parent__r.Parent__r.Parent__r.CSUser__r.IsActive = true
+                                                AND Associated_OU__r.Parent__r.Parent__r.RecordType.DeveloperName  = 'EDC' 
+                                                AND Associated_OU__r.Parent__r.Parent__r.CSUser__c != null 
+                                                AND Associated_OU__r.Parent__r.Parent__r.CSUser__r.IsActive = true
                                               ]);
             if(accountToId.keySet() != null && accountIds.size() > 0){
                 accountTeamList = [SELECT Id,AccountId FROM AccountTeamMember WHERE AccountId IN :accountToId.keySet() AND TeamMemberRole = 'Service Resource'];
@@ -609,7 +609,8 @@ public without sharing class CaseHelper{
             if(accountToId.keySet() != null && accountIds.size() > 0){
                 for(Case cs : caseList){
                     if(cs.AccountId != null && accountToId.containsKey(cs.AccountId) && !accountIdToTeamMap.containsKey(cs.AccountId)){
-                        cs.OwnerId = accountToId.get(cs.AccountId).Associated_OU__r.Parent__r.Parent__r.Parent__r.CSUser__c;
+                        cs.OwnerId = accountToId.get(cs.AccountId).Associated_OU__r.Parent__r.Parent__r.CSUser__c;
+                        cs.Status = 'Open(Assigned)';
                     }
                 }
             }

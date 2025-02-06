@@ -52,7 +52,7 @@ public class ChangeOwnerTest {
         testRequest.TransferNotesAndAttachments = true;
         testRequest.TransferOpenActivities = true;
         //testRequest.TransferOrders = true;
-        //testRequest.TransferOwnedOpenCases = true;
+        testRequest.TransferOwnedOpenCases = true;
         //testRequest.TransferAllOwnedCases = true;
         testRequest.TransferOthersOpenOpportunities = true;
         testRequest.TransferOwnedClosedOpportunities = true;

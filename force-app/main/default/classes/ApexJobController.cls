@@ -1,4 +1,4 @@
-public with sharing class ApexJobController {
+public without sharing class ApexJobController {
     
     @AuraEnabled(cacheable=true)
     public static List<User> getAllUsers() {

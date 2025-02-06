@@ -5,7 +5,7 @@
         <name>Assign_owner_to_HEAD</name>
         <label>Assign owner to HEAD</label>
         <locationX>50</locationX>
-        <locationY>647</locationY>
+        <locationY>755</locationY>
         <assignmentItems>
             <assignToReference>$Record.Lead_Assigned_OU__c</assignToReference>
             <operator>Assign</operator>
@@ -49,7 +49,7 @@
         <name>ASsing_owner_to_MSME</name>
         <label>ASsing owner to MSME</label>
         <locationX>314</locationX>
-        <locationY>647</locationY>
+        <locationY>755</locationY>
         <assignmentItems>
             <assignToReference>$Record.OwnerId</assignToReference>
             <operator>Assign</operator>
@@ -93,7 +93,7 @@
         <name>Cold_Call_case</name>
         <label>Cold Call case</label>
         <locationX>842</locationX>
-        <locationY>647</locationY>
+        <locationY>755</locationY>
         <assignmentItems>
             <assignToReference>$Record.Lead_Assigned_OU__c</assignToReference>
             <operator>Assign</operator>
@@ -130,7 +130,7 @@
         <name>Retail_Case</name>
         <label>Retail Case</label>
         <locationX>578</locationX>
-        <locationY>647</locationY>
+        <locationY>755</locationY>
         <assignmentItems>
             <assignToReference>$Record.OwnerId</assignToReference>
             <operator>Assign</operator>
@@ -171,32 +171,10 @@
         </connector>
     </assignments>
     <decisions>
-        <name>Check_if_organization_master_record_is_not_null</name>
-        <label>Check if organization master record is not null</label>
-        <locationX>974</locationX>
-        <locationY>431</locationY>
-        <defaultConnectorLabel>null</defaultConnectorLabel>
-        <rules>
-            <name>not_null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>getOU</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>check_lead_type</targetReference>
-            </connector>
-            <label>not null</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>check_lead_type</name>
         <label>check lead type</label>
         <locationX>578</locationX>
-        <locationY>539</locationY>
+        <locationY>647</locationY>
         <defaultConnectorLabel>NA</defaultConnectorLabel>
         <rules>
             <name>Strategic</name>
@@ -294,6 +272,57 @@
             <label>Cold Call</label>
         </rules>
     </decisions>
+    <decisions>
+        <name>IsNewOrIsChanged</name>
+        <label>IsNewOrIsChanged?</label>
+        <locationX>1304</locationX>
+        <locationY>323</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Isnew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.PostalCode</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>getOU</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>IsOrganizationMasterAvailable</name>
+        <label>IsOrganizationMasterAvailable</label>
+        <locationX>974</locationX>
+        <locationY>539</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>not_null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>getOU</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>check_lead_type</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <formulas>
         <name>Isnew</name>
@@ -330,10 +359,10 @@
         <name>getOU</name>
         <label>getOU</label>
         <locationX>974</locationX>
-        <locationY>323</locationY>
+        <locationY>431</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Check_if_organization_master_record_is_not_null</targetReference>
+            <targetReference>IsOrganizationMasterAvailable</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -365,14 +394,14 @@
         <name>Update_the_lead</name>
         <label>Update the lead</label>
         <locationX>578</locationX>
-        <locationY>839</locationY>
+        <locationY>947</locationY>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>848</locationX>
+        <locationX>1178</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>getOU</targetReference>
+            <targetReference>IsNewOrIsChanged</targetReference>
         </connector>
         <filterLogic>1 AND (2 OR 3) AND 4 AND 5 AND 6 AND 7 AND 8</filterLogic>
         <filters>

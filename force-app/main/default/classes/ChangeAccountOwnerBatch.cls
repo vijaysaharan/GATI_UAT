@@ -28,16 +28,18 @@ global class ChangeAccountOwnerBatch implements Database.Batchable<SObject>,Data
     
     global Database.QueryLocator start(Database.BatchableContext BC) {
         List<String> listToPass = new List<String>();
-        System.debug('GATI_Customer_Code__c'+listToPass);
+        Id contractRecordType = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Contract').getRecordTypeId();
+        Id customerCodeRecordType = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Customer_Code').getRecordTypeId();
+        Id retailRecordType = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Retail').getRecordTypeId();
+        String query = '';
+
         for (Object obj : gatiCustomerCodes) {
             listToPass.add((String)obj);
         }
-        System.debug('listToPass'+listToPass);
-        String query = '';
         if(isContract=='Contract Number'){
-            query = 'SELECT Id, OwnerId, GATI_Customer_Code__c, Contract_Number__c FROM Account WHERE GATI_Contract_Number__c in :listToPass';
+            query = 'SELECT Id, OwnerId, GATI_Customer_Code__c, Contract_Number__c FROM Account WHERE GATI_Contract_Number__c in :listToPass AND RecordTypeId = :contractRecordType';
         }else{
-         	query = 'SELECT Id, OwnerId, GATI_Customer_Code__c, Contract_Number__c FROM Account WHERE GATI_Customer_Code__c in :listToPass';   
+         	query = 'SELECT Id, OwnerId, GATI_Customer_Code__c, Contract_Number__c FROM Account WHERE GATI_Customer_Code__c in :listToPass AND (RecordTypeId =: customerCodeRecordType OR RecordTypeId =: retailRecordType)';   
         }
         System.debug('Batch Query==> '+query);
         

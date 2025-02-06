@@ -104,7 +104,7 @@ public class AmountRollupHandler {
     //Get Account Team For Owner Change 
     public static void getAccountTeamForOwnerChange(List<Account> accList){
         if(accList != null && accList.size()>0){
-            List<AccountTeamMember> AccountTeamList = [Select Id,UserId,AccountId,OpportunityAccessLevel,AccountAccessLevel,CaseAccessLevel,TeamMemberRole From AccountTeamMember Where AccountId IN:accList];
+            List<AccountTeamMember> AccountTeamList = [Select Id,UserId,User.IsActive,AccountId,OpportunityAccessLevel,AccountAccessLevel,CaseAccessLevel,TeamMemberRole From AccountTeamMember Where AccountId IN:accList];
             if(AccountTeamList != null && AccountTeamList.size()>0){
                 for(AccountTeamMember acm : AccountTeamList){
                     System.debug('acm'+acm);
@@ -128,7 +128,7 @@ public class AmountRollupHandler {
                 }
             }
             for(Account acc : accList){
-                if(!CurrentAccountTeamMap.containsKey(acc.Id) && AccountTeamMap.containsKey(acc.Id)){
+                if(!CurrentAccountTeamMap.containsKey(acc.Id) && AccountTeamMap.containsKey(acc.Id) && AccountTeamMap.get(acc.Id).User.IsActive == true){
                     insertAccountTeamList.add(AccountTeamMap.get(acc.Id));
                 }
             }

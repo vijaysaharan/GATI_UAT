@@ -1,50 +1,56 @@
 public class OUAssignController {
-    @AuraEnabled 
-    public static String searchDB(String objectName, String fld_API_Text, String fld_API_Val, 
-                                  Integer lim,String fld_API_Search,String searchText ){
-                                      
-                                      searchText='\'%' + String.escapeSingleQuotes(searchText.trim()) + '%\'';
-                                      
-                                      String query='';
-                                      
-                                      query = 'SELECT '+fld_API_Text+' ,'+fld_API_Val+
-                                          ' FROM '+objectName+
-                                          ' WHERE '+fld_API_Search+' LIKE '+searchText+' AND RecordType.Name='+System.Label.RecordTypeId+' LIMIT '+lim;
-                                      
-                                      System.debug('--- debtor query---'+query);
-                                      
-                                      List<sObject> sobjList = Database.query(query);
-                                      List<ResultWrapper> lstRet = new List<ResultWrapper>();
-                                      
-                                      for(SObject s : sobjList){
-                                          ResultWrapper obj = new ResultWrapper();
-                                          obj.objName = objectName;
-                                          obj.text = String.valueOf(s.get(fld_API_Text)) ;
-                                          obj.val = String.valueOf(s.get(fld_API_Val))  ;
-                                          lstRet.add(obj);
-                                      } 
-                                      return JSON.serialize(lstRet) ;
-                                  }
-    
-    @AuraEnabled 
-    public static String assignOU(String recordId, String ouId){
-        System.debug('---'+recordId+'--'+ouId);
-        Lead ld = [SELECT Id,Lead_Assigned_OU__c FROM Lead WHERE Id=:recordId LIMIT 1];
-        ld.Lead_Assigned_OU__c = ouId;
-        try{
-            update ld;
-            return ld.Id;
-        }Catch(Exception ex){
-            return ex.getMessage()+ex.getLineNumber();
+    @AuraEnabled
+    public static List<OperationalUnitWrapper> getOperationalUnit(Id leadId){
+        try {
+            List<Organization_Master__c> pincodeLocations = new List<Organization_Master__c>();
+            Map<Id, OperationalUnitWrapper> operationUnitToData = new Map<Id, OperationalUnitWrapper>();
+            List<Lead> leadDetails = [SELECT Id, PostalCode,Lead_Assigned_OU__c  FROM Lead WHERE Id = :leadId AND PostalCode != null];
+
+            if(leadDetails != null && leadDetails.size() > 0){
+                String pincode = leadDetails[0].PostalCode;
+                Id currentAssignedOu = leadDetails[0].Lead_Assigned_OU__c;
+                Id pincodeLocationId = Schema.SObjectType.Organization_Master__c.getRecordTypeInfosByDeveloperName().get('Pincode').getRecordTypeId();
+                Id operationalUnitId = Schema.SObjectType.Organization_Master__c.getRecordTypeInfosByDeveloperName().get('Operation_Unit').getRecordTypeId();
+
+                pincodeLocations = [SELECT Id, RecordTypeId, Parent__c, Parent__r.RecordTypeId, Parent__r.Name 
+                                    FROM Organization_Master__c 
+                                    WHERE Name = :pincode
+                                    AND Parent__c != :currentAssignedOu
+                                    AND RecordTypeId = :pincodeLocationId
+                                    AND Parent__r.RecordTypeId = :operationalUnitId
+                                    ];
+            }
+
+            if(pincodeLocations != null && pincodeLocations.size() > 0){
+                for(Organization_Master__c OrgMaster : pincodeLocations){
+                    if(OrgMaster.Parent__c != null && !operationUnitToData.containsKey(OrgMaster.Parent__c)){
+                        OperationalUnitWrapper operationUnitWrap = new OperationalUnitWrapper();
+                        operationUnitWrap.operationId = OrgMaster.Parent__c;
+                        operationUnitWrap.operationName = OrgMaster.Parent__r.Name;
+                        operationUnitToData.put(OrgMaster.Parent__c, operationUnitWrap);
+                    }
+                }
+            }
+            return operationUnitToData.values();
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
         }
     }
-    
-    public class ResultWrapper{
-        public String objName {get;set;}
-        public String text{get;set;}
-        public String val{get;set;}
-        
+
+    @AuraEnabled
+    public static Boolean updateAssignedOU(Id leadId, Id assignedOuId){
+        try {
+            Lead leadDetail = new Lead(Id = leadId);
+            leadDetail.Lead_Assigned_OU__c = assignedOUId;
+            Database.SaveResult saveResult = Database.update(leadDetail);
+            return saveResult.isSuccess();
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
     }
-    
-    
+
+    public class OperationalUnitWrapper{
+        @AuraEnabled public Id operationId{get;set;}
+        @AuraEnabled public String operationName{get;set;}
+    }
 }

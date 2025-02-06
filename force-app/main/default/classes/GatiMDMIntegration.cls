@@ -103,7 +103,6 @@ public class GatiMDMIntegration {
         csRequestRoot.content = (Object)csRequest;
         
         String requestBody = JSON.serialize(csRequestRoot,false);
-        System.debug('requestBody Send CS Mapping'+requestBody);
         HttpRequest request = new Httprequest();
         request.setMethod('POST');
         request.setEndpoint(MDMSetting__mdt.getInstance('CS_Update_End_Point').EndPoint__c + atmAccount.GATI_Customer_Code__c + '\'');
@@ -114,7 +113,6 @@ public class GatiMDMIntegration {
         HttpResponse response = http.send(request);
         GatiMDMUtil.ActionOutput output = new GatiMDMUtil.ActionOutput();
         output.cmStatusCode = response.getStatusCode();
-        System.debug('SatusCode Send CS Mapping'+response.getStatusCode());
         return output;
         
     }
@@ -125,12 +123,22 @@ public class GatiMDMIntegration {
         GatiMDMUtil.GatiMDMRequestContentWrapper Existing_Contract_Number = new GatiMDMUtil.GatiMDMRequestContentWrapper();
         GatiMDMUtil.GatiMDMRequestContentWrapper Sub_Code_Requested = new GatiMDMUtil.GatiMDMRequestContentWrapper();
         GatiMDMUtil.GatiMDMRequestContentWrapper account_ID_Requested = new GatiMDMUtil.GatiMDMRequestContentWrapper();
+        GatiMDMUtil.GatiMDMRequestContentWrapper bd_Staff_Code_Requested = new GatiMDMUtil.GatiMDMRequestContentWrapper();
+        GatiMDMUtil.GatiMDMRequestContentWrapper opportunity_Id_Requested = new GatiMDMUtil.GatiMDMRequestContentWrapper();
         
         // Geting related object data
-        Account parentAccount = [SELECT GATI_Customer_Code__c,Contract_Number__c,GATI_Company_Code__c
+        Account parentAccount = [SELECT GATI_Customer_Code__c,Contract_Number__c,GATI_Company_Code__c,Owner.Staff_Code__c
                                  FROM Account 
                                  WHERE Id =: input.account.ParentId
                                 ];
+        
+        // Getting Opportunity data
+        List<Quote> quoteDetail = [SELECT OpportunityId 
+                                   FROM quote 
+                                   WHERE Test_LOF_number__c like :parentAccount.Contract_Number__c 
+                                   AND Opportunity.Opportunity_Type_Contract__c='New Contract'
+                                   LIMIT 1
+                                  ];
         
         // Mappign will be here
         String companyName = getCompanyName(parentAccount.GATI_Company_Code__c);
@@ -139,6 +147,8 @@ public class GatiMDMIntegration {
         Existing_Contract_Number.content = parentAccount.Contract_Number__c;
         Sub_Code_Requested.content = 'Y';
         account_ID_Requested.content = input.account.Id;
+        bd_Staff_Code_Requested.content = parentAccount.Owner.Staff_Code__c != null ? parentAccount.Owner.Staff_Code__c : null;
+        opportunity_Id_Requested.content = (quoteDetail != null && quoteDetail.size()>0) ? quoteDetail[0].OpportunityId : null;
         
         GatiMDMUtil.GatiMDMSubCodeCreationWrapper subCodeCreationRequest = new GatiMDMUtil.GatiMDMSubCodeCreationWrapper();
         subCodeCreationRequest.EXISTING_CUST_ID = EXISTING_CUST_ID;
@@ -146,12 +156,14 @@ public class GatiMDMIntegration {
         subCodeCreationRequest.Existing_Contract_Number = Existing_Contract_Number;
         subCodeCreationRequest.Sub_Code_Requested = Sub_Code_Requested;
         subCodeCreationRequest.account_ID = account_ID_Requested;
+        subCodeCreationRequest.bd_Staff_Code = bd_Staff_Code_Requested;
+        subCodeCreationRequest.opportunity_ID = opportunity_Id_Requested;
         
         GatiMDMUtil.GatiMDMRequestRootWrapper subCodeCreationRequestRoot = new GatiMDMUtil.GatiMDMRequestRootWrapper();
         subCodeCreationRequestRoot.content = (Object)subCodeCreationRequest;
         
         String requestBody = JSON.serialize(subCodeCreationRequestRoot,false);
-        System.debug('requestBody SEND Code'+requestBody);
+        System.debug('requestBody '+requestBody);
         HttpRequest request = new Httprequest();
         request.setMethod('POST');
         request.setEndpoint(MDMSetting__mdt.getInstance('Sub_Code_Creation_End_Point').EndPoint__c);
@@ -195,7 +207,6 @@ public class GatiMDMIntegration {
         HttpResponse response = http.send(request);
         GatiMDMUtil.ActionOutput output = new GatiMDMUtil.ActionOutput();
         output.subCodeCreationStatusCode = response.getStatusCode();
-        System.debug(response.getBody());
         if(response.getStatusCode() != 201 && ((List<Object>)((Map<String,Object>) JSON.deserializeUntyped(response.getBody())).get('errors')) != null && ((List<Object>)((Map<String,Object>) JSON.deserializeUntyped(response.getBody())).get('errors')).size() > 0){
             output.errorMessage = (String)((Map<String,Object>)((List<Object>)((Map<String,Object>) JSON.deserializeUntyped(response.getBody())).get('errors'))[0]).get('message');   
         }
@@ -217,7 +228,6 @@ public class GatiMDMIntegration {
         requestGet.setHeader('Content-Type', 'application/json');
         Http httpGet = new Http();
         HttpResponse responseGet = httpGet.send(requestGet);
-        System.debug('responseGet '+responseGet);
         if(responseGet.getStatusCode() == 200 && ((List<Object>)((Map<String, Object>) JSON.deserializeUntyped(responseGet.getBody())).get('rows')) != null && ((List<Object>)((Map<String, Object>) JSON.deserializeUntyped(responseGet.getBody())).get('rows')).size() > 0){
             sequenceNumber = (String)((Map<String, Object>)((Map<String, Object>)((Map<String, Object>)((List<Object>)((Map<String, Object>) JSON.deserializeUntyped(responseGet.getBody())).get('rows'))[0]).get('content')).get('CUST_CONTR_SEQ_NUM')).get('content');
             List<Quote> quoteLOFData = [SELECT Id,AmendedVersion__c,LOF_Amendment_Date__c 
@@ -273,7 +283,6 @@ public class GatiMDMIntegration {
             Map<String, Object> mainMap = new Map<String, Object>();
             mainMap.put('content', contentMap);
             String requestBody = JSON.serialize(mainMap);
-            System.debug('requestBody'+requestBody);
             HttpRequest request = new Httprequest();
             request.setMethod('PUT');
             request.setEndpoint(MDMSetting__mdt.getInstance('Create_LOF_Account').EndPoint__c+sequenceNumber);

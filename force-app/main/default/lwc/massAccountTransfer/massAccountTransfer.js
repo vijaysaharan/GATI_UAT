@@ -1,38 +1,21 @@
 import { LightningElement, wire, track,api } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
-import { subscribe, unsubscribe, onError, setDebugFlag, isEmpEnabled } from 'lightning/empApi';
-import getAllUsers from '@salesforce/apex/ApexJobController.getAllUsers';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { subscribe, unsubscribe, onError, setDebugFlag, isEmpEnabled } from 'lightning/empApi';
 import OwnerToChange from '@salesforce/resourceUrl/OwnerToChange';
+import getAllUsers from '@salesforce/apex/ApexJobController.getAllUsers';
 import OwnerToChangeFromContract from '@salesforce/resourceUrl/OwnerToChangeFromContract';
-//import BatchCallForTransfer from '@salesforce/apex/ApexJobController.BatchCallForTransfer';
 import MassBatchCallForTransfer from '@salesforce/apex/ApexJobController.MassBatchCallForTransfer';
 
 export default class MassAccountTransfer extends NavigationMixin(LightningElement) {
-    @track selectedUserIdforTransfer = '';
-    @track selectedUserIdToTransfer = '';
-
-    subscription = {};
     @api channelName = '/event/ProvideCsv__e';
 
+    @track selectedUserIdforTransfer = '';
+    @track selectedUserIdToTransfer = '';
     @track errorCsv = '"Customer Code","Error"\n';
-
-    labelToApi = new Map();
-
     @track tableData;
     @track columnData;
-    showTabe = false;
-    isSuccessError = false;
-    showErrorButton = false;
-
     @track showProgressChart = false;
-
-    isDisabled = false;
-
-    BatchJobId;
-
-    userOptions = [];
-
     @track check = {
         EnforceNewOwnerHasReadAccess: true,
         KeepAccountTeam: true,
@@ -46,8 +29,15 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
         TransferOwnedOpenOpportunities: true
     }
 
+    subscription = {};
+    labelToApi = new Map();
+    showTabe = false;
+    isSuccessError = false;
+    showErrorButton = false;
+    isDisabled = false;
+    BatchJobId;
+    userOptions = [];
     accountTypeValue = 'Customer Code';
-
     accountTypeList = [
         {
             label : 'Customer Code',
@@ -59,17 +49,17 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
         }
     ];
 
-    handleAccountTypeChange(event){
-        this.accountTypeValue = event.detail.value;
-        if(this.accountTypeValue == 'Contract Number'){
-            this.labelToApi.set('CONTRACT NUMBER', 'customerCode');
-        }else{
-            this.labelToApi.set('CUSTOMER CODE', 'customerCode');
+    @wire(getAllUsers)
+    usersResult({ error, data }) {
+        if (data) {
+            this.userOptions = data.map(user => ({
+                label: user.Name,
+                value: user.Id
+            }));
+        } 
+        else if (error) {
+            this.showToast('Error', error.body.message, 'error');
         }
-    }
-
-    handleCsvError(event){
-        this.showToast('Error', event.detail.errorMessage, 'error');
     }
 
     connectedCallback(){
@@ -83,82 +73,69 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
         this.registerErrorListener();
     }
 
+    handleAccountTypeChange(event){
+        this.accountTypeValue = event.detail.value;
+        if(this.accountTypeValue == 'Contract Number'){
+            this.labelToApi.set('CONTRACT NUMBER', 'customerCode');
+        }
+        else{
+            this.labelToApi.set('CUSTOMER CODE', 'customerCode');
+        }
+    }
+    handleCsvError(event){
+        this.showToast('Error', event.detail.errorMessage, 'error');
+    }
     handleSubscribe() {
         const self = this;
         const messageCallback = function (response) {
             self.errorCsv = self.errorCsv+response.data.payload.csvString__c+','+'\n';
             self.showErrorButton = true;
         };
-        // Invoke subscribe method of empApi. Pass reference to messageCallback
         subscribe(this.channelName, -1, messageCallback).then(response => {
-            // Response contains the subscription information on subscribe call
             this.subscription = response;
         });
     }
-    //handle Error
     registerErrorListener() {
         onError(error => {
+            console.log('Server Error: ', JSON.stringify(error));
         });
     }
-
-    download(event) {
+    download() {
         var baseUrl = 'https://' + location.host;
         if(this.accountTypeValue == 'Contract Number'){
             window.open(baseUrl + OwnerToChangeFromContract);
-        }else{
+        }
+        else{
             window.open(baseUrl + OwnerToChange);
         }
     }
-
     handleFileUpload(event){
         this.tableData = event.detail.tableData;
         this.columnData = event.detail.columnData;
         this.showTabe = true;
     }
-
     handleValueSelectedFromUser(event) {
         this.selectedUserIdforTransfer = event.detail.Id;
     }
     handleValueSelectedToUser(event) {
         this.selectedUserIdToTransfer = event.detail.Id;
     }
-
-    @wire(getAllUsers)
-    usersResult({ error, data }) {
-        if (data) {
-            this.userOptions = data.map(user => ({
-                label: user.Name,
-                value: user.Id
-            }));
-        } else if (error) {
-            this.showToast('Error', error.body.message, 'error');
-        }
-    }
-
-
     handleRecordSelectionFirst(event) {
         this.checkboxFirst = event.detail.value;
         this.check['EnforceNewOwnerHasReadAccess'] = this.checkboxFirst;
     }
-
     handleRecordSelectionSecond(event) {
         this.checkboxSecond = event.detail.value;
         this.check['KeepAccountTeam'] = this.checkboxFirst;
     }
-
     handleRecordSelectionThird(event) {
         this.checkboxThird = event.detail.value;
         this.check['KeepSalesTeam'] = this.checkboxFirst;
     }
-
     handleRecordSelectionFourth(event) {
         this.checkboxFourth = event.detail.value;
         this.check['TransferContacts'] = this.checkboxFirst;
     }
-    /*handleRecordSelectionFifth(event) {
-        this.checkboxFifth = event.detail.value;
-        this.check['TransferContracts'] = this.checkboxFirst;
-    }*/
     handleRecordSelectionSixth(event) {
         this.checkboxSixth = event.detail.value;
         this.check['TransferNotesAndAttachments'] = this.checkboxFirst;
@@ -167,14 +144,6 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
         this.checkboxSeventh = event.detail.value;
         this.check['TransferOpenActivities'] = this.checkboxFirst;
     }
-    /*handleRecordSelectionEighth(event) {
-        this.checkboxEighth = event.detail.value;
-        this.check['TransferOrders'] = this.checkboxFirst;
-    }*/
-    /*handleRecordSelectionNineth(event) {
-        this.checkboxNineth = event.detail.value;
-        this.check['TransferOwnedOpenCases'] = this.checkboxFirst;
-    }*/
     handleRecordSelectionTenth(event) {
         this.checkboxTenth = event.detail.value;
         this.check['TransferOwnedOpenOpportunities'] = this.checkboxFirst;
@@ -182,30 +151,30 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
 
     handleTransfer() {
         this.isSuccessError = true;
-        var tabset = this.template.querySelector('lightning-tabset');
-        if(tabset.activeTabValue == 'tab-1'){
-            var mapTosend = {};
-            this.tableData.forEach(element => {
-                if(mapTosend[element.newUser] == undefined){
-                    mapTosend[element.newUser] = [element.customerCode];
-                }
-                else{
-                    mapTosend[element.newUser] = [ ...mapTosend[element.newUser],element.customerCode];
-                }
-            });
-
-            MassBatchCallForTransfer({wrapp : this.check, ownerData : mapTosend,isContract : this.accountTypeValue })
-            .then((res)=>{
+        //var tabset = this.template.querySelector('lightning-tabset');
+        var mapTosend = {};
+        this.tableData.forEach(element => {
+            if(mapTosend[element.newUser] == undefined){
+                mapTosend[element.newUser] = [element.customerCode];
+            }
+            else{
+                mapTosend[element.newUser] = [ ...mapTosend[element.newUser],element.customerCode];
+            }
+        });
+        MassBatchCallForTransfer({wrapp : this.check, ownerData : mapTosend,isContract : this.accountTypeValue })
+        .then((res)=>{
             this.BatchJobId = res;
             this.isDisabled = true;
             this.showProgressChart = false;
             setTimeout(() => {
                 this.showProgressChart = true;
-                // this.isDisabled = false;
                 this.showToast('Batch Called','Your Batch Called Successfully','Success');
-            }, 100)
-            })
-        }else{
+            }, 100);
+        });
+        /*if(tabset.activeTabValue == 'tab-1'){
+            //Above Code
+        }
+        else{
             if(this.selectedUserIdforTransfer !== this.selectedUserIdToTransfer){
                 var obj = {
                     newUser : this.selectedUserIdToTransfer,
@@ -224,7 +193,7 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
                 })
 
             }
-        }
+        }*/
     }
     handlecomplete(){
         this.isDisabled = false;
@@ -260,5 +229,4 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
         });
         this.dispatchEvent(toastEvent);
     }
-
 }

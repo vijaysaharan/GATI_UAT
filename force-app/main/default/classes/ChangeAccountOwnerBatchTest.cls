@@ -3,7 +3,8 @@ public class ChangeAccountOwnerBatchTest {
     
     @IsTest
     public static void testChangeAccountOwnerBatch() {
-        Account testAccount = new Account(Name = 'Test Account',GATI_Customer_Code__c='200300');
+        Id customerCodeRecordType = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Customer_Code').getRecordTypeId();
+        Account testAccount = new Account(Name = 'Test Account',GATI_Customer_Code__c='200300',RecordTypeId = customerCodeRecordType, OwnerId = UserInfo.getUserId());
         insert testAccount;
         
         List<Object> gatiCustomerCodes = new List<Object>();

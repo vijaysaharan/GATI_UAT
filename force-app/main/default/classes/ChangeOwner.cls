@@ -1,5 +1,5 @@
 //https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_header_ownerchangeoptions.htm
-global with sharing class ChangeOwner {
+global without sharing class ChangeOwner {
     private static final String TEST_SESSION_ID = 'TEST_SESSION_ID';
     @InvocableMethod(label='Change Owner' description='Change Owner')
     global static List<Results> execute(List<Requests> requestList) {    

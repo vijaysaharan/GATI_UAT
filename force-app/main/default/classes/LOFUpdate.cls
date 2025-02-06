@@ -3,7 +3,7 @@ global with sharing class LOFUpdate{
     @HttpPost
     global static responseClass doPost(){
        	RestRequest req = RestContext.request;
-        String reqBody = (req.requestBody.toString());
+        String reqBody = EncodingUtil.base64Decode(EncodingUtil.base64Encode(req.requestBody)).toString();
         try{
         	List<LOFUpdateWrapper> wc = new List<LOFUpdateWrapper>();
             wc = (List<LOFUpdateWrapper>)JSON.deserialize(reqBody, List<LOFUpdateWrapper>.class);
