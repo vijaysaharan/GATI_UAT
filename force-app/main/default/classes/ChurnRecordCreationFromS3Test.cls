@@ -1,5 +1,5 @@
 @isTest
-public class ChurnRecordCreationFromS3Test {   
+public class ChurnRecordCreationFromS3Test {    
     private class MockHttpResponse implements HttpCalloutMock {
         private Integer statusCode;
         public MockHttpResponse(Integer statusCode) {

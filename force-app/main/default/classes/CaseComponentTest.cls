@@ -2,7 +2,11 @@
 public class CaseComponentTest {
     public class MockHttpResponseGenerator implements HttpCalloutMock {
         // Implement this interface method
-        public HTTPResponse respond(HTTPRequest req) {            
+        public HTTPResponse respond(HTTPRequest req) {
+            
+            System.assertEquals(API_credential__mdt.getInstance('DocketNoVerification').Endpoint__c, req.getEndpoint());
+            System.assertEquals('POST', req.getMethod());
+            
             // Create a fake response
             HttpResponse res = new HttpResponse();
             res.setHeader('Content-Type', 'application/json');

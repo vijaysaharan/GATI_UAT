@@ -5,7 +5,7 @@ public without sharing class MassFeedbackController {
         Map<String, Account> accountsByCustomerCode = new Map<String, Account>();
 		List<Account> accounts = new List<Account>();
         Boolean returnData = false;
-		List<OrgWideEmailAddress> orgWideDefault = [select id, Address, DisplayName from OrgWideEmailAddress Where Address = 'gsalesforce@gatikwe.com' LIMIT 1];
+		List<OrgWideEmailAddress> orgWideDefault = [select id, Address, DisplayName from OrgWideEmailAddress Where Address = 'gsalesforce@allcargologistics.com' LIMIT 1];
         List<EmailTemplate> emailTemplateList = [Select Id, Subject, HtmlValue,Body From EmailTemplate Where DeveloperName ='Mass_Customer_Feedback_Template'];
         List<Domain> reqDomain = [Select Domain from Domain where HttpsOption = 'SitesAlt' limit 1];
         string url = '';

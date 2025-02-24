@@ -32,7 +32,6 @@
                       recordId="{!v.recordId}"
                       fields="Name,Commited_Gati_Potentail__c,
                               Amount_Business_potentital__c,
-                              CreatedDate,
                               AccountId,
                               No_of_Line_Items__c,
                               Account.GATI_Company_Code__c,
@@ -40,12 +39,12 @@
                               Account.Registration_Status__c,
                               Account.Customer_Type_KYC__c,
                               Account.Customer_Category__c,
-                              Account.Partner_Sub_Category__c, 
                               Account.Risk_Covered_By__c,
                               Account.Market_Type__c,
                               Account.Market_Cide__c,
                               Account.PANNumber__c,
                               Account.Associated_OU__r.Name,
+                              Account.GATI_Customer_Code__c,
                               Account.Contract_type__c"
                       targetError="{!v.recordError}"
                       targetRecord="{!v.record}"
@@ -53,6 +52,6 @@
                       recordUpdated="{!c.handleLoadedRecord}"/>
     <aura:handler event="force:refreshView" action="{!c.isRefreshed}" />
     <lightning:notificationsLibrary aura:id="notify"/>
-    <lightning:spinner variant="inverse" size="medium"/>
+    <lightning:spinner variant="inverse" size="medium" />
     <!--<c:GatiFrameData iframeUrl="https://www.gati.net/GSalesForce/CONTRACT/CONTRACT.jsp?puser=RCH_27295&amp;cp1=102&amp;cp2=102"/>-->
 </aura:component>

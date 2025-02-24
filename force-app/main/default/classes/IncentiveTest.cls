@@ -77,7 +77,7 @@ public with sharing class IncentiveTest {
         Incentive__c incentive = new Incentive__c();
         incentive.AccountType__c = 'Strategic & MSME';
         incentive.SalesExecutive__c = UserInfo.getUserId();
-        incentive.Quarter__c = 'Q3';
+        incentive.Quarter__c = 'Q2';
         incentive.Year__c = '2024-2025';
         insert incentive;
     }

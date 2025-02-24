@@ -237,9 +237,9 @@ public class Pickup_req_OutboundAPINew implements Database.Batchable<SObject>, D
         public string approverStatus{get;set;}
         public string approverRemarks{get;set;}
         public string firstSchedule{get;set;} 
-        public string pickupStatus{get;set;}    
-        public string shipperCity{get;set;}     
-        public string latLong{get;set;}       
+        public string pickupStatus{get;set;}	
+        public string shipperCity{get;set;} 	
+        public string latLong{get;set;}	      
         public string companyOf {get;set;}   
         public string caseName{get;set;}  
         public string Pick_up_type{get;set;}

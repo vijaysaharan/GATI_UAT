@@ -31,7 +31,6 @@ public class addExpenseInVisitControllerTest {
         Visit__c testVisit = new Visit__c(
             Visit_Date__c = System.today(),
             Employee_Name__c = u.Id,
-            Mode__c = 'Two wheeler',
             Visit_Start_DateTime__c = System.now(),
             Source_Geo_Coordinate__Latitude__s = 28.6130176,
             Source_Geo_Coordinate__Longitude__s = 77.3521408,

@@ -16,7 +16,7 @@ public class WeeklyEventPlanBatch implements Database.Batchable<sObject>{
                  nameWithEmail.put(cc.Owner.Email,cc.Owner.LastName);
             }
         }
-        OrgWideEmailAddress[] owea = [select Id from OrgWideEmailAddress where Address = 'noreply@gatikwe.com'];
+        OrgWideEmailAddress[] owea = [select Id from OrgWideEmailAddress where Address = 'allcargogati.noreply@allcargologistics.com'];
         if(!emailIds.isEmpty()){
             for(String emailSet : emailIds){
                 String UserName='';

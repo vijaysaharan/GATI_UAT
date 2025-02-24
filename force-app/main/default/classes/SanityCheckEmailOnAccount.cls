@@ -60,7 +60,7 @@ public class SanityCheckEmailOnAccount implements Database.Batchable<Sobject> {
             +'</table><br>';
         }
         htmlBody+='Thanks & Regards'+'<br>';
-        htmlBody+='Gati Team';
+        htmlBody+='Allcargogati Team';
        return htmlBody;
     }
     

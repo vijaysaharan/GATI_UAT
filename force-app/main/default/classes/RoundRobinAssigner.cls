@@ -52,9 +52,9 @@ public without sharing class RoundRobinAssigner {
 		}
         update RRSettings;
         if(objectList != null && objectList.size()>0 && isUpdate){
-            try{
+            //try{
              	Database.update(objectList, false);   
-            }catch(Exception e){}
+            //}catch(Exception e){}
         }
 	}
 

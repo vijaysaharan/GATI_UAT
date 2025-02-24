@@ -16,82 +16,39 @@
                 component.find('notify').showToast({
                     "variant": "Error",
                     "title": "Error",
-                    "message": "GATI Company is required. Can you please add it against the Contract and retry"
+                    "message": "GATI Company is required."
                 });
                 $A.get("e.force:closeQuickAction").fire();
-            } /*else if(component.get("v.OpptyRecord.Account.PANNumber__c") ==null){
+            } else if(component.get("v.OpptyRecord.Account.GATI_Customer_Code__c") ==null){
                 component.find('notify').showToast({
                     "variant": "Error",
                     "title": "Error",
-                    "message": "PAN number is required. Can you please add it against the Contract and retry"
+                    "message": "GATI Customer Code is required."
                 });
                 $A.get("e.force:closeQuickAction").fire();
-            }*/
-            //Opportunity.Account.Customer_Category__c,"Retail"
-                else if(component.get("v.OpptyRecord.Account.PANNumber__c") ==null & component.get("v.OpptyRecord.Account.Customer_Category__c")=="Retail" & component.get("v.OpptyRecord.Account.Partner_Sub_Category__c")!= "Parent Cluster Code" & component.get("v.OpptyRecord.CreatedDate") > "2023-02-28"){
-                    component.find('notify').showToast({
-                    "variant": "Error",
-                    "title": "Error",
-                    "message": "PAN number is required. Please update PAN number at account."
-                });
-                $A.get("e.force:closeQuickAction").fire();
-                }
-            else if(component.get("v.OpptyRecord.Account.Associated_OU__r.Name") ==null){
+            } else if(component.get("v.OpptyRecord.Account.PANNumber__c") ==null){
                 component.find('notify').showToast({
                     "variant": "Error",
                     "title": "Error",
-                    "message": "Operation Unit is required. Can you please add it against the Contract and retry"
+                    "message": "PAN number is required."
+                });
+                $A.get("e.force:closeQuickAction").fire();
+            }else if(component.get("v.OpptyRecord.Account.Associated_OU__r.Name") ==null){
+                component.find('notify').showToast({
+                    "variant": "Error",
+                    "title": "Error",
+                    "message": "Operation Unit is required."
                 });
                 $A.get("e.force:closeQuickAction").fire();
             }
-                else if(component.get("v.OpptyRecord.Account.Nature_of_business__c ") ==null & component.get("v.OpptyRecord.Account.Customer_Category__c")=="Retail"){
+                else if(component.get("v.OpptyRecord.Account.Customer_Category__c")=="Retail"){
                 component.find('notify').showToast({
                     "variant": "Error",
                     "title": "Error",
-                    "message": "Please select Value for Nature of Business and Retry"
+                    "message": "You are not authorized to generate a quote."
                 });
                 $A.get("e.force:closeQuickAction").fire();
-            }
-               else if(component.get("v.OpptyRecord.Account.Registration_Status__c") ==null & component.get("v.OpptyRecord.Account.Customer_Category__c")=="Retail"){
-                component.find('notify').showToast({
-                    "variant": "Error",
-                    "title": "Error",
-                    "message": "Please select Value for Registration Status and Retry"
-                });
-                $A.get("e.force:closeQuickAction").fire();
-            }
-               else if(component.get("v.OpptyRecord.Account.Customer_Type_KYC__c") ==null & component.get("v.OpptyRecord.Account.Customer_Category__c")=="Retail"){
-                component.find('notify').showToast({
-                    "variant": "Error",
-                    "title": "Error",
-                    "message": "Please select Value for Customer Type KYC and Retry"
-                });
-                $A.get("e.force:closeQuickAction").fire();
-            }
-                   else if(component.get("v.OpptyRecord.Account.Risk_Covered_By__c") ==null & component.get("v.OpptyRecord.Account.Customer_Category__c")=="Retail"){
-                component.find('notify').showToast({
-                    "variant": "Error",
-                    "title": "Error",
-                    "message": "Please select Value for Risk Covered By and Retry"
-                });
-                $A.get("e.force:closeQuickAction").fire();
-            }
-                   else if(component.get("v.OpptyRecord.Account.Market_Type__c") ==null & component.get("v.OpptyRecord.Account.Customer_Category__c")=="Retail"){
-                component.find('notify').showToast({
-                    "variant": "Error",
-                    "title": "Error",
-                    "message": "Please select Value for Market Type and Retry"
-                });
-                $A.get("e.force:closeQuickAction").fire();
-            }
-                       
-                   else if(component.get("v.OpptyRecord.Account.Market_Cide__c") ==null & component.get("v.OpptyRecord.Account.Customer_Category__c")=="Retail"){
-                component.find('notify').showToast({
-                    "variant": "Error",
-                    "title": "Error",
-                    "message": "Please provide for Market Code and Retry"
-                });
-            }else if(component.get("v.OpptyRecord.Account.Contract_type__c") ==null){
+            } else if(component.get("v.OpptyRecord.Account.Contract_type__c") ==null){
                 component.find('notify').showToast({
                     "variant": "Error",
                     "title": "Error",
@@ -112,31 +69,6 @@
             
         }
     },
-	/*getOptyId : function(component, event, helper) {
-		var rid = component.get("v.recordId");
-        var action = component.get("c.getPayHistoryData");
-        action.setParams({optyId: rid});
-        action.setCallback(this, function(response){
-            var state = response.getState();
-            if (state === "SUCCESS") {
-                alert("Quote Created!");
-                $A.get('e.force:refreshView').fire();
-            }
-            else if (state === "ERROR") {
-                var errors = response.getError();
-                if (errors) {
-                    if (errors[0] && errors[0].message) {
-                        console.log("Error message: " + 
-                                    errors[0].message);
-                    }
-                } 
-                else {
-                    console.log("Unknown Error");
-                }
-            }
-        });
-        $A.enqueueAction(action);
-	},*/
     isRefreshed: function(component, event, helper) {
         //location.reload();
     }

@@ -5,8 +5,6 @@ private class CaseCountDashboardBatchTest {
     static void testBatchExecution() {
         Account testAccount = new Account(Name = 'Test Account');
         insert testAccount;
-        Case cs = new Case(AccountId = testAccount.Id);
-        insert cs;
         CustomerDashboard__c customerDashboards = new CustomerDashboard__c(AccountName__c = testAccount.Id);
         insert customerDashboards;
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());

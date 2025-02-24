@@ -5,7 +5,7 @@ global class AutocreatedRegHandler1657535495660 implements Auth.SamlJitHandler {
     private void handleUser(boolean create, User usr, Map<String, String> attributes, String federationIdentifier, boolean isStandard) {
         dummy();
         if(create && attributes.containsKey('Username')) {
-           // usr.Username = attributes.get('Username');
+            usr.Username = attributes.get('Username');
         }else if(create){
             
         }
@@ -109,9 +109,9 @@ global class AutocreatedRegHandler1657535495660 implements Auth.SamlJitHandler {
             String ForecastEnabledVal = attributes.get('User.ForecastEnabled');
             usr.ForecastEnabled = '1'.equals(ForecastEnabledVal) || Boolean.valueOf(ForecastEnabledVal);
         }
-        //if(attributes.containsKey('ProfileId')) {
-          //  String profileId = attributes.get('User.ProfileId');
-            //List<Profile> profileList = [SELECT Id FROM Profile WHERE Id=:profileId];
+        if(attributes.containsKey('ProfileId')) {
+            String profileId = attributes.get('User.ProfileId');
+            List<Profile> profileList = [SELECT Id FROM Profile WHERE Id=:profileId];
             //if(!profileList.isEmpty() && profileList.size()>0 ){
             //usr.ProfileId = profileList[0].Id;
             // }else{
@@ -119,8 +119,8 @@ global class AutocreatedRegHandler1657535495660 implements Auth.SamlJitHandler {
             //ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Error,'Profile id is incorrect or Null'));
             //}
             
-        //}
-        /*
+        }
+        
         if(attributes.containsKey('UserRoleId')) {
             String userRole = attributes.get('UserRoleId');
             List<UserRole> roleList = [SELECT Id,parentRoleId FROM UserRole WHERE Id=:userRole];
@@ -129,7 +129,7 @@ global class AutocreatedRegHandler1657535495660 implements Auth.SamlJitHandler {
                 if(u!=null){
                     usr.ManagerId = u.Id;
                 }
-            }*/
+            }
            
             //if(!roleList.isEmpty() && roleList.size()>0){
             //usr.UserRoleId = roleList[0].Id;
@@ -137,7 +137,7 @@ global class AutocreatedRegHandler1657535495660 implements Auth.SamlJitHandler {
             // System.debug('-- User Role id is incorrect or Null--');
             // ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.Error,'User Role id is incorrect or Null'));
             //}
-        //}
+        }
         
         if(!create) {
             update(usr);

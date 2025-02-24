@@ -7,7 +7,7 @@ global class LeadEmailNotificationBatch implements Database.batchable<sObject>,S
     }
     global void execute(Database.BatchableContext BC, List<Lead> scope) {
         System.debug('--- check 1 all data--'+scope);
-        String fromEmail = [SELECT Id,Address,DisplayName FROM OrgWideEmailAddress WHERE Address='noreply@gatikwe.com'].Id;
+        String fromEmail = [SELECT Id,Address,DisplayName FROM OrgWideEmailAddress WHERE Address='allcargogati.noreply@allcargologistics.com'].Id;
         String gatiSpocEmailId = [SELECT Id,Email,Name from User WHERE UserRole.Name='INSIDE SALES' and isActive=true limit 1].Email;
          String ccEmail = System.Label.Cross_Sell_Email;
          

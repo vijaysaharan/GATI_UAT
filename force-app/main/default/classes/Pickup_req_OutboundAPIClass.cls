@@ -355,11 +355,11 @@ public class Pickup_req_OutboundAPIClass {
         public string approverStatus{get;set;}
         public string approverRemarks{get;set;}
         public string firstSchedule{get;set;} //new
-        public string pickupStatus{get;set;}    //new
-        public string shipperCity{get;set;}     //new
-        public string latLong{get;set;}     //new    
-        public string companyOf {get;set;}      //new    
-        public string caseName{get;set;}        //new    
+        public string pickupStatus{get;set;}	//new
+        public string shipperCity{get;set;} 	//new
+        public string latLong{get;set;}	    //new    
+        public string companyOf {get;set;}	    //new    
+        public string caseName{get;set;}	    //new    
         public string Pick_up_type{get;set;}
     }
     

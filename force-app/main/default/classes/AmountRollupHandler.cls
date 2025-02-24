@@ -1,15 +1,6 @@
 public class AmountRollupHandler {
     public static Map<Id,AccountTeamMember> AccountTeamMap = New Map<Id,AccountTeamMember>();
     
-    /*
-* Author : Ashish(akumar4@kloudrac.com)
-* Description : Roll up Amount and update to the parent
-* Trigger Name : AmountRollup
-*  Test Class Name : AmountRollupTest(88%)
-* Created Date : 02-05-2022
-*  Modified Date : 16-06-2022
-*/
-    
     public static void accountAmountRollup(List<Account> accList){
         map<id,Account> updateMap =new map<id,Account>(); 
         set<ID> accountParentIDs = new set<ID>(); 
@@ -139,6 +130,39 @@ public class AmountRollupHandler {
                 System.debug(insertAccountTeamList);
                 insert insertAccountTeamList;
             }
+        }
+    }
+
+    //Add CS To Account Team Member
+    public static void addCsToAccountTeam(List<Account> accountList, Map<Id, Account> oldAccountMap){
+        List<Account> accountsToAddCs = new List<Account>();
+        List<AccountTeamMember> accountTeamMemberToInsert = new List<AccountTeamMember>();
+
+        for(Account acc : accountList){
+            if(((acc.Customer_Category__c == 'MSME' && acc.Status__c != null && ((oldAccountMap != null && acc.Status__c != oldAccountMap.get(acc.Id).Status__c && acc.Status__c == 'Customer') || acc.Status__c == 'Customer')) || (acc.Customer_Category__c == 'Retail' && acc.Customer_Code__c != null)) && acc.Associated_OU__c != null){
+                accountsToAddCs.add(acc);
+            }
+        }
+
+        List<Account> accountsToAssociatedOu = [SELECT Id, Associated_OU__r.Service_User__c 
+                                                FROM Account 
+                                                WHERE Id IN :accountsToAddCs 
+                                                AND Associated_OU__r.Service_User__c != null
+                                               ];
+
+        if(accountsToAssociatedOu != null && accountsToAssociatedOu.size() > 0){
+            for(Account acc : accountsToAssociatedOu){
+                AccountTeamMember newServiceResource = new AccountTeamMember(
+                    AccountId = acc.Id,
+                    UserId = acc.Associated_OU__r.Service_User__c,
+                    TeamMemberRole = 'Service Resource'
+                );
+                accountTeamMemberToInsert.add(newServiceResource);
+            }
+        }
+
+        if(accountTeamMemberToInsert != null && accountTeamMemberToInsert.size() > 0){
+            Database.insert(accountTeamMemberToInsert, false);
         }
     }
 }

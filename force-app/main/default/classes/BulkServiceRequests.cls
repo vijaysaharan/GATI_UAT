@@ -70,7 +70,6 @@ public without sharing class BulkServiceRequests {
                     }
                 }
             }
-            System.debug('returnMap'+returnMap);
             return returnMap;
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
@@ -218,7 +217,7 @@ public without sharing class BulkServiceRequests {
             fed='crmproj2';
         }
         if(fed==null){
-            //throw new IllegalArgumentException('Federation ID was not found on user');
+            throw new IllegalArgumentException('Federation ID was not found on user');
         }
         else {
             docketverify docket= new docketverify();

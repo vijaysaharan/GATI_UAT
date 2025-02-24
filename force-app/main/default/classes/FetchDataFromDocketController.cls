@@ -126,12 +126,15 @@ public with sharing class FetchDataFromDocketController implements Queueable, Da
                 String emailDomain = cs.SuppliedEmail != null ? cs.SuppliedEmail.split('@').get(1) : null;
                 if(emailToUser.containsKey(cs.SuppliedEmail)){
                     cs.OwnerId = emailToUser.get(cs.SuppliedEmail);
+                    cs.Status = 'Open(Assigned)';
                 }
                 else if(emailToUser.containsKey(emailDomain)){
                     cs.OwnerId = emailToUser.get(emailDomain);
+                    cs.Status = 'Open(Assigned)';
                 }
                 else{
                     RoundRobinAssigner.RoundRobinAssignment GroupAndIdForRoundRobin = New RoundRobinAssigner.RoundRobinAssignment();
+                    cs.Status = 'Open(Assigned)';
                     GroupAndIdForRoundRobin.fieldName = 'OwnerId';
                     GroupAndIdForRoundRobin.groupName = 'RetailSupport';
                     GroupAndIdForRoundRobin.recordId = cs;

@@ -1,12 +1,4 @@
 trigger AmountRollup on Account (after insert,after update,after unDelete,after delete,before update,before insert) {
-/*
-* Author : Ashish(akumar4@kloudrac.com)
-* Description : Roll up Amount and update to the parent
-* Trigger Handler Name : AmountRollupHandler
-* Test Class Name : AmountRollupTest(100%)
-* Created Date : 02-05-2022
-* Modified Date : 09-Dec-2024
-*/
     Trigger_Rule__mdt mdt = [select Id,Account_Rollup__c,customerUserOwnerChange__c,riskCoverageByChange__c,Contract_Account_Change__c from Trigger_Rule__mdt];
     if(mdt.Account_Rollup__c==false){
         if((Trigger.isAfter && Trigger.isInsert) || (Trigger.isAfter && Trigger.isUpdate) ){
@@ -40,7 +32,7 @@ trigger AmountRollup on Account (after insert,after update,after unDelete,after 
             //AmountRollupHandler.updateAccountType(Trigger.new);
         }
     }
-    
+
     if(Trigger.isBefore && Trigger.isUpdate){
         for(Account acc : Trigger.new){
             if(acc.OwnerId!=Trigger.oldmap.get(acc.Id).OwnerId){
@@ -49,7 +41,6 @@ trigger AmountRollup on Account (after insert,after update,after unDelete,after 
         }
     } 
     
-    //Before Account Owner Change Getting List Of Account Team
     If(Trigger.isBefore && Trigger.isUpdate){
         List<Account> accList = New List<Account>();
         for(Account ac : Trigger.New){
@@ -61,7 +52,7 @@ trigger AmountRollup on Account (after insert,after update,after unDelete,after 
             AmountRollupHandler.getAccountTeamForOwnerChange(accList);
         }
     }
-    //After Account Owner Change Setting Account Team
+    
     If(Trigger.isAfter && Trigger.isUpdate){
         List<Account> accList = New List<Account>();
         for(Account ac : Trigger.New){
@@ -72,5 +63,9 @@ trigger AmountRollup on Account (after insert,after update,after unDelete,after 
         If(accList != null && accList.size()>0){
             AmountRollupHandler.setAccountTeamForAccount(accList);
         }
+    }
+
+    if(Trigger.isAfter && (Trigger.isInsert || Trigger.isUpdate)){
+        AmountRollupHandler.addCsToAccountTeam(Trigger.new, Trigger.oldMap);
     }
 }

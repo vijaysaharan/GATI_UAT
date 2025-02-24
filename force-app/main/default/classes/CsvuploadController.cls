@@ -4,16 +4,14 @@ public without sharing class CsvuploadController {
         Map<String,String> returnMap = New Map<String,String>();
         List<csvWrapper> dataWrapper = new List<csvWrapper>();
         String lineBreak = '\n';
-        String successHeader = 'Message,Type,SubType,DocketNumber,PickupRefNumber,Status\n';
+        String successHeader = 'Type,SubType,DocketNumber,PickupRefNumber,Status,Message\n';
         String successData = '';
-        String errorHeader = 'Message,Type,SubType,DocketNumber,PickupRefNumber,Status\n';
+        String errorHeader = 'Type,SubType,DocketNumber,PickupRefNumber,Status,Message\n';
         String errorData = '';
         returnMap.put('successHeader',successHeader);
         returnMap.put('errorHeader',errorHeader);
         try {
             List<Case> caseToInsert = new List<Case>();
-            Map<Id, Case> caseIdToCaseNumber = new Map<Id, Case>();
-            Set<Id> caseIds = new Set<Id>();
             List<csvWrapper> wrapperToReturn = new List<csvWrapper>();
             String docketNumbers = '';
             Set<String> pickUpCaseNumbers = new Set<String>();
@@ -64,6 +62,18 @@ public without sharing class CsvuploadController {
                 newCase.Status  = 'New';               
                 newCase.Type = csv.Type;
                 newCase.Sub_Type__c = csv.SubType;
+                
+                /*if(csv.CustomerVendor != null && csv.CustomerVendor != ''){
+                    Contact con = new Contact(Gati_Con_eid__c = csv.CustomerVendor);
+                    newCase.Contact = con;
+                }
+
+                if(csv.CustomerVendor != null && csv.CustomerVendor != ''){
+                    String customerCode = csv.CustomerVendor.split('\\.');
+                    Account acc = new Account(Customer_Code__c = customerCode);
+                    newCase.Account = acc;
+                }*/
+
                 newCase.RecordTypeId = complaint;
                 newCase.Pick_Up_Ref_No__c = csv?.PickupRefNumber;
                 if(csv?.PickupRefNumber != null && csv?.PickupRefNumber != '' && csv.Type == 'Pending Pickup' && pickUpNumberToCase.containsKey(csv?.PickupRefNumber)){
@@ -190,27 +200,19 @@ public without sharing class CsvuploadController {
             if(caseToInsert != null && caseToInsert.size() > 0){
                 List<Database.SaveResult> saveResults = Database.insert(caseToInsert,false);
                 if(saveResults != null && saveResults.size()>0){
-                    for(Database.SaveResult sr : saveResults){
-                        if(sr.isSuccess()){
-                            caseIds.add(sr.getId());
-                        }
-                    }
-                    if(caseIds.size() > 0){
-                        caseIdToCaseNumber = new Map<Id, Case>([SELECT Id,CaseNumber FROM Case WHERE Id IN :caseIds]);
-                    }
                     for(Integer i = 0; i < caseToInsert.size(); i++){
                         csvWrapper csv = wrapperToReturn[i];
                         Database.SaveResult sr = saveResults[i];
                         String base = csv.Type +','+ csv.SubType +','+ csv.DocketNumber +','+ csv.PickupRefNumber;
                         if(sr.isSuccess()){
-                            successData += 'Complaint Id : '+ (caseIdToCaseNumber.containsKey(sr.getId()) ? caseIdToCaseNumber.get(sr.getId()).CaseNumber : sr.getId()) +','+base+',Successfully Complaint Registered'+ lineBreak;
+                            successData += base + ',Successfully Complaint Registered,'+'Complaint Id : '+ sr.getId() + lineBreak;
                         }
                         else{
                             String errorMessage = '';
                             for(Database.Error err : sr.getErrors()){
                                 errorMessage += err.getStatusCode() +' - '+ err.getMessage();
                             }
-                            errorData += 'Error : '+errorMessage+','+base+',Error Occurred'+ lineBreak;
+                            errorData += base + ',Error Occurred,'+'Error : '+errorMessage+ lineBreak;
                         }
                     }
                 }

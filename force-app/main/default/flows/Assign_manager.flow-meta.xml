@@ -4,8 +4,8 @@
     <assignments>
         <name>assign_manager</name>
         <label>assign manager</label>
-        <locationX>466</locationX>
-        <locationY>260</locationY>
+        <locationX>50</locationX>
+        <locationY>395</locationY>
         <assignmentItems>
             <assignToReference>$Record.Last_Modified_s_Manager__c</assignToReference>
             <operator>Assign</operator>
@@ -20,7 +20,105 @@
                 <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Is_Customer_Code_Empty_Or_Changed</targetReference>
+        </connector>
     </assignments>
+    <assignments>
+        <name>Update_Customer_Code</name>
+        <label>Update Customer Code</label>
+        <locationX>50</locationX>
+        <locationY>695</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Customer_Code__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varCustomerCode</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>Credit_Days_Check</name>
+        <label>Is Credit Days Changed?</label>
+        <locationX>182</locationX>
+        <locationY>287</locationY>
+        <defaultConnector>
+            <targetReference>Is_Customer_Code_Empty_Or_Changed</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Creadit_Days</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Credit_Days__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_manager</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Customer_Code_Empty_Or_Changed</name>
+        <label>Is Customer Code Empty Or Changed?</label>
+        <locationX>182</locationX>
+        <locationY>587</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Changed</name>
+            <conditionLogic>(1 AND 2 AND 3 AND 5) OR 4</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Customer_Code__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.GATI_Customer_Code__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.GATI_Company_Code__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.GATI_Customer_Code__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CreatedDate</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <dateTimeValue>2025-02-14T18:30:00.000Z</dateTimeValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Customer_Code</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>varCustomerCode</name>
+        <dataType>Number</dataType>
+        <expression>VALUE({!$Record.GATI_Customer_Code__c}&amp;&quot;.&quot;&amp;TEXT({!$Record.GATI_Company_Code__c}))</expression>
+        <scale>3</scale>
+    </formulas>
     <interviewLabel>Assign manager {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Assign manager</label>
     <processMetadataValues>
@@ -32,7 +130,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -43,22 +141,14 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>50</locationX>
-        <locationY>50</locationY>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
         <connector>
-            <targetReference>assign_manager</targetReference>
+            <targetReference>Credit_Days_Check</targetReference>
         </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Credit_Days__c</field>
-            <operator>IsChanged</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </filters>
         <object>Account</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
 </Flow>

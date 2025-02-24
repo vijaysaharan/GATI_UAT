@@ -46,6 +46,7 @@ public with sharing class BulkPickupCaseStatusChangeControllerTest {
                                  );
         insert pickupTest;
     }
+    
     @isTest
     public static void csvDataHandlerTest(){
         Test.setMock(HttpCalloutMock.class, new MockServiceCalloutTest());

@@ -19,13 +19,13 @@ public class Send_Complaint_CCEC_RecordsClass {
                                                     FROM Lookup_Master__mdt 
                                                     ];
         
-        List<Case> caseList = [SELECT Error_message__c,Sub_Type__c,docket_Number__c,CustCode__c,Pick_Up_Ref_ID__r.CaseNumber,
+        List<Case> caseList = [SELECT Sub_Type__c,docket_Number__c,CustCode__c,Pick_Up_Ref_ID__r.CaseNumber,
                                Type,CreatedById,CreatedBy.Name,CreatedBy.Staff_Code__c,Complaint_Actionable_OU__r.Name,
                                OwnerId,Owner.Type,customer_Name__c,Mobile__c,Customer_Email__c,Pick_Up_Pincode__c,Priority,
                                Origin,Complaint_Status__c,Nature_of_Call__c,CaseNumber,ClosedDate,LastModifiedBy.Staff_Code__c,
                                LastModifiedDate,Escalated_Level__c,Escalation_Description__c,Expected_Escalation_Date__c,
                                Company_of__c,Complaint_Actionable_OU__r.Pincode__c,Expected_Closing_Date__c,CreatedDate,
-                               RecordType.Name,CreatedBy.Organi__c,Sync_flag__c,Status 
+                               RecordType.Name,CreatedBy.Organi__c,Error_message__c,Sync_flag__c,Status 
                                FROM case 
                                WHERE Id IN: caseid
                               ];
@@ -371,7 +371,7 @@ public class Send_Complaint_CCEC_RecordsClass {
                     result.setBody('{"requid":"SG31006","result":"successful", "sErrMsg":"","response":[{"complaintRefNo":"00439524","result":"Posted Successfully "}]}');
                     System.debug('testCode'+testCode);
                     if(testCode == '200'){
-                        result.setStatusCode(200);   
+                     	result.setStatusCode(200);   
                     }
                     else if(testCode == '201'){
                         result.setStatusCode(201);
@@ -379,7 +379,7 @@ public class Send_Complaint_CCEC_RecordsClass {
                         result.setStatusCode(null);
                     }
                 }else{
-                    result= http.send(req);   
+                 	result= http.send(req);   
                 }
                 String errormsg1;
                 

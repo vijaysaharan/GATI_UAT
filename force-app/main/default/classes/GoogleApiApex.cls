@@ -11,7 +11,7 @@ public class GoogleApiApex {
         HttpResponse response = httpProtocol.send(request);
         ReverseGeoCodeWrapper geoCodeAddress = (ReverseGeoCodeWrapper) System.JSON.deserialize(response.getBody(), ReverseGeoCodeWrapper.Class);
         //System.debug(response.getBody());
-        System.debug('-- address reverse--'+geoCodeAddress.Results[0].formatted_address);
+        //System.debug('-- address reverse--'+geoCodeAddress.Results[0].formatted_address);
         return geoCodeAddress.Results[0].formatted_address;
     } 
     
@@ -42,7 +42,7 @@ public class GoogleApiApex {
         request.setMethod('GET');
         HttpResponse response = http.send(request);
         Map<String, Object> resultJSON = (Map<String, Object>)JSON.deserializeUntyped(response.getBody()); 
-        System.debug('resultJSON'+resultJSON);
+        
         if ((String)resultJSON.get('status') != 'OK') {
             
         } else {
@@ -76,8 +76,9 @@ public class GoogleApiApex {
         request.setHeader('X-Goog-Api-Key', key);
         request.setHeader('X-Goog-FieldMask', 'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline');
         String jsonRequestBody = createJsonRequestBody(orgLat, orgLog, desLat, desLog);
+        System.debug(jsonRequestBody);
         request.setBody(jsonRequestBody);
-        System.debug('request'+jsonRequestBody);
+        System.debug(request);
         HttpResponse response = httpProtocol.send(request);
         System.debug(response);
         if (response.getStatusCode() == 200) {
@@ -88,8 +89,8 @@ public class GoogleApiApex {
             if (routesList != null && !routesList.isEmpty()) {
                 Map<String, Object> routeInfoMap = (Map<String, Object>)routesList[0];
                 RouteInfo routeInfo = (RouteInfo)JSON.deserialize(JSON.serialize(routeInfoMap), RouteInfo.class);
-                System.debug('routeInfo'+routeInfo);
                 distanceMeters = routeInfo.distanceMeters;
+                System.debug('Distance in meters: ' + distanceMeters);
             } else {
                 System.debug('No routes found in the response.');
             }

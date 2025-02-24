@@ -3,7 +3,7 @@ public Database.QueryLocator start(Database.BatchableContext bc) {
         return Database.getQueryLocator([Select Id,Customer_Name__c,Customer_Code__c,Customer_Code__r.Name,OwnerId from MIS__c where Manual_MIS__c=true AND Trigger_Type__c =:'SL']);  	 
     }
     public void execute(Database.BatchableContext bc,List<MIS__c> MISList)
-    { 		
+    { 
         list <task> T=new list <task>();
           // Iterate through the whole query of MIS. && 
         // Create a Task that's associated with each MIS.

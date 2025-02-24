@@ -64,7 +64,7 @@ public class MCM_ReminderEmailOnAccount implements Database.Batchable<Sobject> {
                 +'</table><br>';
         }
         htmlBody+='Thanks & Regards'+'<br>';
-        htmlBody+='Gati Team';
+        htmlBody+='Allcargogati Team';
         System.debug(htmlBody);
         return htmlBody;
     } 

@@ -8,13 +8,25 @@ public without sharing class RoleHierarchyUtility {
             Set<String> userIds = new Set<String>();
             Date sDate = System.today().month() >= 4 ? Date.newInstance(System.today().year(), 4, 1) : Date.newInstance(System.today().year() - 1, 4, 1);
             Date eDate = System.today().month() >= 4 ? Date.newInstance(System.today().year() + 1, 3, 31) : Date.newInstance(System.today().year(), 3, 31);
-            
+            /*List<Sales_KRA__c> salesKRA = [SELECT Id, KAM_KAE__c, KAM_KAE__r.UserRoleId,  KAM_KAE__r.Name, KAM_KAE__r.Zone__c 
+                                           FROM Sales_KRA__c
+                                           WHERE (KAM_KAE__c =: userId OR KAM_KAE__r.UserRoleId IN: allSubRoleIds)
+                                           AND KAM_KAE__r.Zone__c IN: zoneList
+                                           AND Date__c >=: sDate
+                                           AND Date__c <=: eDate
+                                           ORDER BY KAM_KAE__r.Name
+                                          ];*/
             List<SalesDashboardUser__c> salesUser = [SELECT UserList__c 
                                                      FROM SalesDashboardUser__c 
                                                      WHERE StartDate__c >=: sDate 
                                                      AND EndDate__c <=: eDate
                                                      LIMIT 1
                                                     ];
+            /*if(salesKRA != null && salesKRA.size()>0){
+                for(Sales_KRA__c kra : salesKRA){
+                    userIds.add(kra.KAM_KAE__c);
+                }
+            }*/
 
             if(salesUser != null && salesUser.size() > 0){
                 for(String us : salesUser[0].UserList__c.split(',')){

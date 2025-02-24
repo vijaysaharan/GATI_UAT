@@ -9,7 +9,7 @@ public class TestCCECUpdateApi {
             return res;
         }
     }
-    
+	
     static testmethod void TestMethod1(){
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
         Test.startTest();
@@ -32,13 +32,13 @@ public class TestCCECUpdateApi {
     static testmethod void TestMethod2(){
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
         Test.startTest();
-            Integration_Log__c log = new Integration_Log__c();
+         	Integration_Log__c log = new Integration_Log__c();
                 log.Component_Name__c='CCEC with Remarks Inbound';
                 log.Error_Message__c='Test';
                 log.IsIntegration__c=true;
-                log.Inbound_JSON__c = '{"caseObj":{"Type":"Partial Delivery","Sub_Type__c":"Short at delivery ou","Description":"","Subject":"Complaint Escalation from Mobile App","Origin":"Mobile App","Priority":"High","Customer_Email__c":"harr15.wilson@gmail.com","Customer_Name__c":"Prashant singh","Mobile__c":"9898303627","Complaint_Date__C":" 2022-02-16T17:18:17+05:30","Pick_Up_Ref_No__c":"00202079","Docket_Number__c": "400097001","Delivery_OU__c" : "a0Dp00000060LgGEAU","Pincode__c":"577201"},"RecordType":"Complaint","ccecActionOU":"HYDN","complaintActionOU":"BBI","customercode": "80224588.102","Docket_Validation__c" : "Valid","Type" : "Pick Up","CaseNumber" : null},"customercode":"80224588","recordType":"Complaint","callrecievedOU":"HYDN","callforwardedOU":"HYDN","ccecActionOU":"HYDN","complaintActionOU":"HYDN","pickUpPincode":"577201","Gemrefno":null}';
-                log.Outbound_JSON__c = '{"status":"Not Inserted","error":"duplicate value found: Unique_Docket_Subtype__c duplicates value on record with id: 500p00000099I74","caseName":null}';
-            try{
+        		log.Inbound_JSON__c = '{"caseObj":{"Type":"Partial Delivery","Sub_Type__c":"Short at delivery ou","Description":"","Subject":"Complaint Escalation from Mobile App","Origin":"Mobile App","Priority":"High","Customer_Email__c":"harr15.wilson@gmail.com","Customer_Name__c":"Prashant singh","Mobile__c":"9898303627","Complaint_Date__C":" 2022-02-16T17:18:17+05:30","Pick_Up_Ref_No__c":"00202079","Docket_Number__c": "400097001","Delivery_OU__c" : "a0Dp00000060LgGEAU","Pincode__c":"577201"},"RecordType":"Complaint","ccecActionOU":"HYDN","complaintActionOU":"BBI","customercode": "80224588.102","Docket_Validation__c" : "Valid","Type" : "Pick Up","CaseNumber" : null},"customercode":"80224588","recordType":"Complaint","callrecievedOU":"HYDN","callforwardedOU":"HYDN","ccecActionOU":"HYDN","complaintActionOU":"HYDN","pickUpPincode":"577201","Gemrefno":null}';
+        		log.Outbound_JSON__c = '{"status":"Not Inserted","error":"duplicate value found: Unique_Docket_Subtype__c duplicates value on record with id: 500p00000099I74","caseName":null}';
+        	try{
                 insert log;
         }catch(Exception ex){
             System.debug('---check error--'+ex.getMessage());

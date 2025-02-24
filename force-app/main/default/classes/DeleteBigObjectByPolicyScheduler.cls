@@ -4,7 +4,7 @@ public with sharing class DeleteBigObjectByPolicyScheduler implements Schedulabl
         getAllAcc.isfilter = false;
         Database.executeBatch(getAllAcc , 2000);
 
-        List<Backup_Ploicy__c> policyList = [select Object_Name__c, Remove_Backup_after_DAYS__c, Backup_after_DAYS__c from Backup_Ploicy__c where Object_Name__c = 'Case'];
+        /* List<Backup_Ploicy__c> policyList = [select Object_Name__c, Remove_Backup_after_DAYS__c, Backup_after_DAYS__c from Backup_Ploicy__c where Object_Name__c = 'Case'];
         if(!policyList.isEmpty()){  
             List<Backup_Configuration__c> configList = [select Big_Object_Index__c, Big_Object_Name__c,Object_Name__c,Mapping_S2B__c,Child_To_Backup__c  from Backup_Configuration__c];
 
@@ -45,6 +45,6 @@ public with sharing class DeleteBigObjectByPolicyScheduler implements Schedulabl
                     Database.executeBatch(deleteBatch,1);
                 }
             }
-        } 
+        } */
     }
 }

@@ -43,6 +43,8 @@ public class GatiMDMUtil {
         public GatiMDMRequestContentWrapper Existing_Contract_Number;
         public GatiMDMRequestContentWrapper Sub_Code_Requested;
         public GatiMDMRequestContentWrapper account_ID;
+        public GatiMDMRequestContentWrapper bd_Staff_Code;
+        public GatiMDMRequestContentWrapper opportunity_ID;
     }
 
     public class ActionOutput {

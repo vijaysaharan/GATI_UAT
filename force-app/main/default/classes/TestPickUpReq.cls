@@ -1,6 +1,5 @@
 @istest
 public class TestPickUpReq {
-    /*
     public class MockHttpResponseGenerator1 implements HttpCalloutMock {
         // Implement this interface method
         
@@ -52,5 +51,5 @@ public class TestPickUpReq {
         //test.startTest();
         Pickup_req_OutboundAPI.calloutMethod(caseList);
         test.stopTest();
-    }*/
+    }
 }

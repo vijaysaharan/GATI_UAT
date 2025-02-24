@@ -23,7 +23,7 @@ public class ManualCCECRemarkOutboundAPI {
            //(cc.CreatedBy.name!='Platform Integration User' || cc.CreatedBy.name!='Integration User' ) &&
         if( cc.Case__r.RecordType.Name == 'Service Request' && cc.Case__r.Type == 'Exception' && cc.Case__r.Sub_Type__c!= 'COD Remittance' && cc.Case__r.Sub_Type__c!= 'Bad POD')
         {
-            Exception_SF_Meta__mdt   LookupMastermdtRecords2 = [SELECT Id, crm_field_value__c, external_field_value__c from Exception_SF_Meta__mdt where MasterLabel =: cc.Case__r.Sub_Type__c LIMIT 1];
+            Exception_SF_Meta__mdt	 LookupMastermdtRecords2 = [SELECT Id, crm_field_value__c, external_field_value__c from Exception_SF_Meta__mdt where MasterLabel =: cc.Case__r.Sub_Type__c LIMIT 1];
             if(LookupMastermdtRecords2!=null){
                 obj.identity = LookupMastermdtRecords2.external_field_value__c;
                 

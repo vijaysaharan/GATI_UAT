@@ -121,10 +121,8 @@ public without sharing class IncentiveUtility {
 
         if (c360sToRollup != null && c360sToRollup.size() > 0) {
             for (Customer360__c c360 : c360sToRollup) {
-                Date sDate = System.today().month() >= 4 ? Date.newInstance(System.today().year(), 4, 1) : Date.newInstance(System.today().year() - 1, 4, 1);
-                Date eDate = System.today().month() >= 4 ? Date.newInstance(System.today().year() + 1, 3, 31) : Date.newInstance(System.today().year(), 3, 31);
-                //Date sDate = Date.NewInstance(c360.As_on_date__c.addMonths(-3).year(),c360.As_on_date__c.addMonths(-3).month(),1);
-                //Date eDate = Date.NewInstance(c360.As_on_date__c.addMonths(1).year(),c360.As_on_date__c.addMonths(1).month(),0);
+                Date sDate = Date.NewInstance(c360.As_on_date__c.addMonths(-3).year(),c360.As_on_date__c.addMonths(-3).month(),1);
+                Date eDate = Date.NewInstance(c360.As_on_date__c.addMonths(1).year(),c360.As_on_date__c.addMonths(1).month(),0);
                 String key = c360.Month_Year__c  + c360.Product__c + c360.Account_Type__c + c360.AccountOwner__c;
                 if ( keyTosKRA.containsKey(key) ) {
                     Sales_KRA__c sKRA = keyTosKRA.get(key);

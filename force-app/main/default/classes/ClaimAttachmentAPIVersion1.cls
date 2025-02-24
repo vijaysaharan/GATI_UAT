@@ -60,7 +60,6 @@ global without sharing class ClaimAttachmentAPIVersion1 {
                         }
                     }
                     caseRecordObj.Call_received_OU__c = CaseAndAttachmentObj.callrecievedOU != null ? (refCodeToOrganizationMaster.containsKey(CaseAndAttachmentObj.callrecievedOU) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.callrecievedOU).Id) : null) : null;
-                    caseRecordObj.Company_of__c = CaseAndAttachmentObj.Companyof != null ? (refCodeToOrganizationMaster.containsKey(CaseAndAttachmentObj.Companyof) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.Companyof).Id) : null) : null;
                     caseRecordObj.Gems_Ref_No__c = CaseAndAttachmentObj.Gemrefno != null ? (refCodeToOrganizationMaster.containsKey(CaseAndAttachmentObj.Gemrefno) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.Gemrefno).Id) : null) : null;
                     caseRecordObj.Call_forwarded_OU__c = CaseAndAttachmentObj.callforwardedOU != null ? (refCodeToOrganizationMaster.containsKey(CaseAndAttachmentObj.callforwardedOU) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.callforwardedOU).Id) : null) : null;
                     caseRecordObj.CCEC_Action_OU__c = caseAndAttachmentObj.ccecActionOU != null ? (refCodeToOrganizationMaster.containsKey(caseAndAttachmentObj.ccecActionOU) ? (refCodeToOrganizationMaster.get(caseAndAttachmentObj.ccecActionOU).Id) : null) : null;

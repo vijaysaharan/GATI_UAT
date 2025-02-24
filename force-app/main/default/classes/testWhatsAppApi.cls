@@ -21,20 +21,11 @@ public class testWhatsAppApi {
     
     @istest static void testWhatsApp(){
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator1());
-        List<FlowInput> fList = new List<FlowInput>();
-         test.startTest();
-        FlowInput f = new FlowInput();
-        f.str1 = '9731687426';
-        f.str2 = '4127237~virat~abc~aaa~agag';
-        fList.add(f);
-        
-        WhatsAppApi.calloutMethod(fList);
-       // WhatsAppApiCall.WhatsAppCallOut('9731687426','4127237~virat~abc~aaa~agag');
+        test.startTest();
+        WhatsAppApi.WhatsAppCallOut('9731687426','4127237~virat~abc~aaa~agag');
         Test.stopTest();
        
     }
-    
-     
 
     
 }

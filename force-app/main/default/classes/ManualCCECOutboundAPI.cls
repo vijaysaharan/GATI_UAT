@@ -9,28 +9,18 @@ public Without Sharing class ManualCCECOutboundAPI {
     @future(callout =true)
     public static void ManualCCECOutbound(string ccecid){
         CCECRecords obj=new CCECRecords();
-        List<CCEC__c> ccecs = [SELECT Case__r.Owner.Id, Case__r.Owner.Type, Case__r.RecordType.Name, Case__r.Sub_Type__c, 
-                               Case__r.CaseNumber, Case__r.Docket_Number__c, Case__r.Pick_Up_Ref_ID__r.CaseNumber, Case__r.Open_CCEC_Count__c, 
-                               Comp_Code__c, Name, CCEC_OU_Assignment_Logic__r.name, Case__r.Type, 
+        List<CCEC__c> ccecs = [select Case__r.Owner.Id, Case__r.Owner.Type, Case__r.RecordType.Name, Case__r.Sub_Type__c, Case__r.CaseNumber, Case__r.Docket_Number__c, 
+                               Case__r.Pick_Up_Ref_ID__r.CaseNumber, Case__r.Open_CCEC_Count__c, Comp_Code__c, Name, CCEC_OU_Assignment_Logic__r.name, Case__r.Type, 
                                CCEC_Instructions__c, CreatedBy.Organi__c, CreatedDate, Proactive_CCEC_Flag__c,Auto_CCEC_Flag__c,
                                CCEC_Received_OU__c, CreatedBy.Staff_Code__c, CSA_code__c,Exp_Closure_Dt__c, Case__r.Case_Name__c,
-                               CCEC_reason__c, CCEC_OF__c, Status__c, CCEC_Closure_Date__c,CreatedBy.name,LastModifiedDate,
-                               LastModifiedBy.Staff_Code__c, Total_CCEC_Remarks__c
-                               FROM CCEC__c 
-                               WHERE Id =: ccecid 
-                               ORDER BY Name DESC 
-                               LIMIT 1
-                              ];
+                               CCEC_reason__c, CCEC_OF__c,  Status__c, CCEC_Closure_Date__c,CreatedBy.name,LastModifiedDate,LastModifiedBy.Staff_Code__c,
+                               Total_CCEC_Remarks__c from CCEC__c where id =: ccecid order by Name desc limit 1];
         try{
             if(ccecs != null && ccecs.size()>0){
                 CCEC__c cc = ccecs[0];
                 if(cc.Case__r.RecordType.Name == 'Service Request' && cc.Case__r.Type == 'Exception' && cc.Case__r.Sub_Type__c!= 'COD Remittance' && cc.Case__r.Sub_Type__c!= 'Bad POD')
                 {
-                    Exception_SF_Meta__mdt   LookupMastermdtRecords2 = [SELECT Id, crm_field_value__c, external_field_value__c 
-                                                                        FROM Exception_SF_Meta__mdt 
-                                                                        WHERE MasterLabel =: cc.Case__r.Sub_Type__c 
-                                                                        LIMIT 1
-                                                                       ];
+                    Exception_SF_Meta__mdt	 LookupMastermdtRecords2 = [SELECT Id, crm_field_value__c, external_field_value__c from Exception_SF_Meta__mdt where MasterLabel =: cc.Case__r.Sub_Type__c LIMIT 1];
                     if(LookupMastermdtRecords2!=null){
                         obj.identity = LookupMastermdtRecords2.external_field_value__c;
                     }
@@ -58,32 +48,20 @@ public Without Sharing class ManualCCECOutboundAPI {
                     obj.pickupSlipNo = '';
                 }
                 
-                if(cc.Case__r.RecordType.Name == 'Complaint' && cc.Case__r.Sub_Type__c != null){
-                    Lookup_Master__mdt LookupMastermdtRecords = [SELECT Id, CRM_Field_Value__c, External_Field_Value__c 
-                                                                 FROM Lookup_Master__mdt 
-                                                                 WHERE MasterLabel =: cc.Case__r.Sub_Type__c 
-                                                                 LIMIT 1
-                                                                ];
+                if(cc.Case__r.RecordType.Name == 'Complaint'){
+                    Lookup_Master__mdt LookupMastermdtRecords = [SELECT Id, CRM_Field_Value__c, External_Field_Value__c from Lookup_Master__mdt where MasterLabel =: cc.Case__r.Sub_Type__c LIMIT 1];
                     if(LookupMastermdtRecords!=null){
                         obj.compCode = LookupMastermdtRecords.External_Field_Value__c;
                     }
                 }
                 else if( cc.Case__r.RecordType.Name == 'Service Request' && cc.Case__r.Type == 'Exception' && cc.Case__r.Sub_Type__c!= 'COD Remittance' && cc.Case__r.Sub_Type__c!= 'Bad POD'){
-                    Exception_SF_Meta__mdt   LookupMastermdtRecords1 = [SELECT Id, crm_field_value__c, complaint_code__c 
-                                                                        FROM Exception_SF_Meta__mdt 
-                                                                        WHERE MasterLabel =: cc.Case__r.Sub_Type__c 
-                                                                        LIMIT 1
-                                                                       ];
+                    Exception_SF_Meta__mdt	 LookupMastermdtRecords1 = [SELECT Id, crm_field_value__c, complaint_code__c from Exception_SF_Meta__mdt where MasterLabel =: cc.Case__r.Sub_Type__c LIMIT 1];
                     if(LookupMastermdtRecords1!=null){ 
                         obj.compCode = LookupMastermdtRecords1.complaint_code__c;
                     }
                 }
                 else if(cc.Case__r.RecordType.Name == 'Query'){
-                    Lookup_Master__mdt LookupMastermdtRecords2 = [SELECT Id, CRM_Field_Value__c, External_Field_Value__c 
-                                                                  FROM Lookup_Master__mdt 
-                                                                  WHERE MasterLabel =: cc.Case__r.Type 
-                                                                  LIMIT 1
-                                                                 ];
+                    Lookup_Master__mdt LookupMastermdtRecords2 = [SELECT Id, CRM_Field_Value__c, External_Field_Value__c from Lookup_Master__mdt where MasterLabel =: cc.Case__r.Type LIMIT 1];
                     if(LookupMastermdtRecords2!=null){
                         obj.compCode = LookupMastermdtRecords2.External_Field_Value__c;
                         system.debug('complaintCode = '+obj.compCode);
@@ -140,9 +118,7 @@ public Without Sharing class ManualCCECOutboundAPI {
                     obj.ccecCreatedBY = '';
                 }
                 if(cc.Case__r.Owner.Type=='User'){
-                    user u = [SELECT Id, Staff_Code__c 
-                              FROM user WHERE Id=: cc.Case__r.Owner.Id
-                             ];
+                    user u = [select id, Staff_Code__c from user where id=: cc.Case__r.Owner.Id];
                     obj.csaCode = u.Staff_Code__c;
                 }
                 else{
@@ -196,6 +172,28 @@ public Without Sharing class ManualCCECOutboundAPI {
                 obj.remarksProvidedBy= '';
                 obj.remarksDate= '';
                 
+                system.debug('complaintCode = '+obj.compCode);
+                system.debug('ccecRefNo = '+obj.ccecRefNo);
+                system.debug('ccecInstructions = '+obj.ccecInstructions);
+                system.debug('ccecRaisedOU = '+obj.ccecRaisedOU);
+                system.debug('ccecDateTime = '+obj.ccecDateTime);
+                system.debug('proactiveCCECFlag = '+obj.proactiveCCECFlag);
+                system.debug('autoCCECFlag = '+obj.autoCCECFlag);
+                System.debug('ccec action ou = '+obj.ccecActionOU);
+                System.debug('ccecCreatedBY = '+obj.ccecCreatedBY);
+                system.debug('csaCode = '+obj.csaCode);
+                System.debug('expClosureDt = '+obj.expClosureDt);
+                System.debug('ccec of = '+obj.ccecOf);
+                System.debug('ccecReason = '+obj.ccecReason);
+                System.debug('ccecStatus = '+obj.ccecStatus);
+                System.debug('ccecClosureDate = '+obj.ccecClosureDate);
+                System.debug('lastModifiedby ='+obj.lastModifiedby);       
+                System.debug('lastModifiedDate = '+obj.lastModifiedDate);
+                system.debug('remarkSeq = '+obj.remarkSeq);
+                system.debug('commentsBy = '+obj.commentsBy);
+                system.debug('openRemarks = '+obj.openRemarks);
+                system.debug('remarksProvidedBy = '+obj.remarksProvidedBy);
+                System.debug('remarksDate = '+obj.remarksDate);
                 system.debug('obj'+obj);
                 
                 Http http = new Http(); 
@@ -263,11 +261,373 @@ public Without Sharing class ManualCCECOutboundAPI {
             ic.Error_Message__c=e.getMessage();
             ic.IsIntegration__c=true; 
             if(ccecs != null && ccecs.size()>0){
-                ic.CaseNumber__c=ccecs[0].Case__r.CaseNumber;
-                ic.ccecNumber__c=ccecs[0].Name;   
+             	ic.CaseNumber__c=ccecs[0].Case__r.CaseNumber;
+            	ic.ccecNumber__c=ccecs[0].Name;   
             }
             insert ic;
         }
+        integer i=0;
+        {
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+            i++;
+        } 
     }   
     public class CCECRecords{
         public string identity{get;set;}

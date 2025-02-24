@@ -26,6 +26,9 @@ public class GatiMDMTest {
     static void makeData(){
         Account testAccountChild = TestFactory.getAccount('Test', 'MSME', '301019', TRUE);
         Account testAccountParent = TestFactory.getAccount('Test', 'MSME', '301019', TRUE);
+        testAccountParent.Contract_Number__c = 'HBD/TBT/1234.102';
+        testAccountParent.GATI_Contract_Number__c = 'HBD/TBT/1234';
+        update testAccountParent;
         testAccountChild.ParentId = testAccountParent.Id;
         testAccountChild.LOF_Number__c = '12345.102';
         update testAccountChild;
@@ -109,7 +112,7 @@ public class GatiMDMTest {
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator(false));
         GatiMDMUtil.ActionInput input = new GatiMDMUtil.ActionInput();
         input.action = 'Create-LOF-Account';
-        input.account = [SELECT Id, GATI_Customer_Code__c, LOF_Number__c FROM Account WHERE ParentId != null LIMIT 1];
+        input.account = [SELECT Id, GATI_Customer_Code__c,GATI_Company_Code__c, LOF_Number__c FROM Account WHERE ParentId != null LIMIT 1];
         input.quoteData = [SELECT Id, LOF_Amendment_Date__c, Test_LOF_number__c, AmendedVersion__c FROM Quote Where Test_LOF_number__c = 'ABC/LOF/123.102' LIMIT 1];
         input.authorizationHeader = 'test';
         Test.startTest();
@@ -123,7 +126,7 @@ public class GatiMDMTest {
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator(true));
         GatiMDMUtil.ActionInput input = new GatiMDMUtil.ActionInput();
         input.action = 'Update-CON-Account';
-        input.account = [SELECT Id, GATI_Customer_Code__c, LOF_Number__c, Contract_Amendment_Date__c, Remarks__c, Contract_Activation_Date__c, GATI_Contract_Number__c, Contract_Status__c FROM Account WHERE ParentId != null LIMIT 1];
+        input.account = [SELECT Id, GATI_Customer_Code__c, LOF_Number__c,GATI_Company_Code__c, Contract_Amendment_Date__c, Remarks__c, Contract_Activation_Date__c, GATI_Contract_Number__c, Contract_Status__c FROM Account WHERE ParentId != null LIMIT 1];
         input.authorizationHeader = 'test';
         input.quoteData = [SELECT Id,LOF_Amendment_Date__c, Test_LOF_number__c, OpportunityId, AmendedVersion__c FROM Quote Where Test_LOF_number__c = 'ABC/CON/123.102' LIMIT 1];
         Test.startTest();

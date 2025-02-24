@@ -1,18 +1,11 @@
 ({
-    getOptyId : function(component, event, helper) {
-        var rid = component.get("v.recordId");
+getOptyId : function(component, event, helper) {
+		var rid = component.get("v.recordId");
         var action = component.get("c.payHistoryData");
         action.setParams({optyId: rid});
         action.setCallback(this, function(response){
             var state = response.getState();
             if (state === "SUCCESS") {
-                var isValid = response.getReturnValue();
-                if(isValid != null){
-                    window.setTimeout(
-                    $A.getCallback(function() {
-                        alert(isValid);
-                    }), 5000 );                    
-                }
                 $A.get('e.force:refreshView').fire();
                 component.find('notify').showToast({
                     "variant": "success",
@@ -45,6 +38,6 @@
                 $A.get("e.force:closeQuickAction").fire();
             }
         });
-    $A.enqueueAction(action);
-}
+        $A.enqueueAction(action);
+	}
 })

@@ -103,7 +103,7 @@ public with sharing class BulkPickupCaseStatusChangeController {
         @AuraEnabled public String PickupStatus;
         @AuraEnabled public Datetime PickupDate;
         @AuraEnabled public String ApproverRemarks;
-        @AuraEnabled public Integer ActualWeight;
+        @AuraEnabled public Decimal ActualWeight;
         @AuraEnabled public String Status;
     }
 }

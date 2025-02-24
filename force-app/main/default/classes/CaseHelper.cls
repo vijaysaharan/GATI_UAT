@@ -41,28 +41,33 @@ public without sharing class CaseHelper{
 
         for (Case caseObj : caseList){
             if(caseObj.Status=='New'){
-                caseObj.Status='Open(Assigned)';
                 if(caseObj.AccountId != Null && accountIdVSUserIdMap != null && accountIdVSUserIdMap.containsKey(caseObj.AccountId)){
                     caseObj.OwnerId=accountIdVSUserIdMap.get(caseObj.AccountId);
+                    caseObj.Status='Open(Assigned)';
                 }  
                 else if(caseobj.Type == 'Pick Up' && nameToGroup != null && nameToGroup.containsKey('Pickup Team')){
                     caseobj.OwnerId=nameToGroup.get('Pickup Team').Id;
+                    caseObj.Status='Open(Assigned)';
                 }
                 else if(caseobj.Type == 'Prospect Pickup' && nameToGroup != null && nameToGroup.containsKey('Prospective Pickup Team')){
                     caseobj.OwnerId=nameToGroup.get('Prospective Pickup Team').Id;
+                    caseObj.Status='Open(Assigned)';
                 }
                 else if(caseobj.Type == 'Exception' && nameToGroup != null && nameToGroup.containsKey('Exception Team')){
                     caseobj.OwnerId=nameToGroup.get('Exception Team').Id;
+                    caseObj.Status='Open(Assigned)';
                 }
                 else if((caseobj.Type == 'ADD Extension' || caseobj.Type == 'Appointment Delivery' 
                         || caseobj.Type == 'Bill back of Expenses' || caseobj.Type == 'Rebooking') && nameToGroup != null && nameToGroup.containsKey('Approvals')){
                     caseObj.OwnerId=nameToGroup.get('Approvals').Id;
+                    caseObj.Status='Open(Assigned)';
                 }
                 else if(nameToGroup != null && nameToGroup.containsKey('Issue resolution Team') && (caseobj.Type == 'Pending Pickup' || caseobj.Type == 'Claim' || caseobj.Type == 'Delayed Connection'
                         || caseobj.Type == 'Undelivered' || caseobj.Type == 'Partial Delivery' || caseobj.Type == 'Claims' 
                         || caseobj.Type == 'Invoicing and Others' || caseobj.Type == 'DELIVERY REQUESTED BEFORE ADD' 
                         || caseobj.Type == 'REBOOKING WITHOUT INFORMATION' || caseobj.Type == 'VARIANCE IN ADD' || caseobj.Type == 'WRONG DELIVERY UPDATED')){
                     caseObj.OwnerId=nameToGroup.get('Issue resolution Team').Id;
+                    caseObj.Status='Open(Assigned)';
                 }
             }
         }
@@ -210,11 +215,12 @@ public without sharing class CaseHelper{
                 }
             }
             for(Case c : caseList){
-                if(accToUser.containsKey(c.AccountId)){
-                    c.ownerId = accToUser.get(c.AccountId);
-                }
                 if(codetoAcc.containsKey(c.CustomerCode__c)){
                     c.AccountId = codetoAcc.get(c.CustomerCode__c);
+                }
+                if(accToUser.containsKey(c.AccountId)){
+                    c.ownerId = accToUser.get(c.AccountId);
+                    c.Status='Open(Assigned)';
                 }
             }
         }  

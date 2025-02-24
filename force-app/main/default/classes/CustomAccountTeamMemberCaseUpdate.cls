@@ -1,3 +1,11 @@
+/*
+Author : Sumit Gupta (sgupta3@kloudrac.com)
+Test Class Name : CustomAccountTeamMemberCaseUpdateTest
+Date : Mar 04, 2022
+Desc : Batchable Class to Update Case Owner through Account Team Member.
+Ref : 
+*/
+
 global class CustomAccountTeamMemberCaseUpdate implements Database.Batchable<sObject> {
     String query;
     Map<ID,ID> mapAccountIdUserId = new Map<ID,ID>();
@@ -25,7 +33,7 @@ global class CustomAccountTeamMemberCaseUpdate implements Database.Batchable<sOb
             }
             system.debug('Update Case List = ' + updateLstOpenCases);
             if(updateLstOpenCases != null && updateLstOpenCases.size() > 0){
-                update updateLstOpenCases;
+                Database.update(updateLstOpenCases,true);
             }
         }
         

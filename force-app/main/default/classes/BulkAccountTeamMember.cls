@@ -86,26 +86,18 @@ public class BulkAccountTeamMember {
                 }
                 
                 // Update related Cases' owner
-                /*List<Case> relatedCases = [SELECT Id, AccountId FROM Case WHERE AccountId = :account.Id AND Status != 'Closed'];
+                List<Case> relatedCases = [SELECT Id, AccountId FROM Case WHERE AccountId = :account.Id AND Status != 'Closed'];
                 for (Case c : relatedCases) {
                     c.OwnerId = mapAccountIdUserId.get(c.AccountId);
                     relatedCasesToUpdate.add(c);
-                }*/
-
-                String query = 'Select Id, AccountId from Case where Status != \'Closed\' AND AccountId IN :setAccounts';
-                
-                BulkAccountTeamMemberBatch batch = new BulkAccountTeamMemberBatch(query,mapAccountIdUserId,setAccounts);  
-                Database.executeBatch(batch, 1);
-                //System.enqueueJob(new BulkAccountTeamMemberQueueable(query,mapAccountIdUserId,setAccounts));
-                
+                }
             } else {
-                Account account = accountsByCustomerCode.get(gatiCustomerCode);// Modified
                 // Add handling for records with missing or invalid Gati Customer Code
                 DatatoReturn ret = new DatatoReturn();
                 ret.done = false;
-                ret.Id = account.Id;
+                ret.Id = null;
                 ret.title = 'Invalid Gati Customer Code: ' + gatiCustomerCode;
-                ret.obj = account;
+                ret.obj = null;
                 exceptionList.add(ret);
             }
         }

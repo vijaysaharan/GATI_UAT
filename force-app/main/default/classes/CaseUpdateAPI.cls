@@ -23,7 +23,7 @@ global without sharing class CaseUpdateAPI {
                    if(result.isSuccess()){
                        Case caseSuccessObj = [select CaseNumber from case where  id=:result.id]; 
                        SuccessErrorWrapper successObj  = new SuccessErrorWrapper();
-                       successObj.CaseNumber = caseSuccessObj.CaseNumber;
+               		   successObj.CaseNumber = caseSuccessObj.CaseNumber;
                        successObj.Status = 'Updated';
                        return successObj; 
                      } 
@@ -43,7 +43,7 @@ global without sharing class CaseUpdateAPI {
             log.Component_Name__c='Case Update';
             log.Error_Message__c=e.getMessage();
             log.IsIntegration__c=true; 
-            insert log; 
+        	insert log; 
         }
             return null;
     }

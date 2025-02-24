@@ -68,9 +68,7 @@ public class Pickup_req_OutboundAPIClassTest implements HttpCalloutMock{
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new Pickup_req_OutboundAPIClassTest());
         Pickup_req_OutboundAPIClass picc = new Pickup_req_OutboundAPIClass();
-        Pickup_req_OutboundAPI p = new Pickup_req_OutboundAPI();
-        //p.case1.id = lstCase;
-        System.enqueueJob(p);
+        Pickup_req_OutboundAPIClass.Sendpickup(lstCase);
         //picc.PickupPayload();
         Test.stopTest();
     }

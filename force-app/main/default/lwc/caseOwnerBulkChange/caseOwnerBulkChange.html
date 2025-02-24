@@ -1,0 +1,60 @@
+<template>
+    <lightning-card>
+        <div lwc:if={isLoading} class="loading-class">
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </div>
+        <div lwc:else>
+            <div class="slds-grid slds-grid_align-spread slds-var-p-around_medium">
+                <div>
+                    <lightning-icon icon-name="standard:case_change_status" size="small"></lightning-icon>
+                    <span class="header-title slds-var-m-left_medium">Bulk Case Owner Update</span>
+                </div>
+                <div>
+                    <lightning-button 
+                        icon-name="utility:download" 
+                        class="slds-m-around_medium" 
+                        variant="brand"
+                        name="requests" 
+                        label="Change Owners" 
+                        onclick={downloadDummy}
+                    ></lightning-button>
+                </div>
+            </div>            
+            <div class="slds-var-p-around_medium">
+                <div>
+                    <b>Important points for uploaded csv.</b>
+                    <li class="slds-var-m-left_medium">Case Number : Case number is unique auto number for identify for which case you want to change status.</li>
+                    <li class="slds-var-m-left_medium">User Name : This is the user name for update owner.</li>
+                    <li class="slds-var-m-left_medium">NOTE - Always keep in mind that case number is always with complete like if case number is 00448021 then same put in csv.</li>
+                </div>
+                <div class="slds-var-m-top_xx-large">
+                    <lightning-input type="file" label="Upload Pickup Cases" disabled={isDataUploaded} variant="label-hidden" multiple="false" accept=".csv"
+                                onchange={handleCsvUpload}></lightning-input>
+                </div>
+                <div lwc:if={isDataUploaded} class="slds-var-m-top_medium">
+                    <c-pagination-in-data-table
+                        for-table={rowsTotal}
+                        columns={columns}
+                        page-limit="10"
+                    ></c-pagination-in-data-table>
+                </div>
+            </div>
+            <div class="slds-var-p-around_medium" lwc:if={isDataProcessed}>
+                <div class="result-table slds-var-p-around_medium slds-var-m-around_medium">RESULT TABLE</div>
+                <c-pagination-in-data-table
+                        for-table={dataForResult}
+                        columns={columnsForResult}
+                        page-limit="10"
+                    ></c-pagination-in-data-table>
+            </div>
+            <div class="footer-class">
+                <lightning-button onclick={cancel} label="Cancel"></lightning-button>
+                <lightning-button class="slds-var-m-left_medium" disabled={saveDisabled} variant="brand" onclick={handleSave} label="Save"></lightning-button>
+                <div lwc:if={isDataProcessed}>
+                    <lightning-button variant="success" label="Success CSV" name="Success" onclick={handleDownload} class="slds-m-left_x-small"></lightning-button>
+                    <lightning-button variant="destructive" label="Error CSV" name="Failed" onclick={handleDownload} class="slds-m-left_x-small"></lightning-button>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

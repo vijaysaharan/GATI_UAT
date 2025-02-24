@@ -12,9 +12,7 @@ private class ConvertLeadsInvocableTest {
             lastName = 'Benioff',
             company = 'Salesforce',
             PostalCode = '335524',
-            Product__c = 'Express',
-            Turnover_of_the_Company__c = 100,
-            Expected_Business_Per_Month__c = 100
+            Product__c = 'Express'
         );
         
         insert ld;
@@ -68,9 +66,7 @@ private class ConvertLeadsInvocableTest {
             lastName = 'Benioff',
             company = 'Salesforce',
             PostalCode = '335524',
-            Product__c = 'Express',
-            Turnover_of_the_Company__c = 100,
-            Expected_Business_Per_Month__c = 100
+            Product__c = 'Express'
         );
         
         insert ld;
