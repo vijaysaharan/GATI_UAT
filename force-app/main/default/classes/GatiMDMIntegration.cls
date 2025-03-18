@@ -22,6 +22,7 @@ public class GatiMDMIntegration {
         request.setMethod('PUT');
         request.setEndpoint(MDMSetting__mdt.getInstance('Approval_Request_End_Point').EndPoint__c + input.opportunityId);
         request.setBody(requestBody);
+        request.setTimeout(120000);
         request.setHeader('Authorization', input.authorizationHeader);
         request.setHeader('Content-Type', 'application/json');
         
@@ -107,6 +108,7 @@ public class GatiMDMIntegration {
         request.setMethod('POST');
         request.setEndpoint(MDMSetting__mdt.getInstance('CS_Update_End_Point').EndPoint__c + atmAccount.GATI_Customer_Code__c + '\'');
         request.setBody(requestBody);
+        request.setTimeout(120000);
         request.setHeader('Authorization', input.authorizationHeader);
         request.setHeader('Content-Type', 'application/json');
         Http http = new Http();
@@ -168,6 +170,7 @@ public class GatiMDMIntegration {
         request.setMethod('POST');
         request.setEndpoint(MDMSetting__mdt.getInstance('Sub_Code_Creation_End_Point').EndPoint__c);
         request.setBody(requestBody);
+        request.setTimeout(120000);
         request.setHeader('Authorization', input.authorizationHeader);
         request.setHeader('Content-Type', 'application/json');
         Http http = new Http();
@@ -223,6 +226,7 @@ public class GatiMDMIntegration {
         String endPoint = MDMSetting__mdt.getInstance('Create_LOF_Account').EndPoint__c;
         HttpRequest requestGet = new Httprequest();
         requestGet.setMethod('GET');
+        requestGet.setTimeout(120000);
         requestGet.setEndpoint((endPoint.substring(0,endPoint.length() - 1))+'?filter=CUST_CODE=\''+accRecord.GATI_Customer_Code__c+'%7C'+companyName+'\'');
         requestGet.setHeader('Authorization', authorizationToken);
         requestGet.setHeader('Content-Type', 'application/json');
@@ -287,6 +291,7 @@ public class GatiMDMIntegration {
             request.setMethod('PUT');
             request.setEndpoint(MDMSetting__mdt.getInstance('Create_LOF_Account').EndPoint__c+sequenceNumber);
             request.setBody(requestBody);
+            request.setTimeout(120000);
             request.setHeader('Authorization', authorizationToken);
             request.setHeader('Content-Type', 'application/json');
             Http http = new Http();
@@ -311,6 +316,7 @@ public class GatiMDMIntegration {
         String endPoint = MDMSetting__mdt.getInstance('Delete_CS_Mapping').EndPoint__c;
         HttpRequest requestGet = new Httprequest();
         requestGet.setMethod('GET');
+        requestGet.setTimeout(120000);
         requestGet.setEndpoint(endPoint+'?filter=CUST_CODE=\''+input.customerCode+'%7C'+companyName+'\'andStaff_Code=\''+input.staffCode+'\'');
         requestGet.setHeader('Authorization', input.authorizationHeader);
         requestGet.setHeader('Content-Type', 'application/json');
@@ -324,6 +330,7 @@ public class GatiMDMIntegration {
         if(sequenceNumber != null && sequenceNumber != ''){
             HttpRequest requestDelete = new Httprequest();
             requestDelete.setMethod('DELETE');
+            requestDelete.setTimeout(120000);
             requestDelete.setEndpoint(endPoint+'/'+sequenceNumber);
             requestDelete.setHeader('Authorization', input.authorizationHeader);
             requestDelete.setHeader('Content-Type', 'application/json');

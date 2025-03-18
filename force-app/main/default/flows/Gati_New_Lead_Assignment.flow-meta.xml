@@ -171,6 +171,28 @@
         </connector>
     </assignments>
     <decisions>
+        <name>Check_if_organization_master_record_is_not_null</name>
+        <label>IsOrganizationMastersAvailable?</label>
+        <locationX>974</locationX>
+        <locationY>539</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>not_null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>getOU</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>check_lead_type</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>check_lead_type</name>
         <label>check lead type</label>
         <locationX>578</locationX>
@@ -273,14 +295,14 @@
         </rules>
     </decisions>
     <decisions>
-        <name>IsNewOrIsChanged</name>
-        <label>IsNewOrIsChanged?</label>
+        <name>IsNewOrChangedPincode</name>
+        <label>IsNewOrChangedPincode?</label>
         <locationX>1304</locationX>
         <locationY>323</locationY>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>Isnew</leftValueReference>
                 <operator>EqualTo</operator>
@@ -297,28 +319,6 @@
             </conditions>
             <connector>
                 <targetReference>getOU</targetReference>
-            </connector>
-            <label>Yes</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>IsOrganizationMasterAvailable</name>
-        <label>IsOrganizationMasterAvailable</label>
-        <locationX>974</locationX>
-        <locationY>539</locationY>
-        <defaultConnectorLabel>No</defaultConnectorLabel>
-        <rules>
-            <name>not_null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>getOU</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>check_lead_type</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -362,7 +362,7 @@
         <locationY>431</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>IsOrganizationMasterAvailable</targetReference>
+            <targetReference>Check_if_organization_master_record_is_not_null</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -401,7 +401,7 @@
         <locationX>1178</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>IsNewOrIsChanged</targetReference>
+            <targetReference>IsNewOrChangedPincode</targetReference>
         </connector>
         <filterLogic>1 AND (2 OR 3) AND 4 AND 5 AND 6 AND 7 AND 8</filterLogic>
         <filters>

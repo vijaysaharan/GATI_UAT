@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>53.0</apiVersion>
+    <assignments>
+        <name>assign_cross_sell_cold_storage</name>
+        <label>assign cross sell cold storage</label>
+        <locationX>1154</locationX>
+        <locationY>392</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cross_Sell_Lead_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>4</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>check_cross_sell_cold_storage</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assign_cross_sell_disqualified</name>
+        <label>assign cross sell disqualified</label>
+        <locationX>770</locationX>
+        <locationY>59</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cross_Sell_Lead_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>6</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>lead_status_working</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assign_cross_sell_in_progress_or_working</name>
+        <label>assign cross sell in progress or working</label>
+        <locationX>1142</locationX>
+        <locationY>50</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cross_Sell_Lead_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>5</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>check_cross_sell_in_progress_working</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assign_cross_sell_qualified</name>
+        <label>assign cross sell qualified</label>
+        <locationX>1492</locationX>
+        <locationY>86</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cross_Sell_Lead_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>7</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>check_cross_sell_qualified</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assign_cross_sell_status_to_assigned</name>
+        <label>assign cross sell status to assigned</label>
+        <locationX>755</locationX>
+        <locationY>383</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cross_Sell_Lead_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>2</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>cross_sell_status_rejected</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assign_cross_sell_status_to_new_or_shared</name>
+        <label>assign cross sell status to new or shared</label>
+        <locationX>380</locationX>
+        <locationY>381</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Cross_Sell_Lead_Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>1</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>lead_status_new_and_assigned</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assign_lead_status_converted</name>
+        <label>assign lead status converted</label>
+        <locationX>1492</locationX>
+        <locationY>402</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Converted</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>assign_lead_status_to_non_qualified</name>
+        <label>assign lead status to non qualified</label>
+        <locationX>516</locationX>
+        <locationY>190</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Non Qualified</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>lead_status_non_qualified</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assign_lead_status_working</name>
+        <label>assign lead status working</label>
+        <locationX>949</locationX>
+        <locationY>245</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Working</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>check_lead_status_revisit</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>assign_revisit</name>
+        <label>assign revisit</label>
+        <locationX>1324</locationX>
+        <locationY>236</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Status</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Revisit</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>check_lead_status_converted</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <name>check_cross_sell_cold_storage</name>
+        <label>check cross sell cold storage</label>
+        <locationX>1322</locationX>
+        <locationY>388</locationY>
+        <defaultConnector>
+            <targetReference>check_lead_status_converted</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>check_cold_storage</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>4</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Gati CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_revisit</targetReference>
+            </connector>
+            <label>check cold storage</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_cross_sell_in_progress_working</name>
+        <label>check cross sell in progress working</label>
+        <locationX>1139</locationX>
+        <locationY>220</locationY>
+        <defaultConnector>
+            <targetReference>check_lead_status_revisit</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>check</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>5</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Gati CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_lead_status_working</targetReference>
+            </connector>
+            <label>check</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_cross_sell_qualified</name>
+        <label>check cross sell qualified</label>
+        <locationX>1486</locationX>
+        <locationY>249</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>cross_qualified</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>7</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Gati CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_lead_status_converted</targetReference>
+            </connector>
+            <label>cross qualified</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_lead_status_converted</name>
+        <label>check lead status converted</label>
+        <locationX>1377</locationX>
+        <locationY>51</locationY>
+        <defaultConnector>
+            <targetReference>check_cross_sell_qualified</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>lead_converted</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Converted</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ACL CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ECU CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_cross_sell_qualified</targetReference>
+            </connector>
+            <label>lead converted</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>check_lead_status_revisit</name>
+        <label>check lead status revisit</label>
+        <locationX>936</locationX>
+        <locationY>396</locationY>
+        <defaultConnector>
+            <targetReference>check_cross_sell_cold_storage</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>lead_revisit</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Revisit</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ACL CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ECU CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_cross_sell_cold_storage</targetReference>
+            </connector>
+            <label>lead revisit</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>cross_sell_status_rejected</name>
+        <label>cross sell status rejected</label>
+        <locationX>749</locationX>
+        <locationY>193</locationY>
+        <defaultConnector>
+            <targetReference>lead_status_non_qualified</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>cross_sell_rejected</name>
+            <conditionLogic>(1 OR 2) AND 3 AND 4</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>3</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>6</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Gati CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_lead_status_to_non_qualified</targetReference>
+            </connector>
+            <label>cross sell rejected or disqualified</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>lead_status_new</name>
+        <label>lead status new</label>
+        <locationX>171</locationX>
+        <locationY>390</locationY>
+        <defaultConnector>
+            <targetReference>lead_status_new_and_assigned</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>status_new</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Gati CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_cross_sell_status_to_new_or_shared</targetReference>
+            </connector>
+            <label>status new</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>lead_status_new_and_assigned</name>
+        <label>lead status new and assigned</label>
+        <locationX>573</locationX>
+        <locationY>383</locationY>
+        <defaultConnector>
+            <targetReference>cross_sell_status_rejected</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>new_and_assigned</name>
+            <conditionLogic>1 AND 2 AND 3 AND (4 OR 5)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>New</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Lead_Assigned_OU__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ACL CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ECU CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_cross_sell_status_to_assigned</targetReference>
+            </connector>
+            <label>new and assigned</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>lead_status_non_qualified</name>
+        <label>lead status non qualified</label>
+        <locationX>516</locationX>
+        <locationY>56</locationY>
+        <defaultConnector>
+            <targetReference>lead_status_working</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>lead_non_qualified</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Non Qualified</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ACL CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ECU CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_cross_sell_disqualified</targetReference>
+            </connector>
+            <label>lead non qualified</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>lead_status_working</name>
+        <label>lead status working</label>
+        <locationX>949</locationX>
+        <locationY>58</locationY>
+        <defaultConnector>
+            <targetReference>check_cross_sell_in_progress_working</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>lead_working</name>
+            <conditionLogic>1 AND 2 AND (3 OR 4)</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Working</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ACL CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Cross_Sell_Lead_Created_From__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>ECU CRM</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>assign_cross_sell_in_progress_or_working</targetReference>
+            </connector>
+            <label>lead working</label>
+        </rules>
+    </decisions>
+    <interviewLabel>cross sell and lead status update {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>cross sell and lead status update</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>115</locationY>
+        <connector>
+            <targetReference>lead_status_new</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>LeadSource</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Cross Sell</stringValue>
+            </value>
+        </filters>
+        <object>Lead</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

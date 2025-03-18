@@ -1,13 +1,14 @@
 <!-- sldsValidatorIgnore -->
 <template>
     <lightning-datatable
-    key-field="Name"
+    key-field="Existing_Customer_Code__c"
     data={contractData}
     columns={columns}
     max-row-selection="1"
     lwc:ref="table"
     min-column-width="500px"
-    column-widths-mode="fixed"></lightning-datatable>
+    column-widths-mode="fixed"
+    ></lightning-datatable>
     <div class="slds-grid slds-var-p-top_medium">
         <div class="slds-col slds_size_4-of-6" style="font-size: large; font-weight: bold;">
             Additional approval required to process the duplicate customer.

@@ -4,8 +4,8 @@
     <assignments>
         <name>add_cloumns_to_the_table</name>
         <label>add cloumns to the table</label>
-        <locationX>371</locationX>
-        <locationY>279</locationY>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
         <assignmentItems>
             <assignToReference>table</assignToReference>
             <operator>Add</operator>
@@ -20,8 +20,8 @@
     <assignments>
         <name>Add_table_row_to_table_markup</name>
         <label>Add table row to table markup</label>
-        <locationX>972</locationX>
-        <locationY>343</locationY>
+        <locationX>264</locationX>
+        <locationY>458</locationY>
         <assignmentItems>
             <assignToReference>table</assignToReference>
             <operator>Add</operator>
@@ -36,8 +36,8 @@
     <assignments>
         <name>t</name>
         <label>close table markup</label>
-        <locationX>369</locationX>
-        <locationY>604</locationY>
+        <locationX>176</locationX>
+        <locationY>650</locationY>
         <assignmentItems>
             <assignToReference>table</assignToReference>
             <operator>Add</operator>
@@ -46,6 +46,7 @@
             </value>
         </assignmentItems>
     </assignments>
+    <environments>Default</environments>
     <formulas>
         <name>tablerows</name>
         <dataType>String</dataType>
@@ -61,8 +62,8 @@
     <loops>
         <name>MOm_list</name>
         <label>MOm list</label>
-        <locationX>476</locationX>
-        <locationY>219</locationY>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
         <collectionReference>get_MOM_records</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -81,7 +82,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -94,8 +95,8 @@
     <recordLookups>
         <name>get_MOM_records</name>
         <label>get MOM records</label>
-        <locationX>258</locationX>
-        <locationY>219</locationY>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>add_cloumns_to_the_table</targetReference>
@@ -120,8 +121,8 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>73</locationX>
-        <locationY>54</locationY>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>get_MOM_records</targetReference>
         </connector>

@@ -1,0 +1,28 @@
+<apex:page showHeader="false" sidebar="false" controller="customerFeedbackController">
+    <apex:includeLightning /> 
+    <div id="lightning" />
+    <script>
+    
+    
+    $Lightning.use("c:CustomerFeedbackApp",   
+                   function() {                 
+                       $Lightning.createComponent(
+                           "c:CustomerFeedback", {
+                               accountId:'{!accountId}',
+                               contactId:'{!contactId}',
+                               accountName:'{!accountName}',
+                               contactName:'{!contactName}',
+                               Designation:'{!Designation}',
+                               contactEmail:'{!contactEmail}',
+                               contactPhone:'{!contactPhone}'
+                           }
+                           ,                  
+                           "lightning",   
+                           function(cmp) {                             
+                               
+                               
+                           });           
+                   },);
+                   </script>   
+    
+</apex:page>

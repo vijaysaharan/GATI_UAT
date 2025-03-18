@@ -1,4 +1,4 @@
-public with sharing class CaseOwnerBulkChangeController {
+public without sharing class CaseOwnerBulkChangeController {
     @AuraEnabled
     public static Map<String,String> csvDataHandler(String csvDataList){
         Map<String,String> returnMap = New Map<String,String>();
@@ -17,7 +17,8 @@ public with sharing class CaseOwnerBulkChangeController {
             Map<String, User> userNameToUser = new Map<String, User>();
             Map<String, String> caseNumberToResult = new Map<String, String>();
             Map<String, csvWrapper> caseNumberToData = new Map<String, csvWrapper>();
-            Map<Id, String> caseIdToCaseNumber = new Map<Id, String>();
+            Map<String, String> caseIdToCaseNumber = new Map<String, String>();
+            Map<String, Case> caseNumberToCases = new Map<String, Case>();
 
             dataWrapper = (List<csvWrapper>) JSON.deserialize(
                 csvDataList, List<csvWrapper>.class
@@ -51,6 +52,7 @@ public with sharing class CaseOwnerBulkChangeController {
             for(Case cs : casesMap.values()){
                 Case csUpdate = new Case();
                 csUpdate.Id = cs.Id;
+                caseNumberToCases.put(cs.CaseNumber, cs);
                 if(userNameToUser.containsKey(caseNumberToData.get(cs.CaseNumber).UserName)){
                     csUpdate.OwnerId = userNameToUser.get(caseNumberToData.get(cs.CaseNumber).UserName).Id;
                     caseToUpdate.add(csUpdate);
@@ -88,6 +90,9 @@ public with sharing class CaseOwnerBulkChangeController {
                     else{
                         errorData += baseString+'\n';
                     }
+                }
+                else if(!caseNumberToCases.containsKey(csv.CaseNumber)){
+                    errorData += baseString+'Error - Status is closed and closed cases can not transferred.\n';
                 }
                 else if(!caseIdToCaseNumber.containsKey(csv.CaseNumber)){
                     errorData += baseString+'Error - User Not Active or Not Available\n';

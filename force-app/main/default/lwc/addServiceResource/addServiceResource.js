@@ -72,14 +72,7 @@ export default class AddServiceResource extends LightningElement {
                 }
             })
             .catch(error => {
-                //this.showToasMessage('OOPs-' + error, 'error', 'ERROR');
-                //this.dispatchEvent(new CloseActionScreenEvent());
-                //console.error('--- error occur when save resource--', error);
-                if (error.body && error.body.message) {
-                    this.showToasMessage('Error: ' + error.body.message, 'error', 'ERROR');
-                } else {
-                    this.showToasMessage('An unknown error occurred.', 'error', 'ERROR');
-                }
+                this.showToasMessage('OOPs-' + error, 'error', 'ERROR');
                 this.dispatchEvent(new CloseActionScreenEvent());
                 console.error('--- error occur when save resource--', error);
             })

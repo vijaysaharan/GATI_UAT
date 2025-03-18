@@ -38,18 +38,8 @@
     },
     handleAccompaniedWithChange: function(component, event, helper) {
         var SelectedIdVal = component.get("v.selectedUserId");
-        var dissionVal = component.get("v.DissionValue");
         
-        if(!SelectedIdVal && dissionVal != '' && dissionVal != null){
-            component.set("v.showContinue", false);
-        }else{
-            component.set("v.showContinue", true);
-        }
-    },
-    handleDissionChange: function(component, event, helper) {
-        var dissionVal = component.get("v.DissionValue");
-        var SelectedIdVal = component.get("v.selectedUserId");
-        if(!SelectedIdVal && dissionVal != '' && dissionVal != null){
+        if(!SelectedIdVal){
             component.set("v.showContinue", false);
         }else{
             component.set("v.showContinue", true);

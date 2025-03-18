@@ -3,8 +3,8 @@
     <actionCalls>
         <name>Docket_part</name>
         <label>Docket part</label>
-        <locationX>870</locationX>
-        <locationY>394</locationY>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -39,20 +39,31 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>feedback_email</name>
         <label>feedback email</label>
-        <locationX>873</locationX>
-        <locationY>129</locationY>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>feedbakcbody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>emailAddresses</name>
             <value>
                 <elementReference>$Record.Customer_Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -67,27 +78,14 @@
                 <stringValue>What do you think about Gati?</stringValue>
             </value>
         </inputParameters>
-        <inputParameters>
-            <name>emailBody</name>
-            <value>
-                <elementReference>feedbakcbody</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>sendRichBody</name>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>53.0</apiVersion>
     <decisions>
         <name>check_customer_email</name>
-        <label>check customer email</label>
-        <locationX>382</locationX>
-        <locationY>297</locationY>
+        <label>Check customer email</label>
+        <locationX>380</locationX>
+        <locationY>323</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>if_present</name>
@@ -99,24 +97,17 @@
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
-            <conditions>
-                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Complaint</stringValue>
-                </rightValue>
-            </conditions>
             <connector>
                 <targetReference>if_pickup_complaint</targetReference>
             </connector>
-            <label>if present</label>
+            <label>If present</label>
         </rules>
     </decisions>
     <decisions>
         <name>if_pickup_complaint</name>
-        <label>if pickup complaint</label>
-        <locationX>637</locationX>
-        <locationY>314</locationY>
+        <label>If pickup complaint</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
         <defaultConnector>
             <targetReference>Docket_part</targetReference>
         </defaultConnector>
@@ -134,7 +125,7 @@
             <connector>
                 <targetReference>feedback_email</targetReference>
             </connector>
-            <label>if yes</label>
+            <label>If yes</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -149,7 +140,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -160,8 +151,8 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>50</locationX>
-        <locationY>50</locationY>
+        <locationX>254</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>check_customer_email</targetReference>
         </connector>
@@ -173,19 +164,26 @@
                 <stringValue>Closed</stringValue>
             </value>
         </filters>
+        <filters>
+            <field>Status</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>Case</object>
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <textTemplates>
         <name>Dockettemplate</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Dear Customer,&amp;nbsp;&lt;/p&gt;&lt;p&gt;Your complaint with reference number ({!$Record.CaseNumber}) for ({!$Record.Type}) of docket number ({!$Record.Docket_Number__c}), registered on ({!$Record.CreatedDate}) has been closed on ({!$Record.ClosedDate}).&lt;/p&gt;&lt;p&gt;In case of any further concerns or if you are not satisfied with the closure, please reach out on 1860-123-4284 or write to customerservice@gati.com.&lt;/p&gt;&lt;p&gt;Do share your quick feedback on the link below to help us serve you even better.&lt;/p&gt;&lt;p&gt;Feedback Link: &lt;a href=&quot;https://gati.secure.force.com/PostIssueResolution?Caseno={!$Record.CaseNumber}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Click Here&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Gati &lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://gatikwepvtltd--uat--c.documentforce.com/servlet/servlet.ImageServer?id=015p0000000fBaW&amp;amp;oid=00Dp0000000Dvv2&amp;amp;lastMod=1632729375000&quot; title=&quot;Click Here&quot;&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;Dear Customer,&amp;nbsp;&lt;/p&gt;&lt;p&gt;Your complaint with reference number ({!$Record.CaseNumber}) for ({!$Record.Type}) of docket number ({!$Record.Docket_Number__c}), registered on ({!$Record.CreatedDate}) has been closed on ({!$Record.ClosedDate}).&lt;/p&gt;&lt;p&gt;In case of any further concerns or if you are not satisfied with the closure, please reach out on 1860-123-4284 or write to customerservices@allcargologistics.com.&lt;/p&gt;&lt;p&gt;Do share your quick feedback on the link below to help us serve you even better.&lt;/p&gt;&lt;p&gt;Feedback Link: &lt;a href=&quot;https://allcargogati.secure.force.com/PostIssueResolution?Caseno={!$Record.CaseNumber}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Click Here&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Allcargogati&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</text>
     </textTemplates>
     <textTemplates>
         <name>feedbakcbody</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Dear Customer,&amp;nbsp;&lt;/p&gt;&lt;p&gt;Your complaint with reference number {!$Record.CaseNumber} for ({!$Record.Type}) of pickup slip number ({!$Record.Pick_Up_Ref_No__c}), registered on ({!$Record.CreatedDate}) has been closed on ({!$Record.ClosedDate}).&lt;/p&gt;&lt;p&gt;In case of any further concerns or if you are not satisfied with the closure, please reach out on 1860-123-4284 or write to customerservice@gati.com.&lt;/p&gt;&lt;p&gt;Do share your quick feedback on the link below to help us serve you even better.&lt;/p&gt;&lt;p&gt;Feedback Link: &lt;a href=&quot;https://gati.secure.force.com/PostIssueResolution?Caseno={!$Record.CaseNumber}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Click Here&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Gati &lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://gatikwepvtltd--uat--c.documentforce.com/servlet/servlet.ImageServer?id=015p0000000fBaW&amp;amp;oid=00Dp0000000Dvv2&amp;amp;lastMod=1632729375000&quot; title=&quot;Click Here&quot;&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;Dear Customer,&amp;nbsp;&lt;/p&gt;&lt;p&gt;Your complaint with reference number {!$Record.CaseNumber} for ({!$Record.Type}) of pickup slip number ({!$Record.Pick_Up_Ref_No__c}), registered on ({!$Record.CreatedDate}) has been closed on ({!$Record.ClosedDate}).&lt;/p&gt;&lt;p&gt;In case of any further concerns or if you are not satisfied with the closure, please reach out on 1860-123-4284 or write to customerservices@allcargologistics.com.&lt;/p&gt;&lt;p&gt;Do share your quick feedback on the link below to help us serve you even better.&lt;/p&gt;&lt;p&gt;Feedback Link: &lt;a href=&quot;https://allcargogati.secure.force.com/PostIssueResolution?Caseno={!$Record.CaseNumber}&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Click Here&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Allcargogati&lt;/p&gt;</text>
     </textTemplates>
 </Flow>

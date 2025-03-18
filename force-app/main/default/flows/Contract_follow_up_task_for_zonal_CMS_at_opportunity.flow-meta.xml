@@ -402,7 +402,7 @@
         <inputAssignments>
             <field>Subject</field>
             <value>
-                <stringValue>Follow-up for contract generation</stringValue>
+                <stringValue>Follow-up for contract amendment</stringValue>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -532,7 +532,7 @@
             <field>Username</field>
             <operator>EqualTo</operator>
             <value>
-                <stringValue>ansari.shakil@gatik.uat.com</stringValue>
+                <stringValue>ans_29989@gatiho.com</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>

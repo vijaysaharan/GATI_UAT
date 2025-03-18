@@ -3,8 +3,8 @@
     <apiVersion>62.0</apiVersion>
     <decisions>
         <name>Is_Contract</name>
-        <label>Is Contract?</label>
-        <locationX>182</locationX>
+        <label>Is Contract</label>
+        <locationX>347</locationX>
         <locationY>323</locationY>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
@@ -18,8 +18,52 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Create_Customer_Dashboard</targetReference>
+                <targetReference>Get_Customer_Dashboard</targetReference>
             </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Customer_Dashboard_Available</name>
+        <label>Is Customer Dashboard Available?</label>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
+        <defaultConnector>
+            <targetReference>Create_Customer_Dashboard</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Available</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Customer_Dashboard</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Monthly_Trade</name>
+        <label>Is Monthly Trade?</label>
+        <locationX>248</locationX>
+        <locationY>863</locationY>
+        <defaultConnector>
+            <targetReference>Create_Monthly_Trade</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Trade</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Monthly_Trade</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <label>Yes</label>
         </rules>
     </decisions>
@@ -66,10 +110,10 @@
     <recordCreates>
         <name>Create_Customer_Dashboard</name>
         <label>Create Customer Dashboard</label>
-        <locationX>50</locationX>
-        <locationY>431</locationY>
+        <locationX>248</locationX>
+        <locationY>647</locationY>
         <connector>
-            <targetReference>Create_Monthly_Trade</targetReference>
+            <targetReference>Get_Monthly_Trade</targetReference>
         </connector>
         <inputAssignments>
             <field>AccountName__c</field>
@@ -89,8 +133,8 @@
     <recordCreates>
         <name>Create_Monthly_Trade</name>
         <label>Create Monthly Trade</label>
-        <locationX>50</locationX>
-        <locationY>539</locationY>
+        <locationX>380</locationX>
+        <locationY>971</locationY>
         <inputAssignments>
             <field>ContractName__c</field>
             <value>
@@ -106,13 +150,62 @@
         <object>MonthlyTradeDashboard__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordLookups>
+        <name>Get_Customer_Dashboard</name>
+        <label>Get Customer Dashboard</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Customer_Dashboard_Available</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Contract_Number__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.GATI_Contract_Number__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomerDashboard__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Monthly_Trade</name>
+        <label>Get Monthly Trade</label>
+        <locationX>248</locationX>
+        <locationY>755</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Monthly_Trade</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>MonthYear__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varCurrentMonthYear</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>ContractName__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>MonthlyTradeDashboard__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <start>
-        <locationX>56</locationX>
+        <locationX>221</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Is_Contract</targetReference>
         </connector>
-        <filterLogic>or</filterLogic>
+        <filterLogic>(1 OR 2 OR 3 OR 4 )AND 5 AND 6</filterLogic>
         <filters>
             <field>Customer_Category__c</field>
             <operator>EqualTo</operator>
@@ -141,8 +234,22 @@
                 <stringValue>Strategic</stringValue>
             </value>
         </filters>
+        <filters>
+            <field>Contract_Number__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Contract_Number__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>Account</object>
-        <recordTriggerType>Create</recordTriggerType>
+        <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>

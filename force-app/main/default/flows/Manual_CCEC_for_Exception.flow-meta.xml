@@ -25,7 +25,7 @@
         <name>Short_Reason</name>
         <label>Short Reason</label>
         <locationX>779</locationX>
-        <locationY>346</locationY>
+        <locationY>345</locationY>
         <assignmentItems>
             <assignToReference>$Record.CCEC_Instructions__c</assignToReference>
             <operator>Assign</operator>
@@ -49,7 +49,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>service_req</name>
-            <conditionLogic>(1 AND 3 AND 2) OR (3 AND 4)</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Case__r.RecordType.Name</leftValueReference>
                 <operator>EqualTo</operator>
@@ -71,13 +71,6 @@
                     <stringValue>Connect</stringValue>
                 </rightValue>
             </conditions>
-            <conditions>
-                <leftValueReference>$Record.Case__r.Type</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Pick Up</stringValue>
-                </rightValue>
-            </conditions>
             <connector>
                 <targetReference>for_conect</targetReference>
             </connector>
@@ -85,7 +78,7 @@
         </rules>
         <rules>
             <name>for_shortt</name>
-            <conditionLogic>(1 AND 3 AND 2) OR (3 AND 4)</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Case__r.RecordType.Name</leftValueReference>
                 <operator>EqualTo</operator>
@@ -105,13 +98,6 @@
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Short</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Case__r.Type</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Pick Up</stringValue>
                 </rightValue>
             </conditions>
             <connector>

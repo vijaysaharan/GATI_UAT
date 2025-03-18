@@ -24,7 +24,6 @@
             </value>
         </inputParameters>
         <nameSegment>Contact.reminder_for_expiration_of_contract</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <processMetadataValues>
@@ -130,7 +129,6 @@ Contact the customer.</stringValue>
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <processMetadataValues>
@@ -236,7 +234,6 @@ Contact the customer.</stringValue>
             </value>
         </inputParameters>
         <nameSegment>customNotificationAction</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <assignments>

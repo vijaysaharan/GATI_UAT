@@ -283,6 +283,7 @@ export default class SalesDashboard extends LightningElement {
       'productList' : this.productListSelected,
       'accountTypes' : this.accountTypesSelected
     };
+    console.log('whereData ',JSON.stringify(whereData,null,2));
     getTargets({whereClause : whereData}).then(result => {
       this.customerData.Customer360.TGT = result?.Target ? result?.Target : 0;
       this.customerData.Customer360.TGT_TOTAL = result?.Total_Target ? result?.Total_Target : 0;
@@ -877,7 +878,7 @@ export default class SalesDashboard extends LightningElement {
   }
   get dynamicCurrentYear() {
     this.isSpinner = true;
-    console.log('currentFinancialYear',this.currentFinancialYear);
+    //console.log('currentFinancialYear',this.currentFinancialYear);
     return gql`${this.currentFinancialYear}`;
   }
   get dynamicCurrentMonth() {

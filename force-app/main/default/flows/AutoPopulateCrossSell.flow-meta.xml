@@ -225,7 +225,7 @@
         <connector>
             <targetReference>GetPincode</targetReference>
         </connector>
-        <filterLogic>1 AND 2  AND 3 AND 4</filterLogic>
+        <filterLogic>and</filterLogic>
         <filters>
             <field>PostalCode</field>
             <operator>IsNull</operator>
@@ -247,15 +247,8 @@
                 <stringValue>Cross Sell</stringValue>
             </value>
         </filters>
-        <filters>
-            <field>Cross_Sell_Lead_Created_From__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Gati CRM</stringValue>
-            </value>
-        </filters>
         <object>Lead</object>
-        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
     </start>
     <status>Active</status>

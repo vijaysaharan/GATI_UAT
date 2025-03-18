@@ -36,7 +36,6 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <assignments>

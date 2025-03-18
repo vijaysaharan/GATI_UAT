@@ -98,6 +98,7 @@ export default class MassCustomerFeedback extends NavigationMixin(LightningEleme
         console.log('Check this.totaldata.data',this.totaldata.data);
         
         CSVData({ data: this.totaldata.data}).then(data => {
+            //this.dataresults = data;
             this.isSpninner = false;
             this.isSuccessError = true;
             this.handleSubscribe();
@@ -185,7 +186,7 @@ export default class MassCustomerFeedback extends NavigationMixin(LightningEleme
         doc += '<th>' + 'Result' + '</th>';
         doc += '</tr>';
         // fill data in scv file
-        console.log('this.dataresults @195:', JSON.stringify(this.dataresults,null,2));
+        console.log('this.dataresults @195:', this.dataresults);
         this.dataresults.forEach(element => {
             if (element.done == true) {
                 console.log('element.done',element.done)
@@ -230,7 +231,7 @@ export default class MassCustomerFeedback extends NavigationMixin(LightningEleme
         doc += '</tr>';
         
         // fill data in scv file
-        console.log('this.dataresults @232:', JSON.stringify(this.dataresults,null,2));
+        console.log('this.dataresults @232:', this.dataresults);
         this.dataresults.forEach(element => {
             console.log(element.done,element.title);
             if (element.done == false) {
@@ -260,7 +261,7 @@ export default class MassCustomerFeedback extends NavigationMixin(LightningEleme
     handleSubscribe() {
         // Callback invoked whenever a new event message is received
         const messageCallback = (response) => {
-            //console.log(JSON.stringify(response.data.payload, null, 2));
+            // console.log(JSON.stringify(response.data.payload, null, 2));
             console.log(0);
             let Id = response.data.payload.Account_Id__c;
             console.log(1);
@@ -285,9 +286,7 @@ export default class MassCustomerFeedback extends NavigationMixin(LightningEleme
         };
         
         subscribe(this.channelName, -1, messageCallback).then((response) => {
-            console.log('Successfully subscribed to channel:', this.channelName);
-        }).catch(error => {
-            console.error('Error subscribing to channel:', error);
+            
         });
     }
 }

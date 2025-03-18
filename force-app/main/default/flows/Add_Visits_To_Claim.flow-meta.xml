@@ -119,10 +119,26 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
+        <name>Update_Owner</name>
+        <label>Update Owner</label>
+        <locationX>176</locationX>
+        <locationY>947</locationY>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.Employee_Name__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
         <name>Update_Visit</name>
         <label>Update Visit</label>
         <locationX>176</locationX>
         <locationY>839</locationY>
+        <connector>
+            <targetReference>Update_Owner</targetReference>
+        </connector>
         <inputReference>varVisitCollection</inputReference>
     </recordUpdates>
     <start>

@@ -15,7 +15,6 @@
             </value>
         </inputParameters>
         <nameSegment>SendRecordsToCMS</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <environments>Default</environments>
@@ -195,7 +194,7 @@
             <field>RecordTypeId</field>
             <operator>EqualTo</operator>
             <value>
-                <stringValue>012p0000000SVfSAAW</stringValue>
+                <stringValue>0125g000000EkgNAAS</stringValue>
             </value>
         </filters>
         <object>Account</object>

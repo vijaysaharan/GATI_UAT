@@ -1,0 +1,7 @@
+<apex:page standardcontroller="Customer_Connect__c" extensions="JourneyPlan" action="{!method}">
+  <apex:pageblock rendered="{!a}">
+    <p>
+         Journey Plan record is created!
+      </p>
+    </apex:pageblock>
+</apex:page>

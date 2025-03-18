@@ -24,7 +24,6 @@
             </value>
         </inputParameters>
         <nameSegment>WhatsAppApi</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>cancelled_action</name>
@@ -47,7 +46,6 @@
             </value>
         </inputParameters>
         <nameSegment>WhatsAppApi</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>closureDocket</name>
@@ -70,7 +68,6 @@
             </value>
         </inputParameters>
         <nameSegment>WhatsAppApi</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>closureSlip</name>
@@ -93,7 +90,6 @@
             </value>
         </inputParameters>
         <nameSegment>WhatsAppApi</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>fulfilled_action</name>
@@ -116,7 +112,6 @@
             </value>
         </inputParameters>
         <nameSegment>WhatsAppApi</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>postponed</name>
@@ -139,7 +134,6 @@
             </value>
         </inputParameters>
         <nameSegment>WhatsAppApi</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>53.0</apiVersion>
     <decisions>

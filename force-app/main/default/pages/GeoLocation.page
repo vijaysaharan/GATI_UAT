@@ -1,0 +1,20 @@
+<apex:page standardController="Customer_Connect__c" extensions="GeoLocation">
+    <apex:pageBlock >
+       <!--apex If Some record is fetched-->
+    <apex:pageBlockSection id="abcd1" rendered="{!isrender}">
+       
+       <apex:repeat value="{!b1}" var="outerKey">
+             <!--apex:outputText label="Account Name:" value="{!b1[outerKey]}" id="theValue"/-->
+        
+        <apex:outputLink value="{!b2[outerKey]}"> {!b1[outerKey]} </apex:outputLink>  
+          
+            <apex:outputText label="Distance(km):" value="{!ROUND(outerKey, 4)}" id="theValue2"/>
+   
+        </apex:repeat>
+     </apex:pageBlockSection> 
+    <!--apex If no record is fetched,give error message-->
+    <apex:pageBlockSection id="abcd2" rendered="{!isrender2}">
+        <apex:outputText value="No Record Fetched" id="theValue3"/><br/>
+     </apex:pageBlockSection> 
+     </apex:pageBlock>                 
+     </apex:page>

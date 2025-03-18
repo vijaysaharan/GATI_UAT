@@ -103,7 +103,7 @@ export default class AppointmentDeliveryLWC extends NavigationMixin(LightningEle
             this.isSuccessError = true;
         }).catch(error => {
             console.log('-- error occcur when csv upload--', error);
-            this.showToast(error, 'Please Correct the CSV Data', error);
+            this.showToast(error, 'Please Correct the CSV Data', 'error');
             this.isSpninner = false;
         })
     }

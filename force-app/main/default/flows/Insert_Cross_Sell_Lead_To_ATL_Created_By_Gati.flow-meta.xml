@@ -19,7 +19,6 @@
         </inputParameters>
         <nameSegment>PostLead.PostLead</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>varBodyString</name>
@@ -40,7 +39,6 @@
         </inputParameters>
         <nameSegment>LeadApexBodyUtility</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <assignments>

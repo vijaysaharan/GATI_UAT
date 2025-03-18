@@ -23,23 +23,46 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordUpdates>
-        <name>Update_Current_Case_Stage</name>
-        <label>Update Current Case Stage</label>
+    <recordLookups>
+        <name>Get_Stage_History</name>
+        <label>Get Stage History</label>
         <locationX>176</locationX>
         <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Current_Case_Stage</targetReference>
+        </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Id</field>
+            <field>Case__c</field>
             <operator>EqualTo</operator>
             <value>
                 <elementReference>$Record.Case__c</elementReference>
             </value>
         </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Stage_History__c</object>
+        <sortField>CreatedDate</sortField>
+        <sortOrder>Desc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>Update_Current_Case_Stage</name>
+        <label>Update Current Case Stage</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Stage_History.Case__c</elementReference>
+            </value>
+        </filters>
         <inputAssignments>
             <field>Current_Case_Stage__c</field>
             <value>
-                <elementReference>$Record.Id</elementReference>
+                <elementReference>Get_Stage_History.Id</elementReference>
             </value>
         </inputAssignments>
         <object>Case</object>
@@ -48,7 +71,7 @@
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Update_Current_Case_Stage</targetReference>
+            <targetReference>Get_Stage_History</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>

@@ -1,0 +1,223 @@
+<apex:page standardController="Claim__c" extensions="ClaimPdfController" title="Claim Management" renderAs="pdf" applyBodyTag="false" applyHtmlTag="true" standardStylesheets="true">
+    <apex:variable var="sno" value="{!0}"/>
+    <head>
+        <style type="text/css" media="print">
+            @page {
+            margin-top: 100px;
+            padding:0px;
+            margin-bottom: 100px;
+            {
+            size: A4;
+            
+            }
+            
+            @top-center {
+            content: element(header);
+            }
+            @bottom-left {
+            content: element(footer);
+            }
+            }
+            div.header {
+            padding: 10px;
+            position: running(header);
+            }
+            div.footer {
+            display: block;
+            padding: 5px;
+            position: running(footer);
+            }
+            .pagenumber:before {
+            content: counter(page);
+            }
+            .pagecount:before {
+            content: counter(pages);
+            }
+            .rowFlex{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            }
+            .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            background-color: white;
+            line-height: 30px;
+            }
+            .left {
+            float: left;
+            margin-left: 20px;
+            white-space: nowrap;
+            }
+            .right {
+            float: right;
+            margin-right: 20px;
+            }
+            .center {
+            text-align: center;
+            font-size: 8px;
+            }
+            
+            table.tr { 
+              width: 100%;
+            }
+            
+            .tr td {
+              font-family: Calibri;
+              font-size: 8px;
+            }
+            
+            .watermark {
+            background-repeat: repeat;
+            background-image: url("{!URLFOR($Resource.NotApproved)}");
+            }
+            
+        </style>
+    </head>
+    <div class="header">  
+        <table  border="1" width="100%">
+            <tr>
+                <td ><apex:image url="https://allcargogati.file.force.com/servlet/servlet.ImageServer?id=0159B000000AmJ9&oid=00D5g000003eCVD&lastMod=1697022470000" height="40" width="80"/> </td>   
+                <td >
+                    <span >
+                        <center><strong>Gati Express &amp; Supply Chain Private Limited.</strong></center>
+                    </span>             
+                    <span >
+                        <center><strong>Local Expenses</strong></center>
+                    </span>
+                </td>       
+            </tr>
+        </table>
+    </div>
+    <div class="content {!IF(Claim__c.Approval_Status__c == 'Approved', '', 'watermark')}">
+        <table border="1" width="100%" class="tb">
+            <tr>
+                <td ><strong>Claim No.:</strong><br/>{!Claim__c.Name}</td>
+                <td ><strong>Name:</strong>  <br/>{!Claim__c.Employee_Name__r.Name}</td>
+                <td ><strong>Title:</strong> <br/>{!Claim__c.Employee_Name__r.Title}</td>
+                <td ><strong>Staff Code: </strong> <br/>{!Claim__c.Employee_Name__r.Staff_Code__c}</td>
+            </tr>
+        </table>
+        <BR/>
+        <strong>TRAVEL</strong>
+        <table border="1" width="100%" class="tr">
+            <tr>
+                <td style="text-align:center">
+                    <strong>Customer<br/>Name</strong>
+                </td>
+                <td style="text-align:center">
+                    <strong>From<br/> Date</strong>
+                </td>
+                <td style="text-align:center">
+                    <strong>From<br/> Place</strong>
+                </td>
+                <td style="text-align:center">
+                    <strong>To<br/> Date</strong>
+                </td>
+                <td style="text-align:center">
+                    <strong>To<br/> Place</strong>
+                </td>
+                <td  style="text-align:center">
+                    <strong>Mode</strong>
+                </td>
+                <td  style="text-align:center">
+                    <strong>Accompanied<br/>With</strong>
+                </td>                
+                <td style="text-align:center">
+                    <strong>Distance<br/>(Km)</strong>
+                </td>
+                <td style="text-align:center">
+                    <strong>Amount</strong>
+                </td>
+            </tr> 
+            <apex:repeat var="t" value="{!lstExpense}">            
+                <tr style="{!IF(t.RecordType.Name == 'Travel', 'display:table-row; page-break-inside:avoid; page-break-after:auto', 'display:none')}">
+                    <td >{!t.Customer_Connect__r.Customer_Name__c}</td> 
+                    <td >
+                        <apex:outputField value="{!t.From_Date__c}"> 
+                            <apex:param value="{0,time,HH:mm}" />
+                        </apex:outputField>   
+                    </td>
+                    <td >{!t.From__c}</td>          
+                    <td >
+                        <apex:outputField value="{!t.To_Date__c}">
+                            <apex:param value="{0,time,HH:mm}" />
+                        </apex:outputField>
+                    </td>         
+                    <td >{!t.To__c}</td>    
+                    <td >{!t.Mode__c}</td>
+                    <td >{!t.Accompanied_With__r.Name}</td>
+                    <td >{!t.Distance__c}</td>
+                    <td ><apex:outputText value="{0, number,#,#,##0.00}"><apex:param value="{!t.Amount__c}"/></apex:outputText></td>
+                </tr>            
+            </apex:repeat>
+        </table>
+        <BR/>
+        <strong>MISCELLANEOUS</strong>
+        <table border="1" width="100%" class="tr">
+            <tr>
+                <td style="text-align:center">
+                    <strong>Customer<br/>Name</strong>
+                </td> 
+                <td style="text-align:center">
+                    <strong>From<br/> Date</strong>
+                </td>
+                <td style="text-align:center">
+                    <strong>To<br/> Date</strong>
+                </td>
+                <td style="text-align:center">
+                    <strong>Paticulars</strong>
+                </td>
+                <td style="text-align:center">
+                    <strong>Amount</strong>
+                </td>
+                <td style="text-align:center">
+                    <strong>Description</strong>
+                </td>           
+            </tr> 
+            <apex:repeat var="m" value="{!lstExpense}">            
+                <tr style="{!IF(m.RecordType.Name == 'Miscellaneous', 'display:table-row; page-break-inside:avoid; page-break-after:auto', 'display:none')}">
+                    <td >{!m.Customer_Connect__r.Customer_Name__c}</td> 
+                    <td >
+                        <apex:outputField value="{!m.From_Date__c}"> 
+                            <apex:param value="{0,time,HH:mm}" />
+                        </apex:outputField>   
+                    </td>
+                    <td >
+                        <apex:outputField value="{!m.To_Date__c}">
+                            <apex:param value="{0,time,HH:mm}" />
+                        </apex:outputField>
+                    </td>         
+                    <td >{!m.Paticulars__c}</td>
+                    <td ><apex:outputText value="{0, number,#,#,##0.00}"><apex:param value="{!m.Amount__c}"/></apex:outputText></td>
+                    <td >{!m.Description__c}</td> 
+                </tr>            
+            </apex:repeat>
+        </table>
+        <BR/><BR/>
+        <table style="width:100%;border: 1px solid black;" class="tb">                
+            <tr> <td></td> <td><strong>Travel</strong></td><td><apex:outputText value="{0, number,#,#,##0.00}"><apex:param value="{!totalList[0]}"/></apex:outputText></td></tr>
+            <tr> <td></td> <td><strong>Miscellaneous</strong></td><td><apex:outputText value="{0, number,#,#,##0.00}"><apex:param value="{!totalList[3]}"/></apex:outputText></td></tr>
+            <tr> <td></td> <td><strong>Total Expense</strong></td><td><apex:outputText value="{0, number,#,#,##0.00}"><apex:param value="{!totalList[4]}"/></apex:outputText></td></tr>
+        </table>
+        <BR/><BR/>
+        <table style="width:100%;" class="tb">
+            <tr>
+                <td style="text-align: left;">
+                    ____________________
+                </td>
+
+            </tr>
+            <tr>
+                <td style="text-align: left;">
+                    Signature of Employee
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="footer">
+    </div>
+</apex:page>

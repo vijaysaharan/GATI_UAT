@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <environments>Default</environments>
+    <formulas>
+        <name>varIncentivePayout</name>
+        <dataType>Currency</dataType>
+        <expression>IF({!$Record.RetailOutstandingPercentage__c}=0.0,{!$Record.IncentiveYield212223__c}*1,
+IF({!$Record.RetailOutstandingPercentage__c}&lt;1.0,{!$Record.IncentiveYield212223__c}*0.85,
+IF({!$Record.RetailOutstandingPercentage__c}&lt;3.0,{!$Record.IncentiveYield212223__c}*0.75,
+IF({!$Record.RetailOutstandingPercentage__c}&lt;5.0,{!$Record.IncentiveYield212223__c}*0.50,
+IF({!$Record.RetailOutstandingPercentage__c}&gt;5.0,{!$Record.IncentiveYield212223__c}*0.0,0
+)
+)
+)
+)
+)</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>varQoQRevenue212223</name>
+        <dataType>Currency</dataType>
+        <expression>IF(
+{!$Record.QoQRevenue212223Percentage__c}&gt;0.05,
+{!$Record.IncentiveYield212223__c}+({!$Record.IncentiveYield212223__c}*0.01),
+{!$Record.IncentiveYield212223__c}
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Incentive Process {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Incentive Process</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Fields</name>
+        <label>Update Fields</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <inputAssignments>
+            <field>IncentivePayout__c</field>
+            <value>
+                <elementReference>varIncentivePayout</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>QoQRevenue212223__c</field>
+            <value>
+                <elementReference>varQoQRevenue212223</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Fields</targetReference>
+        </connector>
+        <object>Incentive__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

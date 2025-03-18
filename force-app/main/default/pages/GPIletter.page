@@ -1,0 +1,56 @@
+<apex:page standardController="Customer_Connect__c" renderAs="pdf" contentType="application/pdf" showHeader="false" applyBodyTag="false" standardStylesheets="false">
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        margin: 40px;
+        font-size: 12px;
+        line-height: 1.5;
+        }
+    </style>
+    <div>
+        <div style="text-align: center; margin-bottom: 20px;"><b>By RPAD/Courier/Hand/Digital Delivery</b></div>
+        <div style="text-align : right;">Date: &nbsp;<apex:outputText value="{0,date,dd-MMM-yyyy}"><apex:param value="{!Customer_Connect__c.Visit_Date__c}" /></apex:outputText></div>
+        <div>
+            To,<br/>
+            <apex:outputText value="{!Customer_Connect__c.Customer_Name__c}" escape="false"/><br/>
+            <apex:outputPanel rendered="{!IF(Customer_Connect__c.Customer_Code__r.Customer_Category__c != 'Retail', true, false)}">
+                Ref. - Contract Number: {!Customer_Connect__c.Customer_Code__r.Contract_Number__c}
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!IF(Customer_Connect__c.Customer_Code__r.Customer_Category__c == 'Retail', true, false)}">
+                Ref. - Customer Code: {!Customer_Connect__c.Customer_Code__r.GATI_Customer_Code__c}
+            </apex:outputPanel>
+        </div>
+        <br/>
+        
+        <div><strong>Subject: General Price Increase on Basic Freight Rates From &nbsp;<apex:outputText value="{0,date,dd-MMM-yyyy}"><apex:param value="{!Customer_Connect__c.EffectiveDate__c}" /></apex:outputText></strong></div>
+        
+        <p>Dear Sir/Madam,</p>
+        
+        <p style="text-align: justify;">This is to inform you that, we Gati Express &amp; Supply Chain Private Limited (formerly known as Gati-Kintetsu Express Private Limited) had entered into Agreement/Contract vide dated &nbsp;<apex:outputText value="{0,date,dd-MMM-yyyy}"><apex:param value="{!Customer_Connect__c.Customer_Code__r.Contract_Activation_Date__c}" /></apex:outputText>&nbsp; with you to render our transportation and supply chain management services (hereinafter referred to as <b>“said Agreement”</b>), by adhering the terms and conditions stipulated therein.</p>
+        
+        <p style="text-align: justify;">At the outset, this is pertinent to inform you that in pursuance to our recent announcement/declaration through digital media/website and subsequent meetings and/or telephonic/video conference discussions with you, it’s been discussed and agreed that the existing basic freight rates mentioned in the said Agreement shall be escalated by &nbsp;<b>{!Customer_Connect__c.EscalatedPercentage__c}%</b> from <b>&nbsp;<apex:outputText value="{0,date,dd-MMM-yyyy}"><apex:param value="{!Customer_Connect__c.EffectiveDate__c}" /></apex:outputText></b> onwards.</p>
+        
+        <p style="text-align: justify;">For smooth functioning of the day-to-day transportation business, both parties are hereby agreeing to capture and record the said revised rates by executing this letter.</p>
+        
+        <p style="text-align: justify;">It is further agreed that this Letter shall form part of the said Agreement and shall be attached to it and is co-terminus with the said Agreement. Subject to the aforesaid variation/modification/amendments/additions, the said Agreement shall remain in full force and effect and is binding on both the parties hereto.</p>
+        
+        <p style="text-align: justify;">The said Agreement shall hereafter be read and construed in conjunction with these presents and shall be regarded as varied/modified/amended accordingly. The parties acknowledge that they have read this letter, understand it, and agree to be bound by its terms and conditions. In case of any discrepancies between the above documents, the text of this letter shall always prevail over any of the Appendices.</p>
+        
+        <p style="text-align: justify;">You are requested to sign this letter as a token of your acceptance and return us one original copy for our record purpose.</p>
+        
+        <p>Thanking you,</p>
+        
+        <div style="text-align: center; margin-bottom: 15px;">
+            <b>Agreed &amp; accepted into</b>
+        </div>       
+        <div>
+            <b>Gati Express &amp; Supply Chain Private Limited</b>
+        </div>
+        <div style="float: left; margin-top: 100px;">
+            Authorized Signatory
+        </div>
+        <div style="float: right; margin-top: 100px;">
+            Authorized Signatory
+        </div>
+    </div>
+</apex:page>

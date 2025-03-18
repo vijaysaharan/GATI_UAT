@@ -32,7 +32,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>noreply@gatikwe.com</stringValue>
+                <stringValue>allcargogati.noreply@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -48,7 +48,6 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>53.0</apiVersion>
     <interviewLabel>Prospect Email daily {!$Flow.CurrentDateTime}</interviewLabel>
@@ -163,11 +162,11 @@
     <textTemplates>
         <name>bod</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
-        <text>To confirm a pickup date to ship your consignment from {!loop.Pick_Up_Pincode__r.Name} to {!loop.Delivery_Pincode_Location__r.Name}, just send an email to customerservice@gati.com or send Hi as a WhatsApp message to 7400012000 for on-the-go assistance from Gati Genie. Gati-KWE</text>
+        <text>To confirm a pickup date to ship your consignment from {!loop.Pick_Up_Pincode__r.Name} to {!loop.Delivery_Pincode_Location__r.Name}, just send an email to customerservices@allcargologistics.com or send Hi as a WhatsApp message to 7400012000 for on-the-go assistance from Gati Genie. Allcargogati</text>
     </textTemplates>
     <textTemplates>
         <name>emailTemplate</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Dear {!loop.Customer_Name__c},&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Thank you for your interest in Gati-KWE’s services for shipping your consignment. To confirm a pickup date for transporting your consignment from {!loop.Pick_Up_Pincode__r.City__c} to {!loop.Delivery_Pincode_Location__r.City__c}, all you need to do is send an email to cu stomerservice@gati.com or directly schedule it on WhatsApp with Gati Genie. Send ‘Hi’ as WhatsApp message on 7400012000 to get started. We look forward to partnering with you for your logistics requirements.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Gati – KWE&lt;/p&gt;</text>
+        <text>&lt;p&gt;Dear {!loop.Customer_Name__c},&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Thank you for your interest in Allcargogati’s services for shipping your consignment. To confirm a pickup date for transporting your consignment from {!loop.Pick_Up_Pincode__r.City__c} to {!loop.Delivery_Pincode_Location__r.City__c}, all you need to do is send an email to cu stomerservice@gati.com or directly schedule it on WhatsApp with Gati Genie. Send ‘Hi’ as WhatsApp message on 7400012000 to get started. We look forward to partnering with you for your logistics requirements.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Allcargogati&lt;/p&gt;</text>
     </textTemplates>
 </Flow>

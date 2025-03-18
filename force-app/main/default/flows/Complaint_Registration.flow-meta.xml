@@ -3,8 +3,8 @@
     <actionCalls>
         <name>registration</name>
         <label>registration</label>
-        <locationX>724</locationX>
-        <locationY>245</locationY>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -29,7 +29,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>noreply@gatikwe.com</stringValue>
+                <stringValue>allcargogati.noreply@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -45,13 +45,12 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>send_email_if_new_complaint_only</name>
         <label>send email if new complaint only</label>
-        <locationX>730</locationX>
-        <locationY>498</locationY>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -76,7 +75,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>noreply@gatikwe.com</stringValue>
+                <stringValue>allcargogati.noreply@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -92,14 +91,13 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <assignments>
         <name>owner</name>
         <label>owner</label>
-        <locationX>176</locationX>
-        <locationY>381</locationY>
+        <locationX>314</locationX>
+        <locationY>323</locationY>
         <assignmentItems>
             <assignToReference>AccountOwner</assignToReference>
             <operator>Add</operator>
@@ -114,8 +112,8 @@
     <decisions>
         <name>new_complaint</name>
         <label>new complaint</label>
-        <locationX>444</locationX>
-        <locationY>383</locationY>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>If_new_and_pickup</name>
@@ -134,6 +132,13 @@
                     <stringValue>Pending Pickup</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.AccountId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>registration</targetReference>
             </connector>
@@ -149,12 +154,20 @@
                     <stringValue>Complaint</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>$Record.AccountId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>send_email_if_new_complaint_only</targetReference>
             </connector>
             <label>If new and other</label>
         </rules>
     </decisions>
+    <environments>Default</environments>
     <interviewLabel>Complaint Registration {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Complaint Registration</label>
     <processMetadataValues>
@@ -166,7 +179,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -177,8 +190,8 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>50</locationX>
-        <locationY>50</locationY>
+        <locationX>188</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>owner</targetReference>
         </connector>
@@ -190,20 +203,27 @@
                 <booleanValue>false</booleanValue>
             </value>
         </filters>
+        <filters>
+            <field>Origin</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Email</stringValue>
+            </value>
+        </filters>
         <object>Case</object>
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <textTemplates>
         <name>newemail</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Dear Customer,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Your complaint for {!$Record.Type} of docket number {!$Record.Docket_Number__c}  has been registered on {!$Record.CreatedDate}. We do apologise for any inconvenience caused and assure you of resolving this by {!$Record.Expected_Closing_Date__c}.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Please note your complaint reference number {!$Record.CaseNumber} for any further requirements.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;In case of any further assistance needed, please contact our call centre on 1860-123-4284 or write to customerservice@gati.com&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Regards,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Team Gati-KWE&lt;/span&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Dear Customer,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Your complaint for {!$Record.Type} of docket number {!$Record.Docket_Number__c}  has been registered on {!$Record.CreatedDate}. We do apologise for any inconvenience caused and assure you of resolving this by {!$Record.Expected_Closing_Date__c}.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Please note your complaint reference number {!$Record.CaseNumber} for any further requirements.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;In case of any further assistance needed, please contact our call centre on 1860-123-4284 or write to customerservices@allcargologistics.com&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Regards,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); font-size: 14px; background-color: rgb(255, 255, 255);&quot;&gt;Team Allcargogati&lt;/span&gt;&lt;/p&gt;</text>
     </textTemplates>
     <textTemplates>
         <name>pickupemailtemp</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;Dear Customer,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;Your complaint for {!$Record.Type} of pickup slip number {!$Record.&lt;/span&gt;Pick_Up_Ref_No__c&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;}  has been registered on {!$Record.CreatedDate}. We do apologise for any inconvenience caused and assure you of resolving this by {!$Record.Expected_Closing_Date__c}.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;Please note your complaint reference number {!$Record.CaseNumber} for any further requirements.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;In case of any further assistance needed, please contact our call centre on 1860-123-4284 or write to customerservice@gati.com&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;Regards,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;Team Gati-KWE&lt;/span&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;Dear Customer,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;Your complaint for {!$Record.Type} of pickup slip number {!$Record.&lt;/span&gt;Pick_Up_Ref_No__c&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;}  has been registered on {!$Record.CreatedDate}. We do apologise for any inconvenience caused and assure you of resolving this by {!$Record.Expected_Closing_Date__c}.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;Please note your complaint reference number {!$Record.CaseNumber} for any further requirements.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;In case of any further assistance needed, please contact our call centre on 1860-123-4284 or write to customerservices@allcargologistics.com&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;Regards,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); font-size: 14px;&quot;&gt;Team Allcargogati&lt;/span&gt;&lt;/p&gt;</text>
     </textTemplates>
     <variables>
         <name>AccountOwner</name>

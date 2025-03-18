@@ -29,7 +29,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>noreply@gatikwe.com</stringValue>
+                <stringValue>allcargogati.noreply@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -45,7 +45,6 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>send_cancelled_email</name>
@@ -76,7 +75,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>noreply@gatikwe.com</stringValue>
+                <stringValue>allcargogati.noreply@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -92,7 +91,6 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>send_case_closed_email</name>
@@ -123,7 +121,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>test1@gatikwe.com</stringValue>
+                <stringValue>gsalesforce@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -139,7 +137,6 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>send_postpone_Email</name>
@@ -170,7 +167,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>noreply@gatikwe.com</stringValue>
+                <stringValue>allcargogati.noreply@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -186,7 +183,6 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <assignments>
@@ -409,7 +405,7 @@
     <textTemplates>
         <name>assignedTemplate</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Dear {!$Record.Shipper_Name__c},&amp;nbsp;&lt;/p&gt;&lt;p&gt;Your pickup request with reference number {!$Record.CaseNumber}, scheduled for {!$Record.Pickup_Date__c} has been accepted by our operations team and assigned to our agent {!$Record.Pickup_GA_Name__c}  who can be reached on {!$Record.Pickup_GA_Contact__c}.&amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;In case of any further assistance needed, please contact our call centre on 1860-123-4284 or write to customerservice@gati.com .&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Gati – KWE&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0);&quot;&gt;&lt;img src=&quot;https://gatikwepvtltd--uat--c.documentforce.com/servlet/servlet.ImageServer?id=015p0000000fBaW&amp;amp;oid=00Dp0000000Dvv2&amp;amp;lastMod=1632729375000&quot;&gt;&lt;/span&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;Dear {!$Record.Shipper_Name__c},&amp;nbsp;&lt;/p&gt;&lt;p&gt;Your pickup request with reference number {!$Record.CaseNumber}, scheduled for {!$Record.Pickup_Date__c} has been accepted by our operations team and assigned to our agent {!$Record.Pickup_GA_Name__c}  who can be reached on {!$Record.Pickup_GA_Contact__c}.&amp;nbsp;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;In case of any further assistance needed, please contact our call centre on 1860-123-4284 or write to customerservices@allcargologistics.com .&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Allcargogati&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;&lt;img src=&quot;https://gatikwepvtltd--c.documentforce.com/servlet/servlet.ImageServer?id=0155g0000001sQ9&amp;amp;oid=00DHF0000014wzJ&amp;amp;lastMod=1632732700000&quot;&gt;&lt;/span&gt;&lt;/p&gt;</text>
     </textTemplates>
     <textTemplates>
         <name>CallnotpickedEmailTemplate</name>
@@ -419,12 +415,12 @@
     <textTemplates>
         <name>CancelTemplate</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Dear {!$Record.Shipper_Name__c},&lt;/p&gt;&lt;p&gt;Your pickup request with reference number {!$Record.CaseNumber}, scheduled on {!$Record.Pickup_Date__c} has been cancelled due to {!reason}.&lt;/p&gt;&lt;p&gt;We do apologise for any inconvenience caused and request you to contact our call centre on 1860-123-4284 or write to customerservice@gati.com&amp;nbsp;for further assistance needed.&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Gati – KWEHi {!get_case_record.Customer_Name__c},&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://gatikwepvtltd--uat--c.documentforce.com/servlet/servlet.ImageServer?id=015p0000000fBaW&amp;amp;oid=00Dp0000000Dvv2&amp;amp;lastMod=1632729375000&quot;&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;Dear {!$Record.Shipper_Name__c},&lt;/p&gt;&lt;p&gt;Your pickup request with reference number {!$Record.CaseNumber}, scheduled on {!$Record.Pickup_Date__c} has been cancelled due to {!reason}.&lt;/p&gt;&lt;p&gt;We do apologise for any inconvenience caused and request you to contact our call centre on 1860-123-4284 or write to customerservices@allcargologistics.com&amp;nbsp;for further assistance needed.&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Allcargogati&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(62, 62, 60); background-color: rgb(255, 255, 255);&quot;&gt;&lt;img src=&quot;https://gatikwepvtltd--c.documentforce.com/servlet/servlet.ImageServer?id=0155g0000001sQ9&amp;amp;oid=00DHF0000014wzJ&amp;amp;lastMod=1632732700000&quot;&gt;&lt;/span&gt;&lt;/p&gt;</text>
     </textTemplates>
     <textTemplates>
         <name>caseCloseTemplate</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Dear {!$Record.Shipper_Name__c},&amp;nbsp;&lt;/p&gt;&lt;p&gt;Your pickup request registered with reference number {!$Record.CaseNumber} &lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt; has been &lt;/span&gt;fulfilled. The consignment has been picked up from the scheduled address on {!$Record.Pickup_Date__c}. Please note your docket number {!$Record.Docket_Number__c} for this consignment.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;With Gati Genie, you can get tracking updates on-the-go and instant assistance on WhatsApp. To get started, just send ‘Hi’ as WhatsApp message to 7400012000.&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Gati – KWE&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: 12px; font-family: Arial, Helvetica, sans-serif; color: rgb(0, 0, 0);&quot;&gt;&lt;img src=&quot;https://gatikwepvtltd--uat--c.documentforce.com/servlet/servlet.ImageServer?id=015p0000000fBaW&amp;amp;oid=00Dp0000000Dvv2&amp;amp;lastMod=1632729375000&quot;&gt;&lt;/span&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;Dear {!$Record.Shipper_Name__c},&amp;nbsp;&lt;/p&gt;&lt;p&gt;Your pickup request registered with reference number {!$Record.CaseNumber} &lt;span style=&quot;color: rgb(62, 62, 60); background-color: rgb(255, 255, 255);&quot;&gt; has been &lt;/span&gt;fulfilled. The consignment has been picked up from the scheduled address on {!$Record.Pickup_Date__c}. Please note your docket number {!$Record.Docket_Number__c} for this consignment.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;With Gati Genie, you can get tracking updates on-the-go and instant assistance on WhatsApp. To get started, just send ‘Hi’ as WhatsApp message to 7400012000.&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Allcargogati&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;&lt;img src=&quot;https://gatikwepvtltd--c.documentforce.com/servlet/servlet.ImageServer?id=0155g0000001sQ9&amp;amp;oid=00DHF0000014wzJ&amp;amp;lastMod=1632732700000&quot;&gt;&lt;/span&gt;&lt;/p&gt;</text>
     </textTemplates>
     <textTemplates>
         <name>IncovinenceMail</name>
@@ -434,12 +430,12 @@
     <textTemplates>
         <name>mailTemplate</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Hi {!get_case_record.Customer_Name__c},&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Case have been registered successfully.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Thanks,&lt;/p&gt;&lt;p&gt;Team GATI&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;Hi {!get_case_record.Customer_Name__c},&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Case have been registered successfully.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Thanks,&lt;/p&gt;&lt;p&gt;Team Allcargogati&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;</text>
     </textTemplates>
     <textTemplates>
         <name>postponeTemplate</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Dear {!$Record.Shipper_Name__c},&amp;nbsp;&lt;/p&gt;&lt;p&gt;Your pickup request with reference number {!$Record.CaseNumber}, scheduled for {!$Record__Prior.Pickup_Date__c} has been postponed to {!$Record.Pickup_Date__c} due to {!reason}.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;In case of any disagreement, you can register a complaint with the help of Gati Genie. To get started, just send ‘Hi’ as WhatsApp message to 7400012000.&lt;/p&gt;&lt;p&gt;Also of any further assistance needed, please contact our call centre on 1860-123-4284 or write to customerservice@gati.com.&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Gati – KWE&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://gatikwepvtltd--uat--c.documentforce.com/servlet/servlet.ImageServer?id=015p0000000fBaW&amp;amp;oid=00Dp0000000Dvv2&amp;amp;lastMod=1632729375000&quot;&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;Dear {!$Record.Shipper_Name__c},&amp;nbsp;&lt;/p&gt;&lt;p&gt;Your pickup request with reference number {!$Record.CaseNumber}, scheduled for {!$Record__Prior.Pickup_Date__c} has been postponed to {!$Record.Pickup_Date__c} due to {!reason}.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;In case of any disagreement, you can register a complaint with the help of Gati Genie. To get started, just send ‘Hi’ as WhatsApp message to 7400012000.&lt;/p&gt;&lt;p&gt;Also of any further assistance needed, please contact our call centre on 1860-123-4284 or write to customerservices@allcargologistics.com.&lt;/p&gt;&lt;p&gt;Thank you for partnering with us for your logistics requirements.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards,&lt;/p&gt;&lt;p&gt;Team Allcargogati&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;&lt;img src=&quot;https://gatikwepvtltd--c.documentforce.com/servlet/servlet.ImageServer?id=0155g0000001sQ9&amp;amp;oid=00DHF0000014wzJ&amp;amp;lastMod=1632732700000&quot;&gt;&lt;/span&gt;&lt;/p&gt;</text>
     </textTemplates>
     <variables>
         <name>emailid</name>

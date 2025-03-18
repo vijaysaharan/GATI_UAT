@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>59.0</apiVersion>
-    <assignments>
-        <name>Case_Status_To_Closed</name>
-        <label>Case Status To Closed</label>
-        <locationX>176</locationX>
-        <locationY>287</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.Status</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <stringValue>Closed</stringValue>
-            </value>
-        </assignmentItems>
-    </assignments>
     <environments>Default</environments>
     <interviewLabel>NDR case Closure {!$Flow.CurrentDateTime}</interviewLabel>
     <label>NDR case Closure</label>
@@ -36,13 +23,26 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Status</name>
+        <label>Update Status</label>
+        <locationX>176</locationX>
+        <locationY>323</locationY>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Closed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Case_Status_To_Closed</targetReference>
+            <targetReference>Update_Status</targetReference>
         </connector>
-        <filterLogic>1 AND (2 OR 3 ) AND 4</filterLogic>
+        <filterLogic>1 AND (2 OR 3 OR 4 ) AND 5</filterLogic>
         <filters>
             <field>Type</field>
             <operator>EqualTo</operator>
@@ -65,6 +65,13 @@
             </value>
         </filters>
         <filters>
+            <field>Delivery_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>P</stringValue>
+            </value>
+        </filters>
+        <filters>
             <field>Status</field>
             <operator>NotEqualTo</operator>
             <value>
@@ -73,7 +80,7 @@
         </filters>
         <object>Case</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
-        <triggerType>RecordBeforeSave</triggerType>
+        <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
 </Flow>

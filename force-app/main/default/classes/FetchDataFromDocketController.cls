@@ -62,6 +62,10 @@ public with sharing class FetchDataFromDocketController implements Queueable, Da
         Map<String,Id> emailToUser = New Map<String,Id>();
         Map<String,Id> assignmentEmailToUser = New Map<String,Id>();
         Map<String,EmailToCase_Assignment__mdt> emailToGroupData = New Map<String,EmailToCase_Assignment__mdt>();
+        List<Group> issueResolutionTeam = [SELECT Id, DeveloperName 
+                                           FROM Group 
+                                           WHERE DeveloperName = 'Issue_resolution_Team'
+                                          ];
         List<RecordType> recordType = [SELECT Id,DeveloperName 
                                        FROM RecordType 
                                        WHERE SobjectType = 'Case' 
@@ -132,13 +136,17 @@ public with sharing class FetchDataFromDocketController implements Queueable, Da
                     cs.OwnerId = emailToUser.get(emailDomain);
                     cs.Status = 'Open(Assigned)';
                 }
-                else{
+                else if(cs.Email_Address_For_Assignment__c == 'retail_support@allcargologistics.com'){
                     RoundRobinAssigner.RoundRobinAssignment GroupAndIdForRoundRobin = New RoundRobinAssigner.RoundRobinAssignment();
                     cs.Status = 'Open(Assigned)';
                     GroupAndIdForRoundRobin.fieldName = 'OwnerId';
                     GroupAndIdForRoundRobin.groupName = 'RetailSupport';
                     GroupAndIdForRoundRobin.recordId = cs;
-                    ListForGroupAndId.add(GroupAndIdForRoundRobin);   
+                    ListForGroupAndId.add(GroupAndIdForRoundRobin);
+                }
+                else if(issueResolutionTeam != null && issueResolutionTeam.size() > 0){
+                    cs.Status = 'Open(Assigned)';
+                    cs.OwnerId = issueResolutionTeam[0].Id; 
                 }
             }
         }

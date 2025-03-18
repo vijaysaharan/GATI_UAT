@@ -8,7 +8,7 @@
             <field>Customer_Email__c</field>
             <type>email</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/ADD_Extension_Approved</template>
     </alerts>
@@ -20,21 +20,9 @@
             <field>Customer_Email__c</field>
             <type>email</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Bill_Back_of_Expense_Approved</template>
-    </alerts>
-    <alerts>
-        <fullName>Email_to_contact_on_case_creation</fullName>
-        <description>Email to contact on case creation</description>
-        <protected>false</protected>
-        <recipients>
-            <field>ContactEmail</field>
-            <type>email</type>
-        </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
-        <senderType>OrgWideEmailAddress</senderType>
-        <template>unfiled$public/Prospect_pickup_email_tmp</template>
     </alerts>
     <alerts>
         <fullName>Follow_up_reminder</fullName>
@@ -44,7 +32,7 @@
             <field>ContactEmail</field>
             <type>email</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Pickup_Request_Reminder</template>
     </alerts>
@@ -56,21 +44,9 @@
             <field>Customer_Email__c</field>
             <type>email</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/CCEC_remark_email</template>
-    </alerts>
-    <alerts>
-        <fullName>task1</fullName>
-        <ccEmails>pareekdivya8135@gmail.com</ccEmails>
-        <description>check</description>
-        <protected>false</protected>
-        <recipients>
-            <recipient>kyadav@gati.com</recipient>
-            <type>user</type>
-        </recipients>
-        <senderType>CurrentUser</senderType>
-        <template>unfiled$public/Complaint_Registration_Docket</template>
     </alerts>
     <fieldUpdates>
         <fullName>Bill_Back_Expense_Auto_Approval</fullName>
@@ -87,16 +63,6 @@
         <field>Approval_Status__c</field>
         <literalValue>Y</literalValue>
         <name>Bill Back Expense Auto Approved</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Literal</operation>
-        <protected>false</protected>
-        <reevaluateOnChange>false</reevaluateOnChange>
-    </fieldUpdates>
-    <fieldUpdates>
-        <fullName>ChangePriorityToHigh</fullName>
-        <field>Priority</field>
-        <literalValue>High</literalValue>
-        <name>Changes the case priority to high.</name>
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
         <protected>false</protected>
@@ -124,16 +90,6 @@
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
-        <fullName>Level_1</fullName>
-        <field>Pre_Check_Escalation__c</field>
-        <literalValue>Level 1</literalValue>
-        <name>Level 1</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Literal</operation>
-        <protected>false</protected>
-        <reevaluateOnChange>false</reevaluateOnChange>
-    </fieldUpdates>
-    <fieldUpdates>
         <fullName>Mandatory_Pick_Up_Reference_Number</fullName>
         <field>Docket_Validation__c</field>
         <literalValue>Valid</literalValue>
@@ -152,56 +108,6 @@
         <operation>Formula</operation>
         <protected>false</protected>
         <reevaluateOnChange>false</reevaluateOnChange>
-    </fieldUpdates>
-    <fieldUpdates>
-        <fullName>Update_Complaint_Status</fullName>
-        <field>Complaint_Status__c</field>
-        <literalValue>C</literalValue>
-        <name>Update Complaint Status</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Literal</operation>
-        <protected>false</protected>
-        <reevaluateOnChange>false</reevaluateOnChange>
-    </fieldUpdates>
-    <fieldUpdates>
-        <fullName>Update_Complaint_Status1</fullName>
-        <field>Complaint_Status__c</field>
-        <literalValue>O</literalValue>
-        <name>Update Complaint Status1</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Literal</operation>
-        <protected>false</protected>
-        <reevaluateOnChange>false</reevaluateOnChange>
-    </fieldUpdates>
-    <fieldUpdates>
-        <fullName>st</fullName>
-        <field>Status</field>
-        <literalValue>Open</literalValue>
-        <name>st</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Literal</operation>
-        <protected>false</protected>
-        <reevaluateOnChange>false</reevaluateOnChange>
-    </fieldUpdates>
-    <fieldUpdates>
-        <fullName>step</fullName>
-        <field>Status</field>
-        <literalValue>Closed</literalValue>
-        <name>step</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Literal</operation>
-        <protected>false</protected>
-        <reevaluateOnChange>true</reevaluateOnChange>
-    </fieldUpdates>
-    <fieldUpdates>
-        <fullName>step2</fullName>
-        <field>Approved_Closure__c</field>
-        <literalValue>1</literalValue>
-        <name>step2</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Literal</operation>
-        <protected>false</protected>
-        <reevaluateOnChange>true</reevaluateOnChange>
     </fieldUpdates>
     <rules>
         <fullName>ADD Extension Approval</fullName>
@@ -244,11 +150,6 @@
             <field>Case.CS_Approved__c</field>
             <operation>equals</operation>
             <value>False</value>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Case.Approval_Status__c</field>
-            <operation>notEqual</operation>
-            <value>N</value>
         </criteriaItems>
         <triggerType>onCreateOrTriggeringUpdate</triggerType>
         <workflowTimeTriggers>
@@ -328,15 +229,5 @@
             <operation>notEqual</operation>
         </criteriaItems>
         <triggerType>onCreateOnly</triggerType>
-    </rules>
-    <rules>
-        <fullName>taskCheck</fullName>
-        <active>true</active>
-        <criteriaItems>
-            <field>Case.Sub_Type__c</field>
-            <operation>equals</operation>
-            <value>Normal</value>
-        </criteriaItems>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
 </Workflow>

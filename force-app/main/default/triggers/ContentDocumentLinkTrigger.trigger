@@ -1,9 +1,14 @@
 trigger ContentDocumentLinkTrigger on ContentDocumentLink (after insert,after update, after delete) {
-    ContentCaseDocument.checkimagecountlink(Trigger.newmap);
-    if(Trigger.isAfter && (Trigger.isUpdate || Trigger.isInsert)){
-        contentdocumentlinktriggerhelper.countCOfiles(Trigger.New,null);
+    system.debug('In trigger');
+    //ContentOppoDocument.checkimagecountlink(trigger.newmAP);
+    ///ContentAccountDocument.checkimagecountlink(trigger.newmAP);
+    ContentCaseDocument.checkimagecountlink(trigger.newmap);
+    
+    if(trigger.isafter && (trigger.isupdate || trigger.isinsert)){
+        contentdocumentlinktriggerhelper.countCOfiles(trigger.new,null);
     }
-    if(Trigger.isAfter && Trigger.isDelete){
-        contentdocumentlinktriggerhelper.countCOfiles(Trigger.old,null);
+    if(trigger.isafter && trigger.isdelete){
+        contentdocumentlinktriggerhelper.countCOfiles(trigger.old,null);
     }
+    
 }

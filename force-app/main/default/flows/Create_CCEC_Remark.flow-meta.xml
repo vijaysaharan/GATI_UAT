@@ -15,7 +15,6 @@
             </value>
         </inputParameters>
         <nameSegment>ManualCCECRemarkOutboundAPI</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>53.0</apiVersion>
     <interviewLabel>Create CCEC Remark {!$Flow.CurrentDateTime}</interviewLabel>

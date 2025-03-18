@@ -1,6 +1,6 @@
 ({
     init : function(component, event, helper) {
-        console.log('it on!!');
+        console.log('it on!!',component.get('v.recordId'));
         var action = component.get('c.getContactInfo');
         action.setParams({
             recordId : component.get('v.recordId'),

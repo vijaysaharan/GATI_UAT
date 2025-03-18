@@ -86,18 +86,22 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
         this.showToast('Error', event.detail.errorMessage, 'error');
     }
     handleSubscribe() {
+        console.log("Event Suscribe");
         const self = this;
         const messageCallback = function (response) {
+            console.log('New message received 1: ', JSON.stringify(response));
             self.errorCsv = self.errorCsv+response.data.payload.csvString__c+','+'\n';
+            console.log("Error csv",self.errorCsv);
             self.showErrorButton = true;
         };
         subscribe(this.channelName, -1, messageCallback).then(response => {
+            console.log('Subscription request sent to: ', JSON.stringify(response.channel));
             this.subscription = response;
         });
     }
     registerErrorListener() {
         onError(error => {
-            console.log('Server Error: ', JSON.stringify(error));
+            console.log('Received error from server: ', JSON.stringify(error));
         });
     }
     download() {
@@ -169,6 +173,7 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
             setTimeout(() => {
                 this.showProgressChart = true;
                 this.showToast('Batch Called','Your Batch Called Successfully','Success');
+                console.log('Batch Called');
             }, 100);
         });
         /*if(tabset.activeTabValue == 'tab-1'){
@@ -180,15 +185,20 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
                     newUser : this.selectedUserIdToTransfer,
                     oldUser : this.selectedUserIdforTransfer
                 }
+                console.log('Check ',this.check);
+                console.log('OBJ ',obj);
+                console.log(this.accountTypeValue)
                 MassBatchCallForTransfer({wrapp : this.check, ownerData : [obj], isContract : this.accountTypeValue})
                 .then((res)=>{
                 this.BatchJobId = res;
+                console.log(this.BatchJobId);
                 this.isDisabled = true;
                 this.showProgressChart = false;
                 setTimeout(() => {
                     this.showProgressChart = true;
                     // this.isDisabled = false;
                     this.showToast('Batch Called','Your Batch Called Successfully','Success');
+                    console.log('Batch Called');
                 }, 100)
                 })
 
@@ -214,6 +224,7 @@ export default class MassAccountTransfer extends NavigationMixin(LightningElemen
 
     handleDownloadErrorCSV(){
         let downloadElement = document.createElement('a');
+        console.log(this.errorCsv);
         downloadElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(this.errorCsv);
         downloadElement.target = '_self';
         downloadElement.download = 'Error.csv';

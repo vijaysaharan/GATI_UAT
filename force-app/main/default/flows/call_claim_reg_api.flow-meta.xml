@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>call_api</name>
-        <label>call api</label>
-        <locationX>681</locationX>
-        <locationY>357</locationY>
+        <name>Call_API</name>
+        <label>Call API</label>
+        <locationX>308</locationX>
+        <locationY>288</locationY>
         <actionName>Claim_Registration_OutboundAPI</actionName>
         <actionType>apex</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -15,38 +15,9 @@
             </value>
         </inputParameters>
         <nameSegment>Claim_Registration_OutboundAPI</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
-    <decisions>
-        <name>check_record_type</name>
-        <label>check record type</label>
-        <locationX>487</locationX>
-        <locationY>364</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>if_claim</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Claim</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Type</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Claim</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>call_api</targetReference>
-            </connector>
-            <label>if claim</label>
-        </rules>
-    </decisions>
+    <environments>Default</environments>
     <interviewLabel>call claim reg api {!$Flow.CurrentDateTime}</interviewLabel>
     <label>call claim reg api</label>
     <processMetadataValues>
@@ -58,7 +29,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -69,11 +40,8 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>256</locationX>
-        <locationY>57</locationY>
-        <connector>
-            <targetReference>check_record_type</targetReference>
-        </connector>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Type</field>
@@ -84,6 +52,12 @@
         </filters>
         <object>Case</object>
         <recordTriggerType>Create</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>Call_API</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>

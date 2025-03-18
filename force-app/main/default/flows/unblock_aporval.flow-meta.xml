@@ -31,7 +31,6 @@
         </inputParameters>
         <nameSegment>submit</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Approval_for_5_days_or_less</name>
@@ -64,7 +63,6 @@
         </inputParameters>
         <nameSegment>submit</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <decisions>

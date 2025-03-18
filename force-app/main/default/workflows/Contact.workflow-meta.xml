@@ -8,7 +8,7 @@
             <field>Email</field>
             <type>email</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/FrontlineForChatEmailTemplate</template>
     </alerts>
@@ -20,7 +20,7 @@
             <field>Email</field>
             <type>email</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/FrontlineEmailTemplate</template>
     </alerts>
@@ -29,10 +29,10 @@
         <description>reminder for expiration of contract</description>
         <protected>false</protected>
         <recipients>
-            <field>LastModifiedById</field>
-            <type>userLookup</type>
+            <field>Email</field>
+            <type>email</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Renewal_mailer</template>
     </alerts>
@@ -47,14 +47,4 @@
         <senderType>CurrentUser</senderType>
         <template>unfiled$public/RFQ_checked_email_to_customer</template>
     </alerts>
-    <rules>
-        <fullName>update contact email</fullName>
-        <active>false</active>
-        <criteriaItems>
-            <field>Contact.Contact_type__c</field>
-            <operation>equals</operation>
-            <value>Primary</value>
-        </criteriaItems>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-    </rules>
 </Workflow>

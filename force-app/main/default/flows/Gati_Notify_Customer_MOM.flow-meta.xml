@@ -3,8 +3,8 @@
     <actionCalls>
         <name>SendEmail</name>
         <label>SendEmail</label>
-        <locationX>1201</locationX>
-        <locationY>488</locationY>
+        <locationX>176</locationX>
+        <locationY>2174</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -45,14 +45,13 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <assignments>
         <name>add_owner_email</name>
         <label>add owner email</label>
-        <locationX>181</locationX>
-        <locationY>584</locationY>
+        <locationX>176</locationX>
+        <locationY>1442</locationY>
         <assignmentItems>
             <assignToReference>emailids</assignToReference>
             <operator>Add</operator>
@@ -67,8 +66,8 @@
     <assignments>
         <name>assign_the_email_of_contact</name>
         <label>assign the email of contact</label>
-        <locationX>585</locationX>
-        <locationY>666</locationY>
+        <locationX>264</locationX>
+        <locationY>1658</locationY>
         <assignmentItems>
             <assignToReference>emailids</assignToReference>
             <operator>Add</operator>
@@ -83,8 +82,8 @@
     <assignments>
         <name>assign_the_user</name>
         <label>assign the user</label>
-        <locationX>1210</locationX>
-        <locationY>17</locationY>
+        <locationX>200</locationX>
+        <locationY>782</locationY>
         <assignmentItems>
             <assignToReference>emailids</assignToReference>
             <operator>Add</operator>
@@ -99,8 +98,8 @@
     <assignments>
         <name>contact_assign</name>
         <label>contact assign</label>
-        <locationX>859</locationX>
-        <locationY>251</locationY>
+        <locationX>200</locationX>
+        <locationY>1082</locationY>
         <assignmentItems>
             <assignToReference>emailids</assignToReference>
             <operator>Add</operator>
@@ -115,8 +114,8 @@
     <decisions>
         <name>check_if_contact_are_null</name>
         <label>check if contact are null</label>
-        <locationX>330</locationX>
-        <locationY>589</locationY>
+        <locationX>176</locationX>
+        <locationY>1550</locationY>
         <defaultConnector>
             <targetReference>assign_the_email_of_contact</targetReference>
         </defaultConnector>
@@ -140,8 +139,8 @@
     <decisions>
         <name>check_if_user_not_null</name>
         <label>check if user not null</label>
-        <locationX>870</locationX>
-        <locationY>20</locationY>
+        <locationX>332</locationX>
+        <locationY>674</locationY>
         <defaultConnector>
             <targetReference>contact_not_nulll</targetReference>
         </defaultConnector>
@@ -165,8 +164,8 @@
     <decisions>
         <name>contact_not_nulll</name>
         <label>contact not nulll</label>
-        <locationX>1203</locationX>
-        <locationY>200</locationY>
+        <locationX>332</locationX>
+        <locationY>974</locationY>
         <defaultConnector>
             <targetReference>add_attendees</targetReference>
         </defaultConnector>
@@ -197,8 +196,8 @@
     <decisions>
         <name>decision_null_check</name>
         <label>decision null check</label>
-        <locationX>277</locationX>
-        <locationY>417</locationY>
+        <locationX>176</locationX>
+        <locationY>458</locationY>
         <defaultConnector>
             <targetReference>add_owner_email</targetReference>
         </defaultConnector>
@@ -219,13 +218,14 @@
             <label>attendeesnot null</label>
         </rules>
     </decisions>
+    <environments>Default</environments>
     <interviewLabel>Gati Notify Customer MOM {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Gati Notify Customer MOM</label>
     <loops>
         <name>add_attendees</name>
         <label>add attendees</label>
-        <locationX>562</locationX>
-        <locationY>51</locationY>
+        <locationX>112</locationX>
+        <locationY>566</locationY>
         <collectionReference>Get_attendees</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -244,7 +244,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -257,8 +257,8 @@
     <recordLookups>
         <name>Get_attendees</name>
         <label>Get attendees</label>
-        <locationX>227</locationX>
-        <locationY>242</locationY>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>decision_null_check</targetReference>
@@ -278,7 +278,7 @@
     <recordLookups>
         <name>get_contacts</name>
         <label>get contacts</label>
-        <locationX>125</locationX>
+        <locationX>176</locationX>
         <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -306,8 +306,8 @@
     <recordLookups>
         <name>Getconnectrecord</name>
         <label>Get connect record</label>
-        <locationX>128</locationX>
-        <locationY>123</locationY>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>get_contacts</targetReference>
@@ -327,8 +327,8 @@
     <screens>
         <name>emailsent</name>
         <label>email sent</label>
-        <locationX>949</locationX>
-        <locationY>483</locationY>
+        <locationX>176</locationX>
+        <locationY>2066</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -337,7 +337,7 @@
         </connector>
         <fields>
             <name>Display</name>
-            <fieldText>&lt;p&gt;&lt;b style=&quot;color: rgb(62, 62, 60); background-color: rgb(255, 255, 255); font-size: 16px;&quot;&gt;Please press Next to send Email.&lt;/b&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;b style=&quot;color: rgb(62, 62, 60); background-color: rgb(255, 255, 255); font-size: 16px;&quot;&gt;Please press Next to send email.&lt;/b&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <fields>
@@ -366,8 +366,8 @@
     <screens>
         <name>EnterEmail</name>
         <label>EnterEmail</label>
-        <locationX>748</locationX>
-        <locationY>471</locationY>
+        <locationX>176</locationX>
+        <locationY>1958</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -384,7 +384,7 @@
             <dataType>String</dataType>
             <fieldText>Additional Emails</fieldText>
             <fieldType>InputField</fieldType>
-            <helpText>&lt;p&gt;&lt;b&gt;Maximum 5 Email Id&apos;s are allowed.&lt;/b&gt;&lt;/p&gt;</helpText>
+            <helpText>&lt;p&gt;&lt;b style=&quot;background-color: rgb(255, 255, 255); color: rgb(62, 62, 60);&quot;&gt;Maximum 5 Email Id&apos;s are allowed.&lt;/b&gt;&lt;/p&gt;</helpText>
             <isRequired>false</isRequired>
         </fields>
         <fields>
@@ -416,7 +416,7 @@
     </screens>
     <start>
         <locationX>50</locationX>
-        <locationY>17</locationY>
+        <locationY>0</locationY>
         <connector>
             <targetReference>Getconnectrecord</targetReference>
         </connector>
@@ -425,8 +425,8 @@
     <subflows>
         <name>send_email</name>
         <label>send email</label>
-        <locationX>566</locationX>
-        <locationY>486</locationY>
+        <locationX>176</locationX>
+        <locationY>1850</locationY>
         <connector>
             <targetReference>EnterEmail</targetReference>
         </connector>
@@ -445,7 +445,7 @@
     <textTemplates>
         <name>emailbody</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Dear All,&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;As per our discussion on {!Getconnectrecord.Visit_Start_Date__c}, below mentioned action items were discussed. Request all the action owners to complete their task before due date.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!Table}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards&lt;/p&gt;&lt;p&gt;GATI Sales Team&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://gatikwepvtltd--uat--c.documentforce.com/sfc/servlet.shepherd/version/download/068p00000022TVY?asPdf=false&amp;amp;operationContext=CHATTER&quot;&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;Dear All,&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;As per our discussion on {!Getconnectrecord.Visit_Start_Date__c}, below mentioned action items were discussed. Request all the action owners to complete their task before due date.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;{!Table}&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Regards&lt;/p&gt;&lt;p&gt;GATI Sales Team&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://allcargogati.file.force.com/servlet/servlet.ImageServer?id=0159B000000AmJ9&amp;amp;oid=00DHF0000014wzJ&amp;amp;lastMod=1697022470000&quot;&gt;&lt;/p&gt;</text>
     </textTemplates>
     <textTemplates>
         <name>SendEmailSubject</name>

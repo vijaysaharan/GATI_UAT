@@ -1,41 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <actionCalls>
-        <name>Convert_Leads</name>
-        <label>Convert Leads</label>
-        <locationX>50</locationX>
-        <locationY>1331</locationY>
-        <actionName>ConvertLeadsInvocable</actionName>
-        <actionType>apex</actionType>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>convertedStatus</name>
-            <value>
-                <stringValue>Converted</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>createOpportunity</name>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>leadId</name>
-            <value>
-                <elementReference>$Record.Id</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>ownerId</name>
-            <value>
-                <elementReference>$Record.OwnerId</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>ConvertLeadsInvocable</nameSegment>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
-    </actionCalls>
     <apiVersion>60.0</apiVersion>
     <decisions>
         <name>Cross_Sell_Lead_Status_Assigned_OR_In_Progress_Working</name>
@@ -75,9 +39,6 @@
         <label>Cross Sell Lead Status Cold Storage/Re Visit</label>
         <locationX>182</locationX>
         <locationY>923</locationY>
-        <defaultConnector>
-            <targetReference>Cross_Sell_Lead_Status_Qualified</targetReference>
-        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Cold_Storage_Re_Visit</name>
@@ -94,29 +55,6 @@
             </connector>
             <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
             <label>Cold Storage/Re Visit</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Cross_Sell_Lead_Status_Qualified</name>
-        <label>Cross Sell Lead Status Qualified</label>
-        <locationX>182</locationX>
-        <locationY>1223</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Qualified</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Cross_Sell_Lead_Status__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>7</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Convert_Leads</targetReference>
-            </connector>
-            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
-            <label>Qualified</label>
         </rules>
     </decisions>
     <decisions>
@@ -195,9 +133,6 @@
         <label>Lead Status Revisit</label>
         <locationX>50</locationX>
         <locationY>1031</locationY>
-        <connector>
-            <targetReference>Cross_Sell_Lead_Status_Qualified</targetReference>
-        </connector>
         <inputAssignments>
             <field>Status</field>
             <value>

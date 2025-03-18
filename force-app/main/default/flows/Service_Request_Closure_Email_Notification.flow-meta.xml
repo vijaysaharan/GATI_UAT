@@ -15,7 +15,6 @@
             </value>
         </inputParameters>
         <nameSegment>ServiceRequest__c.Service_Request_Closure_Alert</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>58.0</apiVersion>
     <environments>Default</environments>

@@ -55,7 +55,9 @@
                         padding="around-small">
                         <lightning-input-field field-name="Task__c" variant="label-stacked" required>
                         </lightning-input-field>
-                    </lightning-layout-item>                                      
+                    </lightning-layout-item>
+
+                  
                     <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="2"
                         padding="around-small">
                         <div class="slds-p-top_medium">
@@ -66,17 +68,14 @@
                             <input type="submit" class="hidden" data-item={index} />
                         </div>
                     </lightning-layout-item>
-                    <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="2"
-                        padding="around-small">
-                        <lightning-input-field field-name="Status__c" variant="label-stacked" required>
-                        </lightning-input-field>
-                    </lightning-layout-item>
+
                 <lightning-layout-item size="12" small-device-size="6" medium-device-size="4" large-device-size="2"
                     padding="around-small">
                     <label for={index} style="text-size-adjust: 2px;">Customer-Others</label>
                     <lightning-input-field label="Customer-Others" id={index} variant="label-hidden" field-name="Contact__c"  >
                     </lightning-input-field>
                 </lightning-layout-item>
+
                 </lightning-layout>
             </div>
             </lightning-record-edit-form>

@@ -2,35 +2,9 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>57.0</apiVersion>
     <assignments>
-        <name>Docket_Sub_Type</name>
-        <label>Docket+Sub Type</label>
-        <locationX>578</locationX>
-        <locationY>431</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.Unique_Docket_Subtype__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>varUDST1</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>Docket_Sub_Type_Closed</name>
-        <label>Docket+Sub Type+Closed</label>
-        <locationX>314</locationX>
-        <locationY>551</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.Unique_Docket_Subtype__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>varUDST3</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>Docket_Sub_Type_Open</name>
-        <label>Docket+Sub Type+Open</label>
-        <locationX>50</locationX>
+        <name>Update_Docket_and_Case_Number</name>
+        <label>Update Docket and Case Number</label>
+        <locationX>446</locationX>
         <locationY>551</locationY>
         <assignmentItems>
             <assignToReference>$Record.Unique_Docket_Subtype__c</assignToReference>
@@ -40,25 +14,31 @@
             </value>
         </assignmentItems>
     </assignments>
+    <assignments>
+        <name>Update_Docket_Number</name>
+        <label>Update Docket Number</label>
+        <locationX>182</locationX>
+        <locationY>551</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Unique_Docket_Subtype__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varUDST1</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
     <decisions>
         <name>Check_Sub_Type</name>
-        <label>Check Sub Type</label>
-        <locationX>380</locationX>
-        <locationY>311</locationY>
+        <label>Check Sub Type?</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
         <defaultConnector>
-            <targetReference>Docket_Sub_Type</targetReference>
+            <targetReference>Update_Docket_Number</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Other</defaultConnectorLabel>
         <rules>
-            <name>STC_Colling_and_Non_Delivered</name>
+            <name>STC_Cooling_or_Claim</name>
             <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Sub_Type__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>NON DELIVERED</stringValue>
-                </rightValue>
-            </conditions>
             <conditions>
                 <leftValueReference>$Record.Sub_Type__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -66,57 +46,86 @@
                     <stringValue>STC COOLING</stringValue>
                 </rightValue>
             </conditions>
-            <connector>
-                <targetReference>Complaint_Status</targetReference>
-            </connector>
-            <label>STC Colling and Non Delivered</label>
+            <conditions>
+                <leftValueReference>$Record.Sub_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>CLAIM</stringValue>
+                </rightValue>
+            </conditions>
+            <label>STC Cooling or Claim</label>
         </rules>
     </decisions>
     <decisions>
         <name>Complaint_Status</name>
         <label>Complaint Status?</label>
-        <locationX>182</locationX>
+        <locationX>578</locationX>
         <locationY>431</locationY>
-        <defaultConnector>
-            <targetReference>Docket_Sub_Type_Closed</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Closed</defaultConnectorLabel>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>Open</name>
-            <conditionLogic>and</conditionLogic>
+            <name>Close_or_Auto_Close</name>
+            <conditionLogic>or</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Complaint_Status__c</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>O</stringValue>
+                    <stringValue>C</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Complaint_Status__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>AC</stringValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Docket_Sub_Type_Open</targetReference>
+                <targetReference>Update_Docket_and_Case_Number</targetReference>
             </connector>
-            <label>Open</label>
+            <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+            <label>Close or Auto Close</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>IsNew</name>
+        <label>IsNew?</label>
+        <locationX>314</locationX>
+        <locationY>311</locationY>
+        <defaultConnector>
+            <targetReference>Complaint_Status</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>varIsNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Sub_Type</targetReference>
+            </connector>
+            <label>Yes</label>
         </rules>
     </decisions>
     <environments>Default</environments>
     <formulas>
-        <name>isNewTest</name>
+        <name>varIsNew</name>
         <dataType>Boolean</dataType>
-        <expression>IsNew()</expression>
+        <expression>ISNEW()</expression>
     </formulas>
     <formulas>
         <name>varUDST1</name>
         <dataType>String</dataType>
-        <expression>{!$Record.Docket_Number__c}+ &quot;.&quot; + TEXT({!$Record.Sub_Type__c})</expression>
+        <expression>{!$Record.Docket_Number__c}</expression>
     </formulas>
     <formulas>
         <name>varUDST2</name>
         <dataType>String</dataType>
-        <expression>{!$Record.Docket_Number__c}+ &quot;.&quot; + TEXT({!$Record.Sub_Type__c})+ &quot;.O&quot;</expression>
-    </formulas>
-    <formulas>
-        <name>varUDST3</name>
-        <dataType>String</dataType>
-        <expression>{!$Record.Docket_Number__c}+ &quot;.&quot; + TEXT({!$Record.Sub_Type__c})+ &quot;.C&quot;</expression>
+        <expression>{!$Record.Docket_Number__c}+ &quot;.&quot;+{!$Record.CaseNumber}</expression>
     </formulas>
     <interviewLabel>Update Unique Docket Subtype {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Update Unique Docket Subtype</label>
@@ -140,17 +149,17 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>254</locationX>
+        <locationX>188</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Check_Sub_Type</targetReference>
+            <targetReference>IsNew</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Docket_Number__c</field>
-            <operator>IsNull</operator>
+            <field>Record_Type_Name__c</field>
+            <operator>EqualTo</operator>
             <value>
-                <booleanValue>false</booleanValue>
+                <stringValue>Complaint</stringValue>
             </value>
         </filters>
         <object>Case</object>

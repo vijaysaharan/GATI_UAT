@@ -8,7 +8,7 @@
             <field>LastModifiedById</field>
             <type>userLookup</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Overdue_o_s_beyond_agreed_credit_days_or_credit_amount</template>
     </alerts>
@@ -153,16 +153,6 @@
         <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <rules>
-        <fullName>Overdue o%2Fs beyond agreed credit days or credit amount</fullName>
-        <actions>
-            <name>Overdue_o_s_beyond_agreed_credit_days_or_credit_amount</name>
-            <type>Alert</type>
-        </actions>
-        <active>true</active>
-        <formula>IF(RecordType.DeveloperName = &apos;Contract&apos; || RecordType.DeveloperName = &apos;Retail&apos;|| RecordType.DeveloperName = &apos;Customer_Code&apos; , Credit_Period__c &gt; Credit_Days__c  ||  Amount__c &gt; Credit_Amount__c,False)</formula>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-    </rules>
-    <rules>
         <fullName>Populate ou zone</fullName>
         <actions>
             <name>Populate_ou_zone</name>
@@ -200,15 +190,5 @@
         </criteriaItems>
         <description>Set Accounteid as record Id if Account Subtype is Mobile or Counter</description>
         <triggerType>onCreateOnly</triggerType>
-    </rules>
-    <rules>
-        <fullName>z</fullName>
-        <active>false</active>
-        <criteriaItems>
-            <field>Account.ATF_Index__c</field>
-            <operation>equals</operation>
-            <value>0</value>
-        </criteriaItems>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
     </rules>
 </Workflow>

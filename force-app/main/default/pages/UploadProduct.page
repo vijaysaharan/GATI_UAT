@@ -1,0 +1,24 @@
+<apex:page standardcontroller="Opportunity" extensions="ImportDatafromCSVController" lightningStylesheets="true">
+    <apex:form >
+        <apex:pagemessages />
+        <apex:pageBlock rendered="{!!display}" >
+            <apex:pageBlockSection >
+                <apex:outputLink value="{!URLFOR($Action.Document.Download, doc.Id)}" target="_blank">Click to download the sample file for product uploading.</apex:outputLink>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="4" >                
+                <apex:inputFile value="{!csvFileBody}" filename="{!csvAsString}"/>
+                <apex:commandButton value="Import Products" action="{!importCSVFile}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock rendered="{!display}" title="Following Line Items Added">
+            <apex:pageblocktable value="{!accList}" var="acc">
+                <apex:column value="{!acc.Product2Id}" />
+                <apex:column value="{!acc.Quantity}" />
+                <apex:column value="{!acc.UnitPrice}" />
+            </apex:pageblocktable>
+            <apex:pageBlockSection columns="4">
+                <apex:commandButton value="Done" action="{!onSave}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

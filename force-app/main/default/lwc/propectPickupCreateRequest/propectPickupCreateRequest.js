@@ -30,6 +30,7 @@ export default class PropectPickupCreateRequest extends NavigationMixin(Lightnin
 			console.log(field.fieldName);
             if (field.fieldName!='Type')
 			{field.reset();}
+
         });
     }		
 		this.closeModalchild();

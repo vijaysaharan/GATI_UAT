@@ -88,11 +88,12 @@
             <label>is Retail Partner</label>
         </rules>
     </decisions>
+    <environments>Default</environments>
     <formulas>
         <description>If account type is KEA or SME then record type is Customer Code AND if account type is Retail then Record type is Retail AND if account type is Partner then Record type is Partner</description>
         <name>KEAndSME</name>
         <dataType>String</dataType>
-        <expression>IF(Text({!$Record.Customer_Category__c})=&quot;KEA&quot; || Text({!$Record.Customer_Category__c})=&quot;SME&quot;,IF (OR({!$Profile.Name} =&quot;API User&quot;,{!$Profile.Name} =&quot;User API&quot;),&quot;Customer Code&quot;,&quot;Contract&quot;), Text({!$Record.Customer_Category__c}))</expression>
+        <expression>IF(Text({!$Record.Customer_Category__c})=&quot;KEA&quot; || Text({!$Record.Customer_Category__c})=&quot;MSME&quot; || Text({!$Record.Customer_Category__c})=&quot;Strategic&quot;,IF (OR({!$Profile.Name} =&quot;API User&quot;,{!$Profile.Name} =&quot;User API&quot;),&quot;Customer Code&quot;,&quot;Contract&quot;), Text({!$Record.Customer_Category__c}))</expression>
     </formulas>
     <interviewLabel>Account Record Type Assingment {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Account Record Type Assingment</label>

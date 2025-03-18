@@ -3,6 +3,6 @@ trigger ServiceResourceAlocation on AccountTeamMember (before insert, before del
         ServiceResourceTriggerHelper.serviceResourceAllocation(Trigger.New);
     }
     if(Trigger.isBefore && Trigger.isDelete){
-        //ServiceResourceTriggerHelper.mapCustomerCodeToStaffCode(Trigger.oldMap.keySet());
+        ServiceResourceTriggerHelper.mapCustomerCodeToStaffCode(Trigger.oldMap.keySet());
     }    
 }

@@ -15,7 +15,6 @@
             </value>
         </inputParameters>
         <nameSegment>AmazonS3Connect</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>61.0</apiVersion>
     <environments>Default</environments>

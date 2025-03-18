@@ -4,7 +4,7 @@
         <name>Open_URL</name>
         <label>Open URL</label>
         <locationX>176</locationX>
-        <locationY>674</locationY>
+        <locationY>566</locationY>
         <actionName>c:OpenURL</actionName>
         <actionType>component</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -22,41 +22,13 @@
         </inputParameters>
         <nameSegment>c:OpenURL</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
-    </actionCalls>
-    <actionCalls>
-        <name>Redirect</name>
-        <label>Redirect</label>
-        <locationX>176</locationX>
-        <locationY>566</locationY>
-        <actionName>c:navigateToRecord</actionName>
-        <actionType>component</actionType>
-        <connector>
-            <targetReference>Open_URL</targetReference>
-        </connector>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>sObject</name>
-            <value>
-                <stringValue>Account</stringValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>recordId</name>
-            <value>
-                <stringValue>{!Get_Account.Id}</stringValue>
-            </value>
-        </inputParameters>
-        <nameSegment>c:navigateToRecord</nameSegment>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>61.0</apiVersion>
     <assignments>
         <name>Fields_Mapping</name>
         <label>Fields Mapping</label>
         <locationX>176</locationX>
-        <locationY>242</locationY>
+        <locationY>350</locationY>
         <assignmentItems>
             <assignToReference>varAccount</assignToReference>
             <operator>Assign</operator>
@@ -75,7 +47,7 @@
             <assignToReference>varAccount.RecordTypeId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>012p0000000SVfSAAW</stringValue>
+                <elementReference>varRecordTypeId</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -105,6 +77,13 @@
         </assignmentItems>
         <assignmentItems>
             <assignToReference>varAccount.Customer_Code_Req_No__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue></stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varAccount.Id</assignToReference>
             <operator>Assign</operator>
             <value>
                 <stringValue></stringValue>
@@ -140,34 +119,46 @@
         <name>Create_Account</name>
         <label>Create Account</label>
         <locationX>176</locationX>
-        <locationY>350</locationY>
+        <locationY>458</locationY>
         <connector>
-            <targetReference>Get_Account</targetReference>
+            <targetReference>Open_URL</targetReference>
         </connector>
         <faultConnector>
-            <isGoTo>true</isGoTo>
             <targetReference>Fault</targetReference>
         </faultConnector>
         <inputReference>varAccount</inputReference>
     </recordCreates>
     <recordLookups>
-        <name>Get_Account</name>
-        <label>Get Account</label>
+        <name>Get_Record_Type</name>
+        <label>Get Record Type</label>
         <locationX>176</locationX>
-        <locationY>458</locationY>
+        <locationY>242</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Redirect</targetReference>
+            <targetReference>Fields_Mapping</targetReference>
         </connector>
-        <faultConnector>
-            <targetReference>Fault</targetReference>
-        </faultConnector>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Account</object>
-        <sortField>CreatedDate</sortField>
-        <sortOrder>Desc</sortOrder>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>SobjectType</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Account</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Customer_Code</stringValue>
+            </value>
+        </filters>
+        <object>RecordType</object>
+        <outputAssignments>
+            <assignToReference>varRecordTypeId</assignToReference>
+            <field>Id</field>
+        </outputAssignments>
     </recordLookups>
+    <runInMode>SystemModeWithoutSharing</runInMode>
     <screens>
         <name>Confirmation</name>
         <label>Confirmation</label>
@@ -177,7 +168,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Fields_Mapping</targetReference>
+            <targetReference>Get_Record_Type</targetReference>
         </connector>
         <fields>
             <name>Messaage</name>
@@ -228,5 +219,12 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>Account</objectType>
+    </variables>
+    <variables>
+        <name>varRecordTypeId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
 </Flow>

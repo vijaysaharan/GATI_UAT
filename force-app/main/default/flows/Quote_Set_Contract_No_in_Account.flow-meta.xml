@@ -11,19 +11,19 @@
         </defaultConnector>
         <defaultConnectorLabel>Retail</defaultConnectorLabel>
         <rules>
-            <name>Not_Retail</name>
+            <name>Contract</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.Opportunity.Account.RecordType.Name</leftValueReference>
-                <operator>NotEqualTo</operator>
+                <leftValueReference>$Record.Account_Record_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <stringValue>Retail</stringValue>
+                    <stringValue>Contract</stringValue>
                 </rightValue>
             </conditions>
             <connector>
                 <targetReference>Update_Contract_Number</targetReference>
             </connector>
-            <label>Not Retail</label>
+            <label>Contract</label>
         </rules>
     </decisions>
     <decisions>
@@ -85,6 +85,11 @@
         <name>RetailCustomerCode</name>
         <dataType>String</dataType>
         <expression>LEFT(RIGHT({!$Record.Test_LOF_number__c},12), IF(FIND(&apos;.&apos;, RIGHT({!$Record.Test_LOF_number__c},12))&gt;0, FIND(&apos;.&apos;, RIGHT({!$Record.Test_LOF_number__c},12))-1, LEN(RIGHT({!$Record.Test_LOF_number__c},12))))</expression>
+    </formulas>
+    <formulas>
+        <name>varDate</name>
+        <dataType>Date</dataType>
+        <expression>DATEVALUE({!$Record.CreatedDate})</expression>
     </formulas>
     <interviewLabel>Quote Set Contract No in Account {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Quote Set Contract No in Account</label>
@@ -184,6 +189,12 @@
                 <elementReference>$Record.Opportunity.AccountId</elementReference>
             </value>
         </filters>
+        <inputAssignments>
+            <field>Contract_Activation_Date__c</field>
+            <value>
+                <elementReference>varDate</elementReference>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <field>Contract_Number__c</field>
             <value>

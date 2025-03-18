@@ -8,7 +8,6 @@ import endTodaysVisit from '@salesforce/apex/visitStartAndEndController.endToday
 import getPicklistOptions from '@salesforce/apex/visitStartAndEndController.getPicklistOptions';
 import getCustomerConnectData from '@salesforce/apex/visitStartAndEndController.getCustomerConnectData';
 import getTravelPriceForCurrentUser from '@salesforce/apex/visitStartAndEndController.getTravelPriceForCurrentUser';
-import { getLocationService } from 'lightning/mobileCapabilities';
 
 export default class VisitStartAndEndButton extends NavigationMixin(LightningElement) {
     @wire(CurrentPageReference) pageRef;
@@ -56,7 +55,17 @@ export default class VisitStartAndEndButton extends NavigationMixin(LightningEle
         Ending_Note__c: null,
         End_Point__c: 'Office',
     }
+
+    /*
+    disconnectedCallback() {
+        window.removeEventListener('focus', this.handleFocus);
+        window.removeEventListener('blur', this.handleBlur);
+    }*/
+
+
     connectedCallback() {
+        // window.addEventListener('focus', this.handleFocus);
+        // window.addEventListener('blur', this.handleBlur);
         const today = new Date();
         const monthNames = [
             'January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -121,6 +130,15 @@ export default class VisitStartAndEndButton extends NavigationMixin(LightningEle
                 this.isVisitStart = true;
                 this.getCustomerConnectRec(true);
             }
+            /*
+            if (res.includes('DisableAll')) {
+                const parts = res.split(';');
+                this.visitRecordId = parts[1];
+                this.isVisitEnd = false;
+                this.isVisitStart = true;
+                console.log(this.visitRecordId);
+                this.getCustomerConnectRec(true);
+            }*/
         }).catch(e => {
             this.isVisitStart = true;
         });
@@ -252,66 +270,6 @@ export default class VisitStartAndEndButton extends NavigationMixin(LightningEle
 
     handleContinue() {
         this.visitStartDisable = true;
-        const myLocationService = getLocationService();
-        if (myLocationService.isAvailable()) {
-            //Location Available
-            myLocationService.getCurrentPosition({ enableHighAccuracy: true }).then(result => {
-                //this.showToast('Success',result?.coords?.latitude + ' '+result?.coords?.longitude , 'success', 'sticky');
-                    let obj = {
-                        latitude : result?.coords?.latitude,
-                        longitude : result?.coords?.longitude
-                    }
-                    let position = obj;
-                    if(position != null){
-                        //this.showToast('Success 2',position?.latitude + ' '+position?.longitude , 'success', 'sticky');
-                        var latitude = position?.latitude;
-                        var longitude = position?.longitude;
-                        this.createVisit.Source_Geo_Coordinate__Latitude__s = latitude;
-                        this.createVisit.Source_Geo_Coordinate__Longitude__s = longitude;
-                        createTodaysVisit({ visitData: this.createVisit }).then(res => {
-                            this.isVisitStart = false;
-                            this.isVisitEnd = true;
-                            this.visitRecordId = JSON.parse(JSON.stringify(res.Id));
-                            this.askForPlace = false;
-                            this.getCustomerConnectRec(true);
-                            window.location.reload();
-                            this.showToast('Initiating the Journey', 'Your journey has been successfully initiated!', 'success', 'Sticky');
-                        }).catch(err => {
-                            this.showToast('Error', 'Error ' + JSON.stringify(err), 'error', 'dismissable');
-                            this.visitStartDisable = false;
-                        });
-                    }
-                    else{
-                        this.visitStartDisable = false;
-                    }
-                }).catch(error=>{
-                    let errorMessage = '';
-                    switch (error.code) {
-                    case "LOCATION_SERVICE_DISABLED":
-                        errorMessage = "Location service on the device is disabled."; // Android only
-                        break;
-                    case "USER_DENIED_PERMISSION":
-                        errorMessage = "User denied permission to use location service on the device.";
-                        break;
-                    case "USER_DISABLED_PERMISSION":
-                        errorMessage = "Toggle permission to use location service on the device from Settings.";
-                        break;
-                    case "SERVICE_NOT_ENABLED":
-                        errorMessage = "Location service on the device is not enabled.";
-                        break;
-                    case "UNKNOWN_REASON":
-                    default:
-                        errorMessage = error.message;
-                        break;
-                    }
-                    this.showToast('Error', errorMessage , 'error', 'dismissable');
-                });
-        }
-        else{
-            //Handle location Not Available
-            this.showToast('Warnnig', 'Please ensure location services are enabled and connectivity is available!', 'error', 'dismissable');
-        }
-        /*
         if (navigator.geolocation && this.validateInputs()) {
             navigator.geolocation.getCurrentPosition(position => {
                 var latitude = position.coords.latitude;
@@ -334,71 +292,9 @@ export default class VisitStartAndEndButton extends NavigationMixin(LightningEle
         } else {
             this.visitStartDisable = false;
         }
-        */
     }
 
     handleContinueEnd() {
-        const myLocationService = getLocationService();
-        if (myLocationService.isAvailable()) {
-            //Location Available
-            myLocationService.getCurrentPosition({ enableHighAccuracy: true }).then(result => {
-                //this.showToast('Success',result?.coords?.latitude + ' '+result?.coords?.longitude , 'success', 'sticky');
-                let obj = {
-                    latitude : result?.coords?.latitude,
-                    longitude : result?.coords?.longitude
-                }
-                let position = obj;
-                if(position != null){
-                    var latitude = position?.latitude;
-                    var longitude = position?.longitude;
-                    if (this.visitRecordId != null && this.validateInputs()) {
-                        endTodaysVisit({ latitude: latitude, longitude: longitude, recordId: this.visitRecordId, EndPoint: this.endVisit.End_Point__c, EndingNote: this.endVisit.Ending_Note__c }).then(res => {
-                            if (res) {
-                                this.isVisitEnd = false;
-                                this.isVisitStart = true;
-                                //this.isDisable = true;
-                                this.showToast('Concluding the Journey', 'Your journey activities for the day have been officially conclude!', 'success', 'dismissable');
-                                this.navigateToVisit(this.visitRecordId);
-                                this.isEndContinueClicked = false;
-                            }else{
-                                this.showToast('Error In Concluding the Journey', 'Please check that you check-out on all customer connect of related to current visit!', 'success', 'dismissable');
-                                this.isEndContinueClicked = false;
-                            }
-                        }).catch(err => {
-                            this.showToast('Error', 'Error ' + JSON.stringify(err), 'error', 'dismissable');
-                            this.isEndContinueClicked = false;
-                        });
-                    }
-                }
-            }).catch(error => {
-                let errorMessage = '';
-                switch (error.code) {
-                case "LOCATION_SERVICE_DISABLED":
-                    errorMessage = "Location service on the device is disabled."; // Android only
-                    break;
-                case "USER_DENIED_PERMISSION":
-                    errorMessage = "User denied permission to use location service on the device.";
-                    break;
-                case "USER_DISABLED_PERMISSION":
-                    errorMessage = "Toggle permission to use location service on the device from Settings.";
-                    break;
-                case "SERVICE_NOT_ENABLED":
-                    errorMessage = "Location service on the device is not enabled.";
-                    break;
-                case "UNKNOWN_REASON":
-                default:
-                    errorMessage = error.message;
-                    break;
-                }
-                this.showToast('Error', errorMessage , 'error', 'dismissable');
-            });
-        }
-        else{
-            //Handle location Not Available
-            this.showToast('Warnnig', 'Please ensure location services are enabled and connectivity is available!', 'error', 'dismissable');
-            return null;
-        }
-        /*
         if (navigator.geolocation) {
             this.isEndContinueClicked = true;
             navigator.geolocation.getCurrentPosition(position => {
@@ -427,7 +323,6 @@ export default class VisitStartAndEndButton extends NavigationMixin(LightningEle
         else {
             this.showToast('Warnnig', 'Please ensure location services are enabled and connectivity is available!', 'error', 'dismissable');
         }
-        */
     }
 
     disconnectedCallback() {

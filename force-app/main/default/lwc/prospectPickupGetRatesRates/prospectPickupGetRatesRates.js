@@ -30,7 +30,7 @@ const columns2 = [
 
 export default class ProspectPickupGetRatesRates extends LightningElement {
 
-@api recordId='5009D000003OZelQAG';
+@api recordId;
 @track GemsRateDetails;
 @track GemsRateDetails2;
 @track error;

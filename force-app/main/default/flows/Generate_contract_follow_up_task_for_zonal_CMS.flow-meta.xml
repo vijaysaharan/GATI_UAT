@@ -363,6 +363,9 @@
         <label>Create follow-up task</label>
         <locationX>1799</locationX>
         <locationY>1583</locationY>
+        <connector>
+            <targetReference>Update_task_already_exist_checkbox_at_opportunity</targetReference>
+        </connector>
         <inputAssignments>
             <field>ActivityDate</field>
             <value>
@@ -672,12 +675,48 @@
         <object>Organization_Master__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Update_task_already_exist_checkbox_at_opportunity</name>
+        <label>Update task already exist checkbox at opportunity</label>
+        <locationX>1799</locationX>
+        <locationY>1703</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.OpportunityId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>TaskAlreadyExist__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+    </recordUpdates>
     <start>
         <locationX>1673</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_OU_code_from_account</targetReference>
         </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>Contains</operator>
+            <value>
+                <stringValue>LOF</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>TaskAlreadyExist__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
         <object>Quote</object>
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>

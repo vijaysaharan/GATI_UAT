@@ -11,7 +11,7 @@
         <inputParameters>
             <name>OwnerId</name>
             <value>
-                <elementReference>BDFS.User__c</elementReference>
+                <elementReference>Zonal_BDFS.User__r.Manager.Id</elementReference>
             </value>
         </inputParameters>
         <inputParameters>
@@ -23,11 +23,10 @@
         <inputParameters>
             <name>Subject</name>
             <value>
-                <stringValue>Please fill the credit rating data at the qualified stage as LOF is created for the Opportunity against the contract.</stringValue>
+                <stringValue>Please fill the credit rating data at the qualified stage after LOF is created for the Opportunity against the contract.</stringValue>
             </value>
         </inputParameters>
         <nameSegment>NewTask</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <decisions>
@@ -61,7 +60,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>BDFS</targetReference>
+                <targetReference>Zonal_BDFS</targetReference>
             </connector>
             <label>If AssociatedOU exists</label>
         </rules>
@@ -70,13 +69,13 @@
         <name>If_User_equals_null</name>
         <label>If User not equals null</label>
         <locationX>636</locationX>
-        <locationY>126</locationY>
+        <locationY>125</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>If_User_is_not_equals_null</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>BDFS</leftValueReference>
+                <leftValueReference>Zonal_BDFS</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
@@ -126,8 +125,8 @@ stage after LOF is created for the Opportunity against the contract .</descripti
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <name>BDFS</name>
-        <label>BDFS</label>
+        <name>Zonal_BDFS</name>
+        <label>Zonal_BDFS</label>
         <locationX>503</locationX>
         <locationY>123</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -144,9 +143,9 @@ stage after LOF is created for the Opportunity against the contract .</descripti
         </filters>
         <filters>
             <field>User_Role__c</field>
-            <operator>Contains</operator>
+            <operator>EqualTo</operator>
             <value>
-                <stringValue>BDFS</stringValue>
+                <stringValue>Zonal_BDFS</stringValue>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>

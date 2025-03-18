@@ -10,28 +10,28 @@
             <assignToReference>$Record.Visit_End_DateTime__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>CurrentDateTime</elementReference>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>$Record.Destination_Address__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Customer_Connects.Check_In_Address__c</elementReference>
+                <elementReference>Get_Customer_Connects.Check_In_Address__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>$Record.Destination_Geo_Coordinate__Latitude__s</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Customer_Connects.Check_In_Location__Latitude__s</elementReference>
+                <elementReference>Get_Customer_Connects.Check_In_Location__Latitude__s</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>$Record.Destination_Geo_Coordinate__Longitude__s</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Customer_Connects.Check_In_Location__Longitude__s</elementReference>
+                <elementReference>Get_Customer_Connects.Check_In_Location__Longitude__s</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -47,7 +47,7 @@
             <assignToReference>$Record.Visit_End_DateTime__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>CurrentDateTime</elementReference>
+                <elementReference>$Flow.CurrentDateTime</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -83,12 +83,12 @@
         <defaultConnector>
             <targetReference>Visit_End_Assignment_If_No_Customer_Connect</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <defaultConnectorLabel>Not Found</defaultConnectorLabel>
         <rules>
-            <name>Customer_Connect_Found</name>
+            <name>Found</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Customer_Connects</leftValueReference>
+                <leftValueReference>Get_Customer_Connects</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
@@ -97,7 +97,7 @@
             <connector>
                 <targetReference>Visit_End_Assignment</targetReference>
             </connector>
-            <label>Customer Connect Found</label>
+            <label>Found</label>
         </rules>
     </decisions>
     <decisions>
@@ -110,14 +110,14 @@
             <name>Customer_Connect_Present</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Customer_Connects</leftValueReference>
+                <leftValueReference>Get_Customer_Connects</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Get_Travel_RecordTypeId</targetReference>
+                <targetReference>Get_Travel_Record_Type</targetReference>
             </connector>
             <label>Customer Connect Present</label>
         </rules>
@@ -127,6 +127,15 @@
         <name>CurrentDateTime</name>
         <dataType>DateTime</dataType>
         <expression>NOW()</expression>
+    </formulas>
+    <formulas>
+        <name>varVisitEnd</name>
+        <dataType>Date</dataType>
+        <expression>IF(
+NOT(ISBLANK({!Get_Customer_Connects.Check_Out_Time__c})),
+{!Get_Customer_Connects.Check_Out_Time__c},
+{!Get_Customer_Connects.Check_In_Time__c}
+)</expression>
     </formulas>
     <interviewLabel>Auto Visit End {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Auto Visit End</label>
@@ -175,7 +184,7 @@
         <inputAssignments>
             <field>Customer_Connect__c</field>
             <value>
-                <elementReference>Customer_Connects.Id</elementReference>
+                <elementReference>Get_Customer_Connects.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -193,7 +202,7 @@
         <inputAssignments>
             <field>From_Date__c</field>
             <value>
-                <elementReference>Customer_Connects.Visit_Date__c</elementReference>
+                <elementReference>Get_Customer_Connects.Visit_Date__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -217,7 +226,7 @@
         <inputAssignments>
             <field>To_Date__c</field>
             <value>
-                <elementReference>Customer_Connects.Visit_Date__c</elementReference>
+                <elementReference>Get_Customer_Connects.Visit_Date__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -236,8 +245,8 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
     <recordLookups>
-        <name>Customer_Connects</name>
-        <label>Customer Connects</label>
+        <name>Get_Customer_Connects</name>
+        <label>Get Customer Connects</label>
         <locationX>182</locationX>
         <locationY>252</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
@@ -266,8 +275,8 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>Get_Travel_RecordTypeId</name>
-        <label>Get Travel RecordTypeId</label>
+        <name>Get_Travel_Record_Type</name>
+        <label>Get Travel Record Type</label>
         <locationX>50</locationX>
         <locationY>876</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
@@ -309,7 +318,7 @@
         <locationX>56</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Customer_Connects</targetReference>
+            <targetReference>Get_Customer_Connects</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -323,7 +332,7 @@
         <schedule>
             <frequency>Daily</frequency>
             <startDate>2023-10-01</startDate>
-            <startTime>00:00:00.000Z</startTime>
+            <startTime>23:45:00.000Z</startTime>
         </schedule>
         <triggerType>Scheduled</triggerType>
     </start>

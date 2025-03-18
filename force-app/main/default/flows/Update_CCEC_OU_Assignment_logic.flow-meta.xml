@@ -4,8 +4,8 @@
     <assignments>
         <name>assign_ccec_of</name>
         <label>assign ccec of</label>
-        <locationX>262</locationX>
-        <locationY>404</locationY>
+        <locationX>974</locationX>
+        <locationY>287</locationY>
         <assignmentItems>
             <assignToReference>$Record.CCEC_OF__c</assignToReference>
             <operator>Assign</operator>
@@ -20,8 +20,8 @@
     <assignments>
         <name>Complaint_OU</name>
         <label>Complaint OU</label>
-        <locationX>807</locationX>
-        <locationY>716</locationY>
+        <locationX>578</locationX>
+        <locationY>611</locationY>
         <assignmentItems>
             <assignToReference>$Record.CCEC_OU_Assignment_Logic__c</assignToReference>
             <operator>Assign</operator>
@@ -33,21 +33,21 @@
     <assignments>
         <name>exception_action_ou</name>
         <label>exception action ou</label>
-        <locationX>1298</locationX>
-        <locationY>725</locationY>
+        <locationX>842</locationX>
+        <locationY>611</locationY>
         <assignmentItems>
             <assignToReference>$Record.CCEC_OU_Assignment_Logic__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>$Record.Case__r.Delivery_OU__c</elementReference>
+                <elementReference>varOU</elementReference>
             </value>
         </assignmentItems>
     </assignments>
     <assignments>
         <name>Set_Stock_OU</name>
         <label>Set Stock OU</label>
-        <locationX>780</locationX>
-        <locationY>379</locationY>
+        <locationX>50</locationX>
+        <locationY>611</locationY>
         <assignmentItems>
             <assignToReference>$Record.CCEC_OU_Assignment_Logic__c</assignToReference>
             <operator>Assign</operator>
@@ -59,8 +59,8 @@
     <assignments>
         <name>Stock_Rece_OU</name>
         <label>Stock Rece OU</label>
-        <locationX>1291</locationX>
-        <locationY>417</locationY>
+        <locationX>314</locationX>
+        <locationY>611</locationY>
         <assignmentItems>
             <assignToReference>$Record.CCEC_OU_Assignment_Logic__c</assignToReference>
             <operator>Assign</operator>
@@ -72,8 +72,8 @@
     <decisions>
         <name>Check_for_Type_and_SubType</name>
         <label>Check for Type and SubType</label>
-        <locationX>500</locationX>
-        <locationY>618</locationY>
+        <locationX>578</locationX>
+        <locationY>503</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>If_Type_is_UnDelivered_and_SubType_is_Non_Delivered</name>
@@ -202,8 +202,8 @@
     <decisions>
         <name>check_if_integration_user</name>
         <label>check if integration user</label>
-        <locationX>285</locationX>
-        <locationY>743</locationY>
+        <locationX>974</locationX>
+        <locationY>395</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>if_not_int_user</name>
@@ -227,6 +227,15 @@
         <dataType>String</dataType>
         <expression>IF( ISPICKVAL( {!$Record.Case__r.Company_of__c} , &apos;102&apos; ), &apos;GKE&apos;, &apos;GICE&apos;)</expression>
     </formulas>
+    <formulas>
+        <name>varOU</name>
+        <dataType>String</dataType>
+        <expression>IF(NOT(ISBLANK({!$Record.Case__r.Stock_OU__c})),{!$Record.Case__r.Stock_OU__c},
+IF(NOT(ISBLANK({!$Record.Case__r.Stock_Receiving_OU__c})),{!$Record.Case__r.Stock_Receiving_OU__c},
+{!$Record.Case__r.Delivery_OU__c}
+)
+)</expression>
+    </formulas>
     <interviewLabel>Update CCEC OU Assignment logic {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Update CCEC OU Assignment logic</label>
     <processMetadataValues>
@@ -238,7 +247,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -249,8 +258,8 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>50</locationX>
-        <locationY>50</locationY>
+        <locationX>848</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>assign_ccec_of</targetReference>
         </connector>

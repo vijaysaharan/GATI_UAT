@@ -4,3 +4,7 @@
 .align-centre{
     text-align: center !important;
 }
+.border-cells{
+    border: 1px solid black;
+    border-collapse: collapse;
+}

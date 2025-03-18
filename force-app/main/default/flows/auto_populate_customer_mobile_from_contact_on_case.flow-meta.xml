@@ -4,13 +4,27 @@
     <assignments>
         <name>assign_address</name>
         <label>assign address</label>
-        <locationX>914</locationX>
-        <locationY>249</locationY>
+        <locationX>903</locationX>
+        <locationY>222</locationY>
         <assignmentItems>
             <assignToReference>$Record.Pickup_Address1__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>get_contact.MailingStreet</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Pickup_Address2__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>get_contact.MailingCity</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>$Record.Pickup_Address3__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>get_contact.MailingState</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -136,7 +150,7 @@
     <assignments>
         <name>assign_pincode</name>
         <label>assign pincode</label>
-        <locationX>1521</locationX>
+        <locationX>1522</locationX>
         <locationY>376</locationY>
         <assignmentItems>
             <assignToReference>$Record.Shipper_Pincode__c</assignToReference>
@@ -176,17 +190,10 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>claim_address</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Address__c</leftValueReference>
                 <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.ContactId</leftValueReference>
-                <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -208,17 +215,10 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>check</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Mobile__c</leftValueReference>
                 <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.ContactId</leftValueReference>
-                <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -237,19 +237,12 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>phone</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>get_contact.Phone</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.ContactId</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -262,24 +255,24 @@
         <name>check_shipper_pincode</name>
         <label>check shipper pincode</label>
         <locationX>1514</locationX>
-        <locationY>227</locationY>
+        <locationY>228</locationY>
         <defaultConnector>
             <targetReference>check_phone</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>shipper_pincode</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>$Record.Shipper_Pincode__c</leftValueReference>
+                <leftValueReference>$Record.Pick_Up_Pincode__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
-                <leftValueReference>$Record.ContactId</leftValueReference>
-                <operator>IsChanged</operator>
+                <leftValueReference>$Record.Shipper_Pincode__c</leftValueReference>
+                <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -351,7 +344,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>check_coordinates</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Pickup_Coordinates__Latitude__s</leftValueReference>
                 <operator>IsNull</operator>
@@ -362,13 +355,6 @@
             <conditions>
                 <leftValueReference>$Record.Pickup_Coordinates__Longitude__s</leftValueReference>
                 <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.ContactId</leftValueReference>
-                <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -390,17 +376,10 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>check_customer_name</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Customer_Name__c</leftValueReference>
                 <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.ContactId</leftValueReference>
-                <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -422,17 +401,10 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>check_email</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Customer_Email__c</leftValueReference>
                 <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.ContactId</leftValueReference>
-                <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -454,17 +426,10 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>check_address</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Pickup_Address1__c</leftValueReference>
                 <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.ContactId</leftValueReference>
-                <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -486,17 +451,10 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>check_pickup_city</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Pickup_City__c</leftValueReference>
                 <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.ContactId</leftValueReference>
-                <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -518,17 +476,10 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>check_name</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Shipper_Name__c</leftValueReference>
                 <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.ContactId</leftValueReference>
-                <operator>IsChanged</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
                 </rightValue>
@@ -596,7 +547,7 @@
             </value>
         </filters>
         <object>Case</object>
-        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
     </start>
     <status>Active</status>

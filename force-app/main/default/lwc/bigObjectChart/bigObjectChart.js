@@ -89,9 +89,6 @@ export default class BigObjectChart extends LightningElement {
                     objList.push(obj);
                 });
                 this.dateObjToShow = objList;
-                console.log(chartMap);
-                console.log(objList);
-                    
                
             }
         })

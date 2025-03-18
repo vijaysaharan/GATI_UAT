@@ -8,7 +8,7 @@
             <field>LastModifiedById</field>
             <type>userLookup</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Escalation</template>
     </alerts>
@@ -20,7 +20,7 @@
             <field>LastModifiedById</field>
             <type>userLookup</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Escalation_for_SME</template>
     </alerts>
@@ -43,7 +43,7 @@
             <field>Zonal_Vertical_Head__c</field>
             <type>userLookup</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Escalation</template>
     </alerts>
@@ -55,7 +55,7 @@
             <field>Zonal_Vertical_Head__c</field>
             <type>userLookup</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Escalation_for_SME</template>
     </alerts>
@@ -67,7 +67,7 @@
             <field>LastModifiedById</field>
             <type>userLookup</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Escalation_for_SME</template>
     </alerts>
@@ -79,7 +79,7 @@
             <field>Zonal_Vertical_Head__c</field>
             <type>userLookup</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/Escalation_for_Retail</template>
     </alerts>
@@ -91,7 +91,7 @@
             <field>Zonal_Vertical_Head__c</field>
             <type>userLookup</type>
         </recipients>
-        <senderAddress>noreply@gatikwe.com</senderAddress>
+        <senderAddress>allcargogati.noreply@allcargologistics.com</senderAddress>
         <senderType>OrgWideEmailAddress</senderType>
         <template>unfiled$public/RFQ_enabled</template>
     </alerts>

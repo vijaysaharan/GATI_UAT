@@ -25,7 +25,6 @@
         </inputParameters>
         <nameSegment>GatiMDMInvocable</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Gati_MDM_Token_Request</name>
@@ -46,12 +45,37 @@
         </inputParameters>
         <nameSegment>GATIMDMAdditionalApprovalAuth.GatiMDMAdditionalApprovalAuth</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Get_Error_Message</name>
+        <label>Get Error Message</label>
+        <locationX>1194</locationX>
+        <locationY>998</locationY>
+        <actionName>GatiMDMInvocable</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Error_Wrapper_Assignment</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>action</name>
+            <value>
+                <stringValue>Convert-Creation-Response</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>jsonString</name>
+            <value>
+                <elementReference>MDMCalloutGati.defaultExc</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>GatiMDMInvocable</nameSegment>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <actionCalls>
         <name>MDMCalloutGati</name>
         <label>MDMCalloutGati</label>
-        <locationX>776</locationX>
+        <locationX>810</locationX>
         <locationY>782</locationY>
         <actionName>MDMCalloutGati.MDMCalloutGati</actionName>
         <actionType>externalService</actionType>
@@ -67,7 +91,6 @@
         </inputParameters>
         <nameSegment>MDMCalloutGati.MDMCalloutGati</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>OpenURL</name>
@@ -94,7 +117,6 @@
         </inputParameters>
         <nameSegment>c:OpenURL</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Send_Additional_Approval_Choice</name>
@@ -145,7 +167,6 @@
         </inputParameters>
         <nameSegment>GatiMDMInvocable</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>60.0</apiVersion>
     <assignments>
@@ -244,6 +265,38 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Error_Message_Assignment</name>
+        <label>Error Message Assignment</label>
+        <locationX>1282</locationX>
+        <locationY>1322</locationY>
+        <assignmentItems>
+            <assignToReference>varErrorMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Error_Message_Loop.Message</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Error_Message_Loop</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Error_Wrapper_Assignment</name>
+        <label>Error Wrapper Assignment</label>
+        <locationX>1194</locationX>
+        <locationY>1106</locationY>
+        <assignmentItems>
+            <assignToReference>varErrorResponseMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Error_Message.creationResponse.Response</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Error_Message_Loop</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Set_Authentication_Params</name>
         <label>Set Authentication Params</label>
         <locationX>446</locationX>
@@ -269,7 +322,7 @@
     <assignments>
         <name>Set_Request_Body</name>
         <label>Set Request Body</label>
-        <locationX>776</locationX>
+        <locationX>810</locationX>
         <locationY>674</locationY>
         <assignmentItems>
             <assignToReference>requestBody.state</assignToReference>
@@ -630,7 +683,7 @@
     <decisions>
         <name>Is_Market_Code_For_Retail</name>
         <label>Is Market Code For Retail</label>
-        <locationX>413</locationX>
+        <locationX>430</locationX>
         <locationY>242</locationY>
         <defaultConnector>
             <targetReference>Get_Opportunity_Line_Items</targetReference>
@@ -662,10 +715,10 @@
     <decisions>
         <name>Response_Code_Check</name>
         <label>Response Code Check</label>
-        <locationX>776</locationX>
+        <locationX>810</locationX>
         <locationY>890</locationY>
         <defaultConnector>
-            <targetReference>ServerDownScreen</targetReference>
+            <targetReference>Get_Error_Message</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -808,7 +861,27 @@
     <formulas>
         <name>varGATICompanyCode</name>
         <dataType>String</dataType>
-        <expression>IF(ISBLANK(TEXT({!recordId.Account.GATI_Company_Code__c})),&quot;null&quot;,TEXT({!recordId.Account.GATI_Company_Code__c}))</expression>
+        <expression>IF(
+    ISBLANK(TEXT({!recordId.Account.GATI_Company_Code__c})),
+    &quot;null&quot;,
+    IF(
+        TEXT({!recordId.Account.GATI_Company_Code__c}) = &quot;101&quot;,
+        &quot;GICE&quot;,
+        IF(
+            TEXT({!recordId.Account.GATI_Company_Code__c}) = &quot;103&quot;,
+            &quot;ACL&quot;,
+            IF(
+                TEXT({!recordId.Account.GATI_Company_Code__c}) = &quot;104&quot;,
+                &quot;ECU&quot;,
+                IF(
+                    TEXT({!recordId.Account.GATI_Company_Code__c}) = &quot;105&quot;,
+                    &quot;UCL&quot;,
+                    &quot;GKE&quot;
+                )
+            )
+        )
+    )
+)</expression>
     </formulas>
     <formulas>
         <name>varGSTIN</name>
@@ -868,7 +941,7 @@
     <formulas>
         <name>varPinCode</name>
         <dataType>String</dataType>
-        <expression>IF(ISBLANK({!recordId.Account.Associated_OU__r.Pincode__c}),&quot;null&quot;,{!recordId.Account.Associated_OU__r.Pincode__c})</expression>
+        <expression>IF(ISBLANK({!recordId.Account.BillingPostalCode}),&quot;null&quot;,{!recordId.Account.BillingPostalCode})</expression>
     </formulas>
     <formulas>
         <name>varRegistrationStatus</name>
@@ -902,6 +975,20 @@
     </formulas>
     <interviewLabel>MDM Callout {!$Flow.CurrentDateTime}</interviewLabel>
     <label>MDM Callout</label>
+    <loops>
+        <name>Error_Message_Loop</name>
+        <label>Error Message Loop</label>
+        <locationX>1194</locationX>
+        <locationY>1214</locationY>
+        <collectionReference>varErrorResponseMessage</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Error_Message_Assignment</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>ServerDownScreen</targetReference>
+        </noMoreValuesConnector>
+    </loops>
     <loops>
         <name>Loop_through_Existing_Customer_Contract</name>
         <label>Loop through Existing_Customer_Contract</label>
@@ -938,7 +1025,7 @@
     <recordLookups>
         <name>Get_Account_Data</name>
         <label>Get Account Data</label>
-        <locationX>413</locationX>
+        <locationX>430</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -959,7 +1046,7 @@
     <recordLookups>
         <name>Get_Industry_Mapping</name>
         <label>Get Industry Mapping</label>
-        <locationX>776</locationX>
+        <locationX>810</locationX>
         <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -980,7 +1067,7 @@
     <recordLookups>
         <name>Get_Opportunity_Line_Items</name>
         <label>Get Opportunity Line Items</label>
-        <locationX>776</locationX>
+        <locationX>810</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -998,6 +1085,7 @@
         <object>OpportunityLineItem</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <runInMode>SystemModeWithoutSharing</runInMode>
     <screens>
         <name>Auto_Finish</name>
         <label>Auto-Finish</label>
@@ -1074,31 +1162,31 @@
     <screens>
         <name>ServerDownScreen</name>
         <label>Server Down Screen</label>
-        <locationX>1106</locationX>
-        <locationY>998</locationY>
+        <locationX>1194</locationX>
+        <locationY>1514</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <fields>
             <name>ServerDownMessage</name>
-            <fieldText>&lt;p style=&quot;text-align: center;&quot;&gt;&lt;strong style=&quot;color: rgb(228, 8, 8); font-size: 24px;&quot;&gt;We&apos;re sorry, but something went wrong on our end (error code: {!MDMCalloutGati.responseCode}). We&apos;re working to fix the issue and appreciate your patience.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(241, 6, 6);&quot;&gt;{!varErrorMessage}&lt;/span&gt;&lt;span style=&quot;color: rgb(228, 8, 8);&quot;&gt;&lt;span class=&quot;ql-cursor&quot;&gt;﻿&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>287</locationX>
+        <locationX>304</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Account_Data</targetReference>
         </connector>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <transforms>
         <name>Transform_Opportunity_Product</name>
         <label>Transform Opportunity Product</label>
-        <locationX>776</locationX>
+        <locationX>810</locationX>
         <locationY>566</locationY>
         <apexClass>ExternalService__MDMCalloutGati_MDMCalloutGati_IN_body_lineDtls</apexClass>
         <connector>
@@ -1113,13 +1201,6 @@
                 <transformType>Map</transformType>
                 <value>
                     <elementReference>Get_Opportunity_Line_Items[$EachItem].frmLane__c</elementReference>
-                </value>
-            </transformValueActions>
-            <transformValueActions>
-                <outputFieldApiName>laneMaxBusiness</outputFieldApiName>
-                <transformType>Map</transformType>
-                <value>
-                    <elementReference>Get_Opportunity_Line_Items[$EachItem].UnitPrice</elementReference>
                 </value>
             </transformValueActions>
             <transformValueActions>
@@ -1141,6 +1222,13 @@
                 <transformType>Map</transformType>
                 <value>
                     <elementReference>Get_Opportunity_Line_Items[$EachItem].toLane__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>laneMaxBusiness</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>Get_Opportunity_Line_Items[$EachItem].UnitPrice</elementReference>
                 </value>
             </transformValueActions>
         </transformValues>
@@ -1186,6 +1274,21 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <name>varErrorMessage</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>varErrorResponseMessage</name>
+        <apexClass>GatiMDMCreationResponseItemWrapper</apexClass>
+        <dataType>Apex</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <name>varMDMRecordToDisplay</name>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
@@ -1198,14 +1301,6 @@
         <apexClass>GatiMDMCreationResponseItemWrapper</apexClass>
         <dataType>Apex</dataType>
         <isCollection>true</isCollection>
-        <isInput>false</isInput>
-        <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>varResponseFormMDM</name>
-        <apexClass>MDMContractCreationResponse</apexClass>
-        <dataType>Apex</dataType>
-        <isCollection>false</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>

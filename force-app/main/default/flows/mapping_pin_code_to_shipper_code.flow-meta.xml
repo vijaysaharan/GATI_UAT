@@ -4,8 +4,8 @@
     <assignments>
         <name>assigning_location</name>
         <label>assigning location</label>
-        <locationX>844</locationX>
-        <locationY>362</locationY>
+        <locationX>270</locationX>
+        <locationY>1247</locationY>
         <assignmentItems>
             <assignToReference>$Record.PickUp_OU__c</assignToReference>
             <operator>Assign</operator>
@@ -27,8 +27,8 @@
     <assignments>
         <name>Assigning_Values</name>
         <label>Assigning Values</label>
-        <locationX>1183</locationX>
-        <locationY>358</locationY>
+        <locationX>138</locationX>
+        <locationY>1487</locationY>
         <assignmentItems>
             <assignToReference>$Record.Receiver_Pincode__c</assignToReference>
             <operator>Assign</operator>
@@ -43,8 +43,8 @@
     <assignments>
         <name>assignment</name>
         <label>assignment</label>
-        <locationX>316</locationX>
-        <locationY>572</locationY>
+        <locationX>50</locationX>
+        <locationY>695</locationY>
         <assignmentItems>
             <assignToReference>$Record.Pick_Up_Pincode__c</assignToReference>
             <operator>Assign</operator>
@@ -66,8 +66,8 @@
     <decisions>
         <name>checking_null</name>
         <label>checking null</label>
-        <locationX>549</locationX>
-        <locationY>366</locationY>
+        <locationX>424</locationX>
+        <locationY>1127</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>checking_ou_is_null_or_not</name>
@@ -102,8 +102,8 @@
     <decisions>
         <name>if_not_null</name>
         <label>if not null</label>
-        <locationX>130</locationX>
-        <locationY>563</locationY>
+        <locationX>182</locationX>
+        <locationY>575</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>not_null</name>
@@ -124,8 +124,8 @@
     <decisions>
         <name>if_prospect_pickup</name>
         <label>if prospect pickup</label>
-        <locationX>1011</locationX>
-        <locationY>365</locationY>
+        <locationX>270</locationX>
+        <locationY>1367</locationY>
         <defaultConnector>
             <targetReference>updating_Record</targetReference>
         </defaultConnector>
@@ -149,8 +149,8 @@
     <decisions>
         <name>if_shipper_pincode_is_not_null</name>
         <label>if shipper pincode is not null</label>
-        <locationX>167</locationX>
-        <locationY>392</locationY>
+        <locationX>424</locationX>
+        <locationY>335</locationY>
         <defaultConnector>
             <targetReference>Pickup_pin_code_entered</targetReference>
         </defaultConnector>
@@ -181,8 +181,8 @@
     <decisions>
         <name>Pickup_pin_code_entered</name>
         <label>Pickup pin code entered</label>
-        <locationX>350</locationX>
-        <locationY>377</locationY>
+        <locationX>666</locationX>
+        <locationY>455</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>pickup_pin_code</name>
@@ -233,7 +233,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -246,8 +246,8 @@
     <recordLookups>
         <name>fetching_Shipper_code</name>
         <label>fetching Shipper code</label>
-        <locationX>20</locationX>
-        <locationY>559</locationY>
+        <locationX>182</locationX>
+        <locationY>455</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>if_not_null</targetReference>
@@ -281,8 +281,8 @@
     <recordLookups>
         <name>Getting_ou</name>
         <label>Getting ou</label>
-        <locationX>493</locationX>
-        <locationY>573</locationY>
+        <locationX>424</locationX>
+        <locationY>1007</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>checking_null</targetReference>
@@ -302,13 +302,13 @@
     <recordUpdates>
         <name>updating_Record</name>
         <label>updating Record</label>
-        <locationX>1118</locationX>
-        <locationY>553</locationY>
+        <locationX>270</locationX>
+        <locationY>1703</locationY>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>67</locationX>
-        <locationY>50</locationY>
+        <locationX>298</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>if_shipper_pincode_is_not_null</targetReference>
         </connector>

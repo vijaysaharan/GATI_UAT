@@ -41,8 +41,11 @@ export default class CaseComponent extends NavigationMixin(LightningElement) {
     @wire(getObjectInfo, { objectApiName: 'Case' })
     getinfos(val) {
         if (val.data) {
-            console.log(Object.keys(val.data.recordTypeInfos));
             const rtis = val.data.recordTypeInfos;
+            console.log('recordTypeId ',this.recordTypeId);
+            if(!this.recordTypeId){
+                this.recordTypeId = '0125g000000F3cmAAC';	
+            }
             this.caserecordtypes = rtis;
             this.rtforre = rtis[this.recordTypeId].name;
             if (rtis[this.recordTypeId].name == "Email Case") {
@@ -53,7 +56,6 @@ export default class CaseComponent extends NavigationMixin(LightningElement) {
             } else if (rtis[this.recordTypeId].name == "Pick Up") {
                 this.pickupCase = false;
             }
-
         }
         if (val.error) {
             console.log(error);
@@ -64,7 +66,6 @@ export default class CaseComponent extends NavigationMixin(LightningElement) {
         this.casePage = true;
     }
     onCancel() {
-
         this[NavigationMixin.Navigate]({
             type: "standard__objectPage",
             attributes: {
@@ -92,7 +93,7 @@ export default class CaseComponent extends NavigationMixin(LightningElement) {
         event.preventDefault();
         this.fetchDocketCases();
 
-       //debugger;
+        debugger;
         if (this.caseOpened > 0) {
             this.isError = true;
         } else {
@@ -155,76 +156,68 @@ export default class CaseComponent extends NavigationMixin(LightningElement) {
                     }
                     let docres = data.response[0];
                     this.docketresponse = docres;
-                    if(this.docketresponse?.result && this.docketresponse?.result.length > 0){
-                        const diffTime = Math.abs(new Date(this.docketresponse.result[0]?.BKG_DT) - new Date());
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        console.log(diffDays);
-                        if ((this.docketresponse.result[0]?.DOCKET_TYPE == "CARRIERS RISK" && diffDays > 60) || (this.docketresponse.result[0]?.DOCKET_TYPE == "OWNERS RISK" && diffDays > 90)) {
-                            const event = new ShowToastEvent({
-                                title: "Failed",
-                                message: "You can not Claim this now. Claim period has been expired!",
-                                variant: "error",
-                                mode: "sticky"
-                            });
-                            this.dispatchEvent(event);
-                            this.onCancel();
-                        } 
-                        else if (this.rtforre == "Complaint" && this.docketresponse.result[0].PDC_BLOCK == "Y") {//PDC BLOCK
-                            //this.invaliddocket = true;
-                            console.log('Record Type >>',this.rtforre == "Complaint");
-                            let val = this.template.querySelector(".docketno");
-                            val.setCustomValidity("Delivery is blocked for this shipment.");
-                            val.reportValidity();
-                        }
-                        else if (docres.sErrMsg == "Invalid Docket No" || docres.sErrMsg.length > 1) {
-                            this.invaliddocket = true;
-                            let val = this.template.querySelector(".docketno");
-                            val.setCustomValidity("Docket Number was not Found in Gems");
-                            val.reportValidity();
-                        } 
-                        else if (this.docketresponse.result[0].DOCKET_STATUS == "REBOOKED" && this.rtforre == "Claim") {
-                            let val = this.template.querySelector(".docketno");
-                            val.setCustomValidity("Claim cannot be registered for the Rebooked docket");
-                            val.reportValidity();
-                        } 
-                        else if (this.subtype == 'STC COOLING') {
-                            if (!this.docketresponse.result[0].STOCK_OU) {
-                                let val = this.template.querySelector(".docketno");
-                                val.setCustomValidity("You can raise a complaint only if cooling is more than 12 hrs");
-                                val.reportValidity();
-                            } else if ((this.docketresponse.result[0].STOCK_OU != null && this.docketresponse.result[0].STOCK_OU != '') && this.docketresponse.result[0].DELIVERY_STN != this.docketresponse.result[0].STOCK_OU) {
-                                var date1 = new Date(this.docketresponse.result[0].STOCK_IN_DATE_TIME);
-                                var date2 = new Date();
-                                var Difference_In_Time = date2.getTime() - date1.getTime();
-                                var Difference_In_hours = Math.round(Difference_In_Time / (1000 * 3600));
-                                var addDate = new Date(this.docketresponse.result[0].ASSURED_DLY_DT);
-                                if (addDate > date2 && Difference_In_hours > 12) {
-                                    this.navigateToNewCasDefaults(true);
-                                } else {
-                                    let val = this.template.querySelector(".docketno");
-                                    val.setCustomValidity("Either ADD is crossed or Cooling times is less than 12 hours.");
-                                    val.reportValidity();
-                                }
-                            }
-                        } 
-                        else {
-                            let val = this.template.querySelector(".docketno");
-                            val.setCustomValidity("");
-                            val.readonly = true;
-                            this.docketValid = true;
-                            this.navigateToNewCasDefaults(true);
-                        }
-                    }
-                    else{
+                    const diffTime = Math.abs(new Date(this.docketresponse.result[0].BKG_DT) - new Date());
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    console.log(diffDays);
+                    if(this.docketresponse.result[0].PDC_BLOCK == 'Y'){}
+                    if ((this.docketresponse.result[0].DOCKET_TYPE == "CARRIERS RISK" && diffDays > 60) || (this.docketresponse.result[0].DOCKET_TYPE == "OWNERS RISK" && diffDays > 90)) {
+                        //this.disableContinue = true;
+                        // this.invaliddocket = true;
+                        // let val = this.template.querySelector(".docketno");
+                        // val.setCustomValidity("No response received from GEMS system. Please try again.");
+                        // val.reportValidity();
                         const event = new ShowToastEvent({
-                            title: "No Results Found",
-                            message: this.docketresponse?.sErrMsg,
+                            title: "Failed",
+                            message: "You can not Claim this now. Claim period has been expired!",
                             variant: "error",
                             mode: "sticky"
                         });
                         this.dispatchEvent(event);
+                        this.onCancel();
+                    } else if (this.rtforre == "Complaint" && this.docketresponse.result[0].PDC_BLOCK == "Y") {//PDC BLOCK
+                        //this.invaliddocket = true;
+                        console.log('Record Type >>',this.rtforre == "Complaint");
+                        let val = this.template.querySelector(".docketno");
+                        val.setCustomValidity("Delivery is blocked for this shipment.");
+                        val.reportValidity();
+                    }
+                    else if (docres.sErrMsg == "Invalid Docket No" || docres.sErrMsg.length > 1) {
+                        this.invaliddocket = true;
+                        let val = this.template.querySelector(".docketno");
+                        val.setCustomValidity("Docket Number was not Found in Gems");
+                        val.reportValidity();
+                    } else if (this.docketresponse.result[0].DOCKET_STATUS == "REBOOKED" && this.rtforre == "Claim") {
+                        let val = this.template.querySelector(".docketno");
+                        val.setCustomValidity("Claim cannot be registered for the Rebooked docket");
+                        val.reportValidity();
+                    } else if (this.subtype == 'STC COOLING') {
+                        if (!this.docketresponse.result[0].STOCK_OU) {
+                            let val = this.template.querySelector(".docketno");
+                            val.setCustomValidity("You can raise a complaint only if cooling is more than 12 hrs");
+                            val.reportValidity();
+                        } else if ((this.docketresponse.result[0].STOCK_OU != null && this.docketresponse.result[0].STOCK_OU != '') && this.docketresponse.result[0].DELIVERY_STN != this.docketresponse.result[0].STOCK_OU) {
+                            var date1 = new Date(this.docketresponse.result[0].STOCK_IN_DATE_TIME);
+                            var date2 = new Date();
+                            var Difference_In_Time = date2.getTime() - date1.getTime();
+                            var Difference_In_hours = Math.round(Difference_In_Time / (1000 * 3600));
+                            var addDate = new Date(this.docketresponse.result[0].ASSURED_DLY_DT);
+                            if (addDate > date2 && Difference_In_hours > 12) {
+                                this.navigateToNewCasDefaults(true);
+                            } else {
+                                let val = this.template.querySelector(".docketno");
+                                val.setCustomValidity("Either ADD is crossed or Cooling times is less than 12 hours.");
+                                val.reportValidity();
+                            }
+                        }
+                    } else {
+                        let val = this.template.querySelector(".docketno");
+                        val.setCustomValidity("");
+                        val.readonly = true;
+                        this.docketValid = true;
+                        this.navigateToNewCasDefaults(true);
                     }
                 } else {
+
                     return;
                 }
             })
@@ -232,7 +225,7 @@ export default class CaseComponent extends NavigationMixin(LightningElement) {
                 console.log(err);
                 const event = new ShowToastEvent({
                     title: "Failed",
-                    message: err?.body?.message,
+                    message: err.body.message,
                     variant: "error",
                     mode: "sticky"
                 });
@@ -244,7 +237,7 @@ export default class CaseComponent extends NavigationMixin(LightningElement) {
 
     }
     get DocketValidate() {
-        if (this.recordTypeId.name != "Email_Case" && this.recordTypeId.name != "Pick Up" && this.type != "ADD Extension" && this.type != "Bill back of Expenses" && this.type != "Appointment Delivery" && this.type != "Exception" && this.type != "UCG Confirmation" && this.type != "Pending Pickup" && this.type != "Prospect Pickup" && this.type != "Call Disposition") { 
+        if (this.recordTypeId?.name != "Email_Case" && this.recordTypeId?.name != "Pick Up" && this.type != "ADD Extension" && this.type != "Bill back of Expenses" && this.type != "Appointment Delivery" && this.type != "Exception" && this.type != "UCG Confirmation" && this.type != "Pending Pickup" && this.type != "Prospect Pickup" && this.type != "Call Disposition") { 
             return true;
         }
         return false;
@@ -253,8 +246,6 @@ export default class CaseComponent extends NavigationMixin(LightningElement) {
         let recid = event.target.value;
         console.log(recid);
         this.recordTypeId = recid;
-
-        // this.template.querySelector('lightning-record-edit-form').re
     }
     navigateToNewCaseProspectpick() {
         this[NavigationMixin.Navigate]({
@@ -299,7 +290,7 @@ export default class CaseComponent extends NavigationMixin(LightningElement) {
                     Assured_Delivery_Date__c: respo.ASSURED_DLY_DT,
                     Consignor_Mobile_No__c: respo.CONSIGNOR_MOBILE_NO,
                     Actual_Weight_Booked__c: respo.ACTUAL_WT,
-                    Booking_Date__c: respo?.BKG_DT,
+                    Booking_Date__c: respo.BKG_DT,
                     POD_Type__c: respo.COD_TYPE,
                     COD_Type__c: respo.POD_TYPE,
                     //Customer_Code__c: respo.CUSTOMER_CODE,

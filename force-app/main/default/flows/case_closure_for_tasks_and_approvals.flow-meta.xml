@@ -5,7 +5,7 @@
         <name>bill_back_app</name>
         <label>bill back app</label>
         <locationX>665</locationX>
-        <locationY>277</locationY>
+        <locationY>278</locationY>
         <assignmentItems>
             <assignToReference>$Record.Status</assignToReference>
             <operator>Assign</operator>
@@ -17,7 +17,7 @@
             <assignToReference>$Record.Approved_by__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>$Record.LastModifiedBy.Staff_Code__c</elementReference>
+                <elementReference>$Record.Owner:User.Staff_Code__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -51,7 +51,7 @@
             <assignToReference>$Record.Approved_by__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>$Record.LastModifiedBy.Staff_Code__c</elementReference>
+                <elementReference>$Record.Owner:User.Staff_Code__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -65,7 +65,7 @@
     <assignments>
         <name>status_assignment</name>
         <label>status assignment</label>
-        <locationX>667</locationX>
+        <locationX>668</locationX>
         <locationY>435</locationY>
         <assignmentItems>
             <assignToReference>$Record.Status</assignToReference>
@@ -85,7 +85,7 @@
             <assignToReference>$Record.Approved_by__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>$Record.LastModifiedBy.Staff_Code__c</elementReference>
+                <elementReference>$Record.Owner:User.Staff_Code__c</elementReference>
             </value>
         </assignmentItems>
     </assignments>
@@ -205,8 +205,8 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>51</locationX>
-        <locationY>51</locationY>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
         <connector>
             <targetReference>Case_closure</targetReference>
         </connector>

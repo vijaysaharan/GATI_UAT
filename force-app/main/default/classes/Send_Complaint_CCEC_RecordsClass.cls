@@ -1,11 +1,3 @@
-/*
-Author     : Sumit Gupta (sgupta3@kloudrac.com)
-Date       : Mar 04, 2022
-Desc       : 
-Test Class Name : Send_Complaint_CCEC_RecordsClassTest
-Updated Date : March 18, 2024
-*/
-
 public class Send_Complaint_CCEC_RecordsClass {
     public static void calloutMethod(List<String> caseid,String testCode){
         Set<Id> caseOwnerSet = New Set<Id>();
@@ -16,7 +8,7 @@ public class Send_Complaint_CCEC_RecordsClass {
         Map<String,Lookup_Master__mdt> lookUpMasterMap = New Map<String,Lookup_Master__mdt>();
         
         List<Lookup_Master__mdt> lookUpMasterList = [SELECT Id, CRM_Field_Value__c, External_Field_Value__c, MasterLabel
-                                                    FROM Lookup_Master__mdt 
+                                                     FROM Lookup_Master__mdt 
                                                     ];
         
         List<Case> caseList = [SELECT Sub_Type__c,docket_Number__c,CustCode__c,Pick_Up_Ref_ID__r.CaseNumber,
@@ -60,7 +52,7 @@ public class Send_Complaint_CCEC_RecordsClass {
                 userList.put(u.Id,u);
             }
         }
-
+        
         if(lookUpMasterList != null && lookUpMasterList.size()>0){
             for(Lookup_Master__mdt lm : lookUpMasterList){
                 lookUpMasterMap.put(lm.MasterLabel,lm);
@@ -169,7 +161,7 @@ public class Send_Complaint_CCEC_RecordsClass {
                 else{
                     obj.expectedCloseDt='';
                 }
-
+                
                 if(caseToCcecMap != null && caseToCcecMap.containsKey(c.Id) && caseToCcecMap.get(c.Id).size()>0){
                     CCEC__c cc = caseToCcecMap.get(c.Id)[0];
                     if(cc.CCEC_OU_Assignment_Logic__r.name!=null){
@@ -369,17 +361,18 @@ public class Send_Complaint_CCEC_RecordsClass {
                 if(Test.isRunningTest()){
                     result.setHeader('Content-Type', 'application/json');
                     result.setBody('{"requid":"SG31006","result":"successful", "sErrMsg":"","response":[{"complaintRefNo":"00439524","result":"Posted Successfully "}]}');
-                    System.debug('testCode'+testCode);
                     if(testCode == '200'){
-                     	result.setStatusCode(200);   
+                        result.setStatusCode(200);   
                     }
                     else if(testCode == '201'){
                         result.setStatusCode(201);
-                    }else if(testCode != '200' && testCode != '201'){
+                    }
+                    else if(testCode != '200' && testCode != '201'){
                         result.setStatusCode(null);
                     }
-                }else{
-                 	result= http.send(req);   
+                }
+                else{
+                    result= http.send(req);   
                 }
                 String errormsg1;
                 
@@ -398,8 +391,7 @@ public class Send_Complaint_CCEC_RecordsClass {
                         ic.Inbound_JSON__c=result.getBody();
                         ic.Outbound_JSON__c=JSON.serialize(obj);
                         ic1.add(ic);
-                    }
-                    catch(Exception e){}   
+                    }catch(Exception e){}   
                 }
                 else{
                     ResponseWrapper responseObj = (ResponseWrapper)JSON.deserialize(result.getBody(), ResponseWrapper.class);
@@ -429,12 +421,10 @@ public class Send_Complaint_CCEC_RecordsClass {
                 ic.eObject__c = 'Case';
                 ic1.add(ic);
             }
-        }
-        
+        }        
         try{
             List<Database.SaveResult> res = Database.insert(ic1,false);
-        }
-        catch(Exception e){}
+        }catch(Exception e){}
     }
     
     public class Complaint_CCECRecords{
@@ -468,9 +458,7 @@ public class Send_Complaint_CCEC_RecordsClass {
         public string escalationLevel{get;set;} 
         public string escalationDescription{get;set;} 
         public string expEscDtTime{get;set;}
-        public string companyOf{get;set;} 
-        
-        
+        public string companyOf{get;set;}
         //CCEC FIELDS
         public string ccecRefNo{get;set;} 
         public string ccecRaisedOU{get;set;} 
@@ -485,12 +473,10 @@ public class Send_Complaint_CCEC_RecordsClass {
         public string ccecStatus{get;set;} 
         public string ccecClosureDate{get;set;} 
         public string CustCode{get;set;}
-        
     }
     public class ResponseWrapper{
         public String requid;    
         public String result;   
-        public String sErrMsg; 
-        
+        public String sErrMsg;        
     }
 }

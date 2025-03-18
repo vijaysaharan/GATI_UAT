@@ -29,10 +29,6 @@ export default class CSVUpload extends NavigationMixin(LightningElement) {
 
     columnsForResult = [
         {
-            label :'Message',
-            fieldName : 'Message'       
-        },
-        {
             label :'Type',
             fieldName : 'Type'
         },
@@ -51,6 +47,10 @@ export default class CSVUpload extends NavigationMixin(LightningElement) {
         {
             label :'Status',
             fieldName : 'Status'
+        },
+        {
+            label :'Message',
+            fieldName : 'Message'       
         }
     ];
 
@@ -127,7 +127,7 @@ export default class CSVUpload extends NavigationMixin(LightningElement) {
                 if(listOfDataError){
                     delete listOfDataError[listOfDataError?.length-1];
                 }
-                let data = ['Message','Type','SubType','DocketNumber','PickupRefNumber','Status'];
+                let data = ['Type','SubType','DocketNumber','PickupRefNumber','Status','Message'];
                 listOfDataSuccess?.forEach(ele => {
                     let listOfEveryRow = ele?.split(',');
                     let tempObj = {};

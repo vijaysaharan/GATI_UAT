@@ -193,12 +193,6 @@ export default class LeadBulkUploadLWC extends NavigationMixin(LightningElement)
         doc += '<th>' + 'State' + '</th>';
         doc += '<th>' + 'PostalCode' + '</th>';
         doc += '<th>' + 'Country' + '</th>';
-        doc += '<th>' + 'Cross Sell CFS Locations' + '</th>';
-        doc += '<th>' + 'Description' + '</th>';
-        doc += '<th>' + 'Cross Sell Lead Status' + '</th>';
-        doc += '<th>' + 'Lost Reason' + '</th>';
-        doc += '<th>' + 'Cross Sell Description' + '</th>';
-        doc += '<th>' + 'Payment Mode' + '</th>';
         doc += '</tr>';
         // fill data in scv file
         this.dataresults.forEach(element => {
@@ -223,13 +217,7 @@ export default class LeadBulkUploadLWC extends NavigationMixin(LightningElement)
                 doc += '<td>' + element.obj.City + '</td>';
                 doc += '<td>' + element.obj.State + '</td>';
                 doc += '<td>' + element.obj.PostalCode + '</td>';
-                doc += '<td>' + element.obj.Cross_Sell_CFS_Locations__c + '</td>';
-                doc += '<td>' + element.obj.Description + '</td>';
-                doc += '<td>' + element.obj.Cross_Sell_Lead_Status__c + '</td>';
-                doc += '<td>' + element.obj.Lost_Reason__c + '</td>';
-                doc += '<td>' + element.obj.Description__c + '</td>';
-                doc += '<td>' + element.obj.Payment_mode__c + '</td>';
-                doc += '</tr>';
+                doc += '<td>' + element.obj.Country + '</td>';
             }
         });
 
@@ -274,12 +262,6 @@ export default class LeadBulkUploadLWC extends NavigationMixin(LightningElement)
         doc += '<th>' + 'State' + '</th>';
         doc += '<th>' + 'PostalCode' + '</th>';
         doc += '<th>' + 'Country' + '</th>';
-        doc += '<th>' + 'Cross Sell CFS Locations' + '</th>';
-        doc += '<th>' + 'Description' + '</th>';
-        doc += '<th>' + 'Cross Sell Lead Status' + '</th>';
-        doc += '<th>' + 'Lost Reason' + '</th>';
-        doc += '<th>' + 'Cross Sell Description' + '</th>';
-        doc += '<th>' + 'Payment Mode' + '</th>';
         doc += '<th>' + 'Error' + '</th>';
         doc += '</tr>';
         // fill data in scv file
@@ -306,12 +288,6 @@ export default class LeadBulkUploadLWC extends NavigationMixin(LightningElement)
                 doc += '<td>' + element.obj.State + '</td>';
                 doc += '<td>' + element.obj.PostalCode + '</td>';
                 doc += '<td>' + element.obj.Country + '</td>';
-                doc += '<td>' + element.obj.Cross_Sell_CFS_Locations__c + '</td>';
-                doc += '<td>' + element.obj.Description + '</td>';
-                doc += '<td>' + element.obj.Cross_Sell_Lead_Status__c + '</td>';
-                doc += '<td>' + element.obj.Lost_Reason__c + '</td>';
-                doc += '<td>' + element.obj.Description__c + '</td>';
-                doc += '<td>' + element.obj.Payment_mode__c + '</td>';
                 doc += '<td>' + element.title + '</td>';
                 doc += '</tr>';
             }

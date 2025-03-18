@@ -10,7 +10,7 @@
             <assignToReference>$Record.Approved_by__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>$Record.LastModifiedBy.Staff_Code__c</elementReference>
+                <elementReference>$Record.Owner:User.Staff_Code__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -29,7 +29,7 @@
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>if_SR_and_ADD</name>
-            <conditionLogic>(1 AND 2 AND 4 AND 5)  OR (1 AND 3 AND  4 AND 5) OR (1 AND 6 AND  4 AND 5)</conditionLogic>
+            <conditionLogic>(1 AND 2 AND 4 AND 5)  OR (1 AND 3 AND  4 AND 5)</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
@@ -65,20 +65,12 @@
                     <stringValue></stringValue>
                 </rightValue>
             </conditions>
-            <conditions>
-                <leftValueReference>$Record.Type</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Non Delivery Reasons</stringValue>
-                </rightValue>
-            </conditions>
             <connector>
                 <targetReference>mapping_staff_code</targetReference>
             </connector>
             <label>if SR and ADD</label>
         </rules>
     </decisions>
-    <environments>Default</environments>
     <formulas>
         <name>date</name>
         <dataType>Date</dataType>
@@ -131,13 +123,6 @@
             <operator>EqualTo</operator>
             <value>
                 <stringValue>Appointment Delivery</stringValue>
-            </value>
-        </filters>
-        <filters>
-            <field>Type</field>
-            <operator>EqualTo</operator>
-            <value>
-                <stringValue>Non Delivery Reasons</stringValue>
             </value>
         </filters>
         <object>Case</object>

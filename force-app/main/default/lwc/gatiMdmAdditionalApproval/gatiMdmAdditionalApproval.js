@@ -1,4 +1,4 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, track } from 'lwc';
 import LightningConfirm from 'lightning/confirm';
 import LightningAlert from 'lightning/alert';
 import { FlowNavigationNextEvent} from 'lightning/flowSupport';
@@ -28,7 +28,6 @@ export default class GatiMdmAdditionalApproval extends LightningElement {
     async handleShowAlert(){
         var dataTable = this.refs.table;
         var selectedRows = dataTable.getSelectedRows();
-
         if (selectedRows.length > 0) {
             var result = await LightningConfirm.open({
                 message: 'Are you sure to process with duplicate customer?',

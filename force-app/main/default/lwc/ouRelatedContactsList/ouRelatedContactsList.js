@@ -29,6 +29,10 @@ const columns = [
         fieldName: 'Email', 
         type: 'email' 
     },
+    { 
+        label: 'Staff Role', 
+        fieldName: 'Staff_Role__c'
+    },
 ];
 
 export default class OuRelatedContactsList extends LightningElement {
@@ -49,12 +53,10 @@ export default class OuRelatedContactsList extends LightningElement {
 
     connectedCallback(){
         getRelatedContacts({recordId : this.recordId}).then(res => {
-            console.log('Data=>',JSON.stringify(res,null,2));
             this.data = JSON.parse(JSON.stringify(res)).map(ele =>{
                 ele['nameUrl']= '/'+ele.Id;
                 return ele;
             });
-            console.log('Data After URL=>',JSON.stringify(res,null,2));
         }).catch(err =>{
             console.log('Error=>',JSON.stringify(err,null,2));
         });

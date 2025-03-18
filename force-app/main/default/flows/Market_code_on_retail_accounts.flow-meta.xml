@@ -44,10 +44,10 @@
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>Record_Type__c</field>
+            <field>RecordTypeId</field>
             <operator>EqualTo</operator>
             <value>
-                <stringValue>Retail</stringValue>
+                <stringValue>0125g000000EkgSAAS</stringValue>
             </value>
         </filters>
         <filters>

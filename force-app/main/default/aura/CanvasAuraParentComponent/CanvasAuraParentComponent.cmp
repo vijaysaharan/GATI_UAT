@@ -18,15 +18,12 @@
 	<aura:attribute name="p6" type="string"/>
 	<aura:attribute name="serverCallSuccess" type="Boolean" default="false"/>    
      <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
-    
     <!--<lightning:buttonIcon iconName="utility:refresh" 
                           variant="brand" alternativeText="Refresh" title="Refresh" 
                           onclick="{! c.refresh}"/>  -->
     <aura:if  isTrue="{!v.serverCallSuccess}" >
-        
         <div id="CanvasFrame">
 		<c:CanvasAuraComponent canvasParameters="{!v.canvasParameters}"/>
-            {!v.canvasParameters}
          </div>
     </aura:if>
 </aura:component>

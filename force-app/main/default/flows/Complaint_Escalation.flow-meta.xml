@@ -3,8 +3,8 @@
     <actionCalls>
         <name>Email_to_CSCO</name>
         <label>Email to CSCO</label>
-        <locationX>3218</locationX>
-        <locationY>816</locationY>
+        <locationX>4802</locationX>
+        <locationY>924</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -29,7 +29,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>test1@gatikwe.com</stringValue>
+                <stringValue>gsalesforce@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -45,13 +45,12 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Email_to_EDC</name>
         <label>Email to EDC</label>
-        <locationX>1106</locationX>
-        <locationY>816</locationY>
+        <locationX>1634</locationX>
+        <locationY>924</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -76,7 +75,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>test1@gatikwe.com</stringValue>
+                <stringValue>gsalesforce@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -92,13 +91,12 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Email_to_GDW</name>
         <label>Email to GDW</label>
         <locationX>50</locationX>
-        <locationY>816</locationY>
+        <locationY>924</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -123,7 +121,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>test1@gatikwe.com</stringValue>
+                <stringValue>gsalesforce@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -139,13 +137,12 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Email_to_HSCO</name>
         <label>Email to HSCO</label>
-        <locationX>2162</locationX>
-        <locationY>816</locationY>
+        <locationX>3218</locationX>
+        <locationY>924</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -170,7 +167,7 @@
         <inputParameters>
             <name>senderAddress</name>
             <value>
-                <stringValue>test1@gatikwe.com</stringValue>
+                <stringValue>gsalesforce@allcargologistics.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -186,13 +183,12 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <assignments>
         <name>Update_Level_1_Records</name>
         <label>Update Level 1 Records</label>
-        <locationX>50</locationX>
+        <locationX>182</locationX>
         <locationY>600</locationY>
         <assignmentItems>
             <assignToReference>$Record.Escalated_Level__c</assignToReference>
@@ -222,7 +218,7 @@
     <assignments>
         <name>Update_Level_2_Records</name>
         <label>Update Level 2 Records</label>
-        <locationX>1106</locationX>
+        <locationX>1766</locationX>
         <locationY>600</locationY>
         <assignmentItems>
             <assignToReference>$Record.Escalated_Level__c</assignToReference>
@@ -252,7 +248,7 @@
     <assignments>
         <name>Update_Level_3_Records</name>
         <label>Update Level 3 Records</label>
-        <locationX>2162</locationX>
+        <locationX>3350</locationX>
         <locationY>600</locationY>
         <assignmentItems>
             <assignToReference>$Record.Escalated_Level__c</assignToReference>
@@ -282,7 +278,7 @@
     <assignments>
         <name>Update_Level_4_Records</name>
         <label>Update Level 4 Records</label>
-        <locationX>3218</locationX>
+        <locationX>4934</locationX>
         <locationY>600</locationY>
         <assignmentItems>
             <assignToReference>$Record.Escalated_Level__c</assignToReference>
@@ -310,9 +306,125 @@
         </connector>
     </assignments>
     <decisions>
+        <name>Check_for_Recipent</name>
+        <label>Check for Recipent</label>
+        <locationX>182</locationX>
+        <locationY>816</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contacts_1.Email</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Contacts_1.IsEmailBounced</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_to_GDW</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_For_Recipent_For_Email_To_EDC</name>
+        <label>Check For Recipent For Email To EDC</label>
+        <locationX>1766</locationX>
+        <locationY>816</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>YesEDC</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contacts_2.Email</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Contacts_2.IsEmailBounced</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_to_EDC</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_For_Recipent_Of_CSCO</name>
+        <label>Check For Recipent Of CSCO</label>
+        <locationX>4934</locationX>
+        <locationY>816</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>YesCSCO</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contacts_4.IsEmailBounced</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Contacts_4.Email</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_to_CSCO</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_For_Recipent_Of_HSCO</name>
+        <label>Check For Recipent Of HSCO</label>
+        <locationX>3350</locationX>
+        <locationY>816</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>YesHSCO</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Contacts_3.IsEmailBounced</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Contacts_3.Email</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_to_HSCO</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>Complaint_Record_Type_1</name>
         <label>Complaint Record Type 1</label>
-        <locationX>578</locationX>
+        <locationX>941</locationX>
         <locationY>276</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -334,7 +446,7 @@
     <decisions>
         <name>Complaint_Record_Type_2</name>
         <label>Complaint Record Type 2</label>
-        <locationX>1634</locationX>
+        <locationX>2525</locationX>
         <locationY>276</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -356,7 +468,7 @@
     <decisions>
         <name>Complaint_Record_Type_3</name>
         <label>Complaint Record Type 3</label>
-        <locationX>2690</locationX>
+        <locationX>4109</locationX>
         <locationY>276</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -378,7 +490,7 @@
     <decisions>
         <name>Complaint_Record_Type_4</name>
         <label>Complaint Record Type 4</label>
-        <locationX>3746</locationX>
+        <locationX>5693</locationX>
         <locationY>276</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -400,7 +512,7 @@
     <decisions>
         <name>Escalation_Level1</name>
         <label>Escalation Level1</label>
-        <locationX>314</locationX>
+        <locationX>512</locationX>
         <locationY>492</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -422,7 +534,7 @@
     <decisions>
         <name>Escalation_Level2</name>
         <label>Escalation Level2</label>
-        <locationX>1370</locationX>
+        <locationX>2096</locationX>
         <locationY>492</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -444,7 +556,7 @@
     <decisions>
         <name>Escalation_Level3</name>
         <label>Escalation Level3</label>
-        <locationX>2426</locationX>
+        <locationX>3680</locationX>
         <locationY>492</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -466,7 +578,7 @@
     <decisions>
         <name>Escalation_Level4</name>
         <label>Escalation Level4</label>
-        <locationX>3482</locationX>
+        <locationX>5264</locationX>
         <locationY>492</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -522,15 +634,51 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Publish_Platform_Event</name>
+        <label>Publish Platform Event</label>
+        <locationX>3746</locationX>
+        <locationY>816</locationY>
+        <inputAssignments>
+            <field>Exception_Details__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Object__c</field>
+            <value>
+                <stringValue>Case</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Operation__c</field>
+            <value>
+                <stringValue>Get Contact or Update Record</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Record_Name__c</field>
+            <value>
+                <elementReference>$Record.CaseNumber</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Exception_Log__e</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
     <recordLookups>
         <name>Get_Contacts_1</name>
         <label>Get Contacts 1</label>
-        <locationX>314</locationX>
+        <locationX>512</locationX>
         <locationY>384</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Escalation_Level1</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Publish_Platform_Event</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>abc__c</field>
@@ -560,12 +708,16 @@
     <recordLookups>
         <name>Get_Contacts_2</name>
         <label>Get Contacts 2</label>
-        <locationX>1370</locationX>
+        <locationX>2096</locationX>
         <locationY>384</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Escalation_Level2</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Publish_Platform_Event</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>abc__c</field>
@@ -595,12 +747,16 @@
     <recordLookups>
         <name>Get_Contacts_3</name>
         <label>Get Contacts 3</label>
-        <locationX>2426</locationX>
+        <locationX>3680</locationX>
         <locationY>384</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Escalation_Level3</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Publish_Platform_Event</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>abc__c</field>
@@ -630,12 +786,16 @@
     <recordLookups>
         <name>Get_Contacts_4</name>
         <label>Get Contacts 4</label>
-        <locationX>3482</locationX>
+        <locationX>5264</locationX>
         <locationY>384</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Escalation_Level4</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Publish_Platform_Event</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>abc__c</field>
@@ -665,45 +825,60 @@
     <recordUpdates>
         <name>Update_Records_Level_1</name>
         <label>Update Records Level 1</label>
-        <locationX>50</locationX>
+        <locationX>182</locationX>
         <locationY>708</locationY>
         <connector>
-            <targetReference>Email_to_GDW</targetReference>
+            <targetReference>Check_for_Recipent</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Publish_Platform_Event</targetReference>
+        </faultConnector>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
         <name>Update_Records_Level_2</name>
         <label>Update Records Level 2</label>
-        <locationX>1106</locationX>
+        <locationX>1766</locationX>
         <locationY>708</locationY>
         <connector>
-            <targetReference>Email_to_EDC</targetReference>
+            <targetReference>Check_For_Recipent_For_Email_To_EDC</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Publish_Platform_Event</targetReference>
+        </faultConnector>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
         <name>Update_Records_Level_3</name>
         <label>Update Records Level 3</label>
-        <locationX>2162</locationX>
+        <locationX>3350</locationX>
         <locationY>708</locationY>
         <connector>
-            <targetReference>Email_to_HSCO</targetReference>
+            <targetReference>Check_For_Recipent_Of_HSCO</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Publish_Platform_Event</targetReference>
+        </faultConnector>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <recordUpdates>
         <name>Update_Records_Level_4</name>
         <label>Update Records Level 4</label>
-        <locationX>3218</locationX>
+        <locationX>4934</locationX>
         <locationY>708</locationY>
         <connector>
-            <targetReference>Email_to_CSCO</targetReference>
+            <targetReference>Check_For_Recipent_Of_CSCO</targetReference>
         </connector>
+        <faultConnector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Publish_Platform_Event</targetReference>
+        </faultConnector>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>1640</locationX>
+        <locationX>2613</locationX>
         <locationY>0</locationY>
         <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>

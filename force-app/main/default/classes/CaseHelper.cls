@@ -164,17 +164,14 @@ public without sharing class CaseHelper{
             if(c.Pick_Up_Ref_No__c != Null){
                 pickupref.add(c.Pick_Up_Ref_No__c);
             }
-            if(c.Pick_Up_Ref_No__c != Null && c.Type =='Pick Up'){
-                casenolist.add(c.Pick_Up_Ref_No__c);
-            }
         }
-        /*
+        
         List<Case> allCase = [SELECT Id, CaseNumber FROM Case WHERE CaseNumber IN: pickupref AND Type='Pick Up'];
         
         for(Case c : allCase){
             casenolist.add(c.CaseNumber);
         }
-        */
+        
         for(Case ca : CaseList){
             if(ca.type == 'Pending Pickup' && ca.Pick_Up_Ref_No__c != null && !casenolist.contains(ca.Pick_Up_Ref_No__c)){
                 ca.Pick_Up_Ref_No__c.addError('Kindly,enter valid pickup reference number');

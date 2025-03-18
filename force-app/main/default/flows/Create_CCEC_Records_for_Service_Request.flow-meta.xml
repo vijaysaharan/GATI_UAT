@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>52.0</apiVersion>
+    <decisions>
+        <name>Is_Type_NDR</name>
+        <label>Is Type NDR?</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>Create_CCEC_for_Service_Request</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Else</defaultConnectorLabel>
+        <rules>
+            <name>NDR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Type</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Non Delivery Reasons</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_CCEC_for_Service_Request_Type_NDR</targetReference>
+            </connector>
+            <label>NDR</label>
+        </rules>
+    </decisions>
     <environments>Default</environments>
     <interviewLabel>Create CCEC for Service Request {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Create CCEC Records for Service Request</label>
@@ -13,7 +38,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -26,8 +51,8 @@
     <recordCreates>
         <name>Create_CCEC_for_Service_Request</name>
         <label>Create CCEC for Service Request</label>
-        <locationX>685</locationX>
-        <locationY>172</locationY>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
         <inputAssignments>
             <field>CCEC_Instructions__c</field>
             <value>
@@ -49,13 +74,51 @@
         <object>CCEC__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
+    <recordCreates>
+        <name>Create_CCEC_for_Service_Request_Type_NDR</name>
+        <label>Create CCEC for Service Request Type NDR</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <inputAssignments>
+            <field>CCEC_Instructions__c</field>
+            <value>
+                <stringValue>Arrange delivery and Share GA details</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCEC_OU_Assignment_Logic__c</field>
+            <value>
+                <elementReference>$Record.Delivery_OU__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Case__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Proactive_CCEC_Flag__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status__c</field>
+            <value>
+                <stringValue>OP</stringValue>
+            </value>
+        </inputAssignments>
+        <object>CCEC__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
     <start>
-        <locationX>69</locationX>
-        <locationY>50</locationY>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
         <connector>
-            <targetReference>Create_CCEC_for_Service_Request</targetReference>
+            <targetReference>Is_Type_NDR</targetReference>
         </connector>
-        <filterLogic>((1 AND 2 AND 3 AND 7 AND 9) OR (3 AND 4 AND 5 AND 6 AND 8 AND 9) OR (10 AND 11)) AND 12</filterLogic>
+        <filterLogic>((1 AND 2 AND 3 AND 7 AND 9) OR (3 AND 4 AND 5 AND 6 AND 8 AND 9) OR (10 AND 11)) AND 12 AND 13</filterLogic>
         <filters>
             <field>Approval_Status__c</field>
             <operator>EqualTo</operator>
@@ -138,6 +201,13 @@
             <operator>NotEqualTo</operator>
             <value>
                 <stringValue>Closed</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Open_CCEC_Count__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <numberValue>0.0</numberValue>
             </value>
         </filters>
         <object>Case</object>

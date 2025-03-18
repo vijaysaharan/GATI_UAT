@@ -3,8 +3,8 @@
     <actionCalls>
         <name>Customer_Feedback</name>
         <label>Customer Feedback</label>
-        <locationX>484</locationX>
-        <locationY>433</locationY>
+        <locationX>50</locationX>
+        <locationY>674</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <connector>
@@ -42,14 +42,13 @@
             </value>
         </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <decisions>
         <name>check_if_primary</name>
         <label>check if primary</label>
-        <locationX>509</locationX>
-        <locationY>234</locationY>
+        <locationX>314</locationX>
+        <locationY>242</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>check_if_primary_exist</name>
@@ -112,7 +111,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -125,8 +124,8 @@
     <recordLookups>
         <name>get_account_email</name>
         <label>get account email</label>
-        <locationX>309</locationX>
-        <locationY>376</locationY>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Contact</targetReference>
@@ -146,8 +145,8 @@
     <recordLookups>
         <name>Get_Contact_Email</name>
         <label>Get Contact Email</label>
-        <locationX>347</locationX>
-        <locationY>496</locationY>
+        <locationX>50</locationX>
+        <locationY>566</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Customer_Feedback</targetReference>
@@ -167,8 +166,8 @@
     <recordLookups>
         <name>Get_Contacts</name>
         <label>Get Contacts</label>
-        <locationX>341</locationX>
-        <locationY>132</locationY>
+        <locationX>314</locationX>
+        <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>check_if_primary</targetReference>
@@ -188,8 +187,8 @@
     <screens>
         <name>Contact</name>
         <label>Contact</label>
-        <locationX>162</locationX>
-        <locationY>446</locationY>
+        <locationX>50</locationX>
+        <locationY>458</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
@@ -202,7 +201,6 @@
             <dataType>String</dataType>
             <fieldText>Select Contact</fieldText>
             <fieldType>DropdownBox</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
         </fields>
         <showFooter>true</showFooter>
@@ -211,8 +209,8 @@
     <screens>
         <name>false_condition</name>
         <label>false condition</label>
-        <locationX>707</locationX>
-        <locationY>262</locationY>
+        <locationX>314</locationX>
+        <locationY>350</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -227,8 +225,8 @@
     <screens>
         <name>Finish_Screen</name>
         <label>Finish Screen</label>
-        <locationX>696</locationX>
-        <locationY>421</locationY>
+        <locationX>50</locationX>
+        <locationY>782</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
@@ -241,8 +239,8 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>47</locationX>
-        <locationY>10</locationY>
+        <locationX>188</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>Get_Contacts</targetReference>
         </connector>
@@ -251,7 +249,7 @@
     <textTemplates>
         <name>CustomerFeedbackEmail</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Dear {!CustomerName}&lt;/p&gt;&lt;p&gt;As one of our preferred customers, your feedback is very important to us.&lt;/p&gt;&lt;p&gt;We are constantly striving to provide a flawless experience for our customers, and your input helps us do so.&amp;nbsp;&lt;/p&gt;&lt;p&gt;That being said, if you could take a minute to share your feedback, we would really appreciate it.&lt;/p&gt;&lt;p&gt;Feedback Link: &lt;a href=&quot;https://gati--uat.sandbox.my.salesforce-sites.com/CustomerFeedback&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Click here&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Best regards,&lt;/p&gt;&lt;p&gt;Team- GATI&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://gatikwepvtltd--uat--c.documentforce.com/servlet/servlet.ImageServer?id=015p0000000fBaW&amp;amp;oid=00Dp0000000Dvv2&amp;amp;lastMod=1632729375000&quot; title=&quot;Click here&quot;&gt;&lt;/p&gt;</text>
+        <text>&lt;p&gt;Dear {!CustomerName}&lt;/p&gt;&lt;p&gt;As one of our preferred customers, your feedback is very important to us.&lt;/p&gt;&lt;p&gt;We are constantly striving to provide a flawless experience for our customers, and your input helps us do so.&amp;nbsp;&lt;/p&gt;&lt;p&gt;That being said, if you could take a minute to share your feedback, we would really appreciate it.&lt;/p&gt;&lt;p&gt;Feedback Link: &lt;a href=&quot;https://allcargogati.my.salesforce-sites.com/CustomerFeedback&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot;&gt;Click here&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Hope you keep using GATI services in future.&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;Best regards,&lt;/p&gt;&lt;p&gt;Team- Allcargogati&lt;/p&gt;</text>
     </textTemplates>
     <variables>
         <name>recordId</name>

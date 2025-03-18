@@ -4,8 +4,8 @@
     <assignments>
         <name>change_status</name>
         <label>change status</label>
-        <locationX>501</locationX>
-        <locationY>347</locationY>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
         <assignmentItems>
             <assignToReference>$Record.Status</assignToReference>
             <operator>Assign</operator>
@@ -19,13 +19,13 @@
     </assignments>
     <decisions>
         <name>record_type</name>
-        <label>record type</label>
-        <locationX>321</locationX>
-        <locationY>387</locationY>
+        <label>Record Type</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>claim</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>1 AND (2 OR 3 OR 4 OR 5 OR 6)</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
@@ -33,12 +33,53 @@
                     <stringValue>Claim</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>isNew</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Risk_Coverage_Prospect__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.OBN_No__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Type</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.CMS_No__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>change_status</targetReference>
             </connector>
-            <label>claim</label>
+            <label>Claim</label>
         </rules>
     </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>isNew</name>
+        <dataType>Boolean</dataType>
+        <expression>IsNew()</expression>
+    </formulas>
     <interviewLabel>claim status close {!$Flow.CurrentDateTime}</interviewLabel>
     <label>claim status close</label>
     <processMetadataValues>
@@ -50,7 +91,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -63,13 +104,13 @@
     <recordUpdates>
         <name>update_status</name>
         <label>update status</label>
-        <locationX>758</locationX>
-        <locationY>365</locationY>
+        <locationX>50</locationX>
+        <locationY>539</locationY>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>50</locationX>
-        <locationY>50</locationY>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>record_type</targetReference>
         </connector>

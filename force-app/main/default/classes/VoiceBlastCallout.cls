@@ -30,7 +30,7 @@ public class VoiceBlastCallout implements Queueable, Database.AllowsCallouts {
                             'sf_id' => caseRecord.Id,
                             'phone1' => caseRecord.ContactPhone,
                             'vb_id' => caseRecord.Id,
-                            'dly_attempted_date' => null,
+                            'dly_attempted_date' => caseRecord.PDC_DATE__c,
                             'Pickup_Date__c' => caseRecord.Pickup_Date__c,
                             'pickup_attempted_date' => null,
                             'mobileno' => caseRecord.ContactMobile,

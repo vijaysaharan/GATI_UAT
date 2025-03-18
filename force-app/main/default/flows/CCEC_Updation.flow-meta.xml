@@ -3,8 +3,8 @@
     <actionCalls>
         <name>Call_Manual_CCEC_Class_for_Updation</name>
         <label>Call Manual CCEC Class for Updation</label>
-        <locationX>281</locationX>
-        <locationY>529</locationY>
+        <locationX>308</locationX>
+        <locationY>288</locationY>
         <actionName>ManualCCECOutboundAPI</actionName>
         <actionType>apex</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -15,60 +15,9 @@
             </value>
         </inputParameters>
         <nameSegment>ManualCCECOutboundAPI</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
-    <decisions>
-        <name>check</name>
-        <label>check</label>
-        <locationX>437</locationX>
-        <locationY>434</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>if_new_remark</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record__Prior.Total_CCEC_Remarks__c</leftValueReference>
-                <operator>GreaterThanOrEqualTo</operator>
-                <rightValue>
-                    <elementReference>$Record.Total_CCEC_Remarks__c</elementReference>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Call_Manual_CCEC_Class_for_Updation</targetReference>
-            </connector>
-            <label>if not new ccec remark</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>check_if_Integration_user</name>
-        <label>check if Integration user</label>
-        <locationX>659</locationX>
-        <locationY>313</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>if_not_Integration_user</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.LastModifiedBy.Profile.Name</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <elementReference>IntegrationProfile</elementReference>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.LastModifiedBy.Profile.Name</leftValueReference>
-                <operator>NotEqualTo</operator>
-                <rightValue>
-                    <elementReference>IntegrationProfile1</elementReference>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>check</targetReference>
-            </connector>
-            <label>if not Integration user</label>
-        </rules>
-    </decisions>
+    <environments>Default</environments>
     <interviewLabel>Manual CCEC Updation {!$Flow.CurrentDateTime}</interviewLabel>
     <label>CCEC Updation</label>
     <processMetadataValues>
@@ -80,7 +29,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -91,13 +40,25 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>543</locationX>
-        <locationY>48</locationY>
-        <connector>
-            <targetReference>check_if_Integration_user</targetReference>
-        </connector>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Call_Manual_CCEC__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>CCEC__c</object>
         <recordTriggerType>Update</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>Call_Manual_CCEC_Class_for_Updation</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>

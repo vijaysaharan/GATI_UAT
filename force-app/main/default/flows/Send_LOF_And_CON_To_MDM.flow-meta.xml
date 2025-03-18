@@ -19,7 +19,6 @@
         </inputParameters>
         <nameSegment>GATIMDMAdditionalApprovalAuth.GatiMDMAdditionalApprovalAuth</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Send_CON</name>
@@ -58,7 +57,6 @@
         </inputParameters>
         <nameSegment>GatiMDMInvocable</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <actionCalls>
         <name>Send_LOF</name>
@@ -97,7 +95,6 @@
         </inputParameters>
         <nameSegment>GatiMDMInvocable</nameSegment>
         <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>61.0</apiVersion>
     <assignments>

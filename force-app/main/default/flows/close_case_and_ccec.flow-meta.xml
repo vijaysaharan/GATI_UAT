@@ -148,7 +148,7 @@
             <connector>
                 <targetReference>myRule_1_A1</targetReference>
             </connector>
-            <label>close case</label>
+            <label>Complaint Status Changed to Close</label>
         </rules>
     </decisions>
     <decisions>
@@ -231,10 +231,10 @@
             <connector>
                 <targetReference>myRule_4_A1</targetReference>
             </connector>
-            <label>Change Status for Manual Cases</label>
+            <label>Case Status Changed to Close</label>
         </rules>
     </decisions>
-    <interviewLabel>close_case_and_ccec-17_InterviewLabel</interviewLabel>
+    <interviewLabel>close_case_and_ccec-16_InterviewLabel</interviewLabel>
     <label>close case and ccec</label>
     <processMetadataValues>
         <name>ObjectType</name>
@@ -420,7 +420,7 @@
             <name>referenceTargetField</name>
         </processMetadataValues>
         <name>myRule_1_A2</name>
-        <label>Update Case Status</label>
+        <label>Update Status to Close</label>
         <locationX>100</locationX>
         <locationY>300</locationY>
         <filterLogic>and</filterLogic>

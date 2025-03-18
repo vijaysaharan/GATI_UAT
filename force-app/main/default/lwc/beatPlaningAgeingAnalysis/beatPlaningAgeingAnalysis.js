@@ -46,7 +46,7 @@ export default class BeatPlaningAgeingAnalysis extends LightningElement {
     getShipmentType({ data, error }) {
         if (data) {
             this.accountType = data.values;
-            this.accountType = this.accountType.filter( pickListValue => pickListValue.value != 'Partner' );
+            this.accountType = this.accountType.filter( pickListValue => (pickListValue.value != 'Partner' && pickListValue.value != 'Retail') );
             this.accountType = [({label : 'ALL', value : 'ALL'}), ...this.accountType ];
         }
     }

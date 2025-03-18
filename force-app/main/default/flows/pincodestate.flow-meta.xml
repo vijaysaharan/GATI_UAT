@@ -2,20 +2,17 @@
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>52.0</apiVersion>
     <assignments>
-        <name>assign</name>
-        <label>assign</label>
-        <locationX>450</locationX>
-        <locationY>363</locationY>
+        <name>Set_State</name>
+        <label>Set State</label>
+        <locationX>176</locationX>
+        <locationY>431</locationY>
         <assignmentItems>
             <assignToReference>$Record.State</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>ou.State_at_Pincode__c</elementReference>
+                <elementReference>Get_Organization_Master.State_at_Pincode__c</elementReference>
             </value>
         </assignmentItems>
-        <connector>
-            <targetReference>state_update</targetReference>
-        </connector>
     </assignments>
     <environments>Default</environments>
     <interviewLabel>pincodestate {!$Flow.CurrentDateTime}</interviewLabel>
@@ -29,7 +26,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -40,13 +37,13 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <name>ou</name>
-        <label>ou</label>
-        <locationX>193</locationX>
-        <locationY>358</locationY>
+        <name>Get_Organization_Master</name>
+        <label>Get Organization Master</label>
+        <locationX>176</locationX>
+        <locationY>311</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>assign</targetReference>
+            <targetReference>Set_State</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -60,18 +57,11 @@
         <object>Organization_Master__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
-    <recordUpdates>
-        <name>state_update</name>
-        <label>state update</label>
-        <locationX>727</locationX>
-        <locationY>372</locationY>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
     <start>
         <locationX>50</locationX>
-        <locationY>50</locationY>
+        <locationY>0</locationY>
         <connector>
-            <targetReference>ou</targetReference>
+            <targetReference>Get_Organization_Master</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -82,8 +72,8 @@
             </value>
         </filters>
         <object>Lead</object>
-        <recordTriggerType>Create</recordTriggerType>
-        <triggerType>RecordAfterSave</triggerType>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
     </start>
     <status>Active</status>
 </Flow>

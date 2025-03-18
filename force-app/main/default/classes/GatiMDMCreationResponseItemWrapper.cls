@@ -8,4 +8,5 @@ public class GatiMDMCreationResponseItemWrapper {
     @AuraEnabled public String Customer_Name {get; set;}
     @AuraEnabled public String Customer_Category {get; set;}
     @AuraEnabled public String Customer_OU_Code {get; set;}
+    @AuraEnabled public String Message {get; set;}
 }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <assignments>
+        <name>Block_Account</name>
+        <label>Block Account</label>
+        <locationX>682</locationX>
+        <locationY>174</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Blocked__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <name>check_DOA</name>
+        <label>check DOA</label>
+        <locationX>281</locationX>
+        <locationY>314</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>DOA_DPA</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Date_of_Approval__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Blocking_Date</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Block_Account</targetReference>
+            </connector>
+            <label>DOA+DPA</label>
+        </rules>
+    </decisions>
+    <formulas>
+        <description>Today - DPA - 3</description>
+        <name>Blocking_Date</name>
+        <dataType>Date</dataType>
+        <expression>{!$Flow.CurrentDate} - {!$Record.Credit_Days__c} - 3</expression>
+    </formulas>
+    <interviewLabel>Blocking of Account {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Blocking of Account</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>51</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>check_DOA</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Date_of_Approval__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Blocked__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Account</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

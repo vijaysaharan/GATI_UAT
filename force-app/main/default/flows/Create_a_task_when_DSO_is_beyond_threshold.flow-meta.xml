@@ -41,7 +41,7 @@
         <dataType>Boolean</dataType>
         <expression>({!myVariable_current.Monthly_DSO__c} &lt; {!$CustomMetadata.Threshold__mdt.Threshold_DSO.Threshold__c} )&amp;&amp; (NOT(ISBLANK({!myVariable_current.Zonal_Vertical_Head__r.Id})))</expression>
     </formulas>
-    <interviewLabel>Create_a_task_when_DSO_is_beyond_threshold-3_InterviewLabel</interviewLabel>
+    <interviewLabel>Create_a_task_when_DSO_is_beyond_threshold-2_InterviewLabel</interviewLabel>
     <label>Create a task when DSO is beyond threshold</label>
     <processMetadataValues>
         <name>ObjectType</name>
@@ -238,7 +238,7 @@
         <object>Task</object>
     </recordCreates>
     <startElementReference>myDecision</startElementReference>
-    <status>Active</status>
+    <status>Obsolete</status>
     <variables>
         <name>myVariable_current</name>
         <dataType>SObject</dataType>

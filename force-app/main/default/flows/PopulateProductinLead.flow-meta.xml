@@ -65,37 +65,7 @@
             </connector>
             <label>Ifproduct102exists</label>
         </rules>
-        <rules>
-            <name>Ifproduct105</name>
-            <conditionLogic>(1 OR 2) AND 3</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.Cross_Sell_101_Products__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.Cross_Sell_101_Products__c</leftValueReference>
-                <operator>IsChanged</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.GATI_Company_Code__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>105</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>update_UCL_Product</targetReference>
-            </connector>
-            <label>Ifproduct105</label>
-        </rules>
     </decisions>
-    <environments>Default</environments>
     <interviewLabel>PopulateProductinLead {!$Flow.CurrentDateTime}</interviewLabel>
     <label>PopulateProductinLead</label>
     <processMetadataValues>
@@ -117,19 +87,6 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
-    <recordUpdates>
-        <name>update_UCL_Product</name>
-        <label>update UCL Product</label>
-        <locationX>345</locationX>
-        <locationY>483</locationY>
-        <inputAssignments>
-            <field>Product__c</field>
-            <value>
-                <elementReference>$Record.Cross_Sell_101_Products__c</elementReference>
-            </value>
-        </inputAssignments>
-        <inputReference>$Record</inputReference>
-    </recordUpdates>
     <recordUpdates>
         <name>Updateproduct101</name>
         <label>Updateproduct101</label>

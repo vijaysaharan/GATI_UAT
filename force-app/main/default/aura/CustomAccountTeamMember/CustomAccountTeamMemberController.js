@@ -1,5 +1,21 @@
 ({  
     doInit : function (component, event, helper) {
+        var workspaceAPI = component.find("workspace");
+        workspaceAPI.getFocusedTabInfo().then(function(response) {
+            var focusedTabId = response.tabId;
+            workspaceAPI.setTabLabel({
+                tabId: focusedTabId,
+                label: "Add Service Resource"
+            });
+            workspaceAPI.setTabIcon({
+                tabId: focusedTabId, 
+                icon: "utility:account",
+                iconAlt: "New Account Team Member"
+            });
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
         // make Spinner attribute true for displaying loading spinner 
      // alert('test');
      component.set("v.showcard", false);

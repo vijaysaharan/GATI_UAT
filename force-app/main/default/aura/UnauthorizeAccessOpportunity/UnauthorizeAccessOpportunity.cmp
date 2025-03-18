@@ -1,4 +1,4 @@
-<aura:component implements="lightning:actionOverride,force:hasRecordId,force:lightningQuickAction,force:hasSObjectName" access="global" >
+<aura:component implements="lightning:actionOverride,force:lightningQuickAction,force:hasRecordId,force:hasSObjectName" access="global" >
 	   
         <div class="slds-text-align_center">
             <div class="demo-only" style="padding: 0.5rem; background: rgb(22, 50, 92);">

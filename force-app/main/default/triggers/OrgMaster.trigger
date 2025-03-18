@@ -18,9 +18,7 @@ trigger OrgMaster on User (after update,after insert)
     } */
     if(trigger.isafter && trigger.isupdate)
     {
-        OrgMasterUser.bypassOrgMasterTrigger = true;
-        OrgMasterUser.comparision(trigger.new, trigger.oldMap);
-        OrgMasterUser.bypassOrgMasterTrigger = false;
+    OrgMasterUser.comparision(trigger.new, trigger.oldMap);
     }
     map<id,string> us= new map<id,string> ();
 
@@ -33,9 +31,7 @@ trigger OrgMaster on User (after update,after insert)
                us.put(u.id,u.Organi__c); 
             }
         }
-        OrgMasterUser.bypassOrgMasterTrigger = true;
         OrgMasterUser.comparision(us);
-        OrgMasterUser.bypassOrgMasterTrigger = false;
         
     }
 }

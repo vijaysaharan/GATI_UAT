@@ -21,7 +21,6 @@
             </value>
         </inputParameters>
         <nameSegment>Send_Complaint_CCEC_Records</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <decisions>
@@ -148,7 +147,7 @@ IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Partial Delivery&apos;),ISPICKVAL( {!$
 IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Claims&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;CLAIM&apos; )) , &apos;Collect the hard copies and Send to Claim cell HO and share the FOC dkt no&apos;,
 IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Claims&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;DAMAGE&apos; )) , &apos;Please complete the OBN process and Issue OBN&apos;,
 IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Claims&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;LOST&apos; )) , &apos;Please complete the OBN process and Issue OBN&apos;, 
-IF(ISPICKVAL( {!$Record.Origin}, &apos;IVR&apos;) , &apos;IVR related complaints&apos;,&apos;&apos;) ))))))))))))))))))</expression>
+IF(ISPICKVAL( {!$Record.Origin}, &apos;IVR&apos;) , &apos;IVR related complaints&apos;,&apos;Pickup and Share GA details&apos;) ))))))))))))))))))</expression>
     </formulas>
     <formulas>
         <name>fillinstructions2</name>
@@ -162,7 +161,7 @@ IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL(
 IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;FREIGHT REFUND&apos; )) , &apos;Issue GATI miles Coupon&apos;,
 IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;NON RECIEPT OF COD AMOUNT&apos; )) ,&apos;Connect the COD and share connectivity details/ Remit COD amount to customer and share details&apos;,
 IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL( {!$Record.Sub_Type__c}, &apos;COD DD LOST&apos; )) ,&apos;Connect the COD and share connectivity details/ Remit COD amount to customer and share details&apos;,
- &apos;&apos;)))))))))</expression>
+ &apos;Pickup and Share GA details&apos;)))))))))</expression>
     </formulas>
     <formulas>
         <name>fillinstructions3</name>
@@ -170,7 +169,7 @@ IF( AND(ISPICKVAL( {!$Record.Type}, &apos;Invoicing and Others&apos;),ISPICKVAL(
         <expression>IF( ISPICKVAL( {!$Record.Type}, &apos;DELIVERY REQUESTED BEFORE ADD&apos;) , &apos;Arrange delivery and share GA details&apos;,
 IF( ISPICKVAL( {!$Record.Type}, &apos;REBOOKING WITHOUT INFORMATION&apos;) , &apos;Share E-Mail communication received for Re-booking of shipment&apos;,
 IF( ISPICKVAL( {!$Record.Type}, &apos;VARIANCE IN ADD&apos;) , &apos;Resolve ADD Variance concern&apos;,
-&apos;&apos;)))</expression>
+&apos;Pickup and Share GA details&apos;)))</expression>
     </formulas>
     <interviewLabel>testccec ceration {!$Flow.CurrentDateTime}</interviewLabel>
     <label>ccec creation for complaint/query</label>

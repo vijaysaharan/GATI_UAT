@@ -15,7 +15,6 @@
             </value>
         </inputParameters>
         <nameSegment>Customer_Feedback_Process__c.send_email_to_customer_when_Customer_Feedback_has_submitted</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>58.0</apiVersion>
     <environments>Default</environments>

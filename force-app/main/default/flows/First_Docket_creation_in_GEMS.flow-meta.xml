@@ -33,7 +33,7 @@
             <assignToReference>Get_Committed_Opportunity.CloseDate</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>PreviousDate</elementReference>
+                <elementReference>$Record.GATI_Created_Date__c</elementReference>
             </value>
         </assignmentItems>
         <connector>

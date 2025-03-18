@@ -4,8 +4,8 @@
     <assignments>
         <name>Set_Opp_id</name>
         <label>Set Opp id</label>
-        <locationX>182</locationX>
-        <locationY>455</locationY>
+        <locationX>381</locationX>
+        <locationY>305</locationY>
         <assignmentItems>
             <assignToReference>oppID</assignToReference>
             <operator>Assign</operator>
@@ -20,8 +20,8 @@
     <assignments>
         <name>Set_opportunity_Id</name>
         <label>Set opportunity Id</label>
-        <locationX>710</locationX>
-        <locationY>455</locationY>
+        <locationX>119</locationX>
+        <locationY>500</locationY>
         <assignmentItems>
             <assignToReference>oppID</assignToReference>
             <operator>Assign</operator>
@@ -36,8 +36,8 @@
     <decisions>
         <name>check_for_empty_opp_id</name>
         <label>check for empty opp id</label>
-        <locationX>710</locationX>
-        <locationY>575</locationY>
+        <locationX>257</locationX>
+        <locationY>500</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>if_not_empty</name>
@@ -58,8 +58,8 @@
     <decisions>
         <name>check_for_Opp_id</name>
         <label>check for Opp id</label>
-        <locationX>182</locationX>
-        <locationY>575</locationY>
+        <locationX>509</locationX>
+        <locationY>304</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>if_present</name>
@@ -80,8 +80,8 @@
     <decisions>
         <name>check_retail_customer_type</name>
         <label>check retail customer type</label>
-        <locationX>644</locationX>
-        <locationY>335</locationY>
+        <locationX>110</locationX>
+        <locationY>293</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>customer_type_is_retail</name>
@@ -121,6 +121,7 @@
             <label>customer type is KEA or SME</label>
         </rules>
     </decisions>
+    <environments>Default</environments>
     <interviewLabel>Opportunity Record Type Selection based on Customer type {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Opportunity Record Type Selection based on Customer type</label>
     <processMetadataValues>
@@ -132,7 +133,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -145,8 +146,8 @@
     <recordLookups>
         <name>Get_Record_type_for_KEA_SME_Opp</name>
         <label>Get Record type for KEA SME Opp</label>
-        <locationX>578</locationX>
-        <locationY>695</locationY>
+        <locationX>447</locationX>
+        <locationY>494</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>update_Opp_Record_Type</targetReference>
@@ -175,8 +176,8 @@
     <recordLookups>
         <name>Get_Record_type_for_Retail_Opp</name>
         <label>Get Record type for Retail Opp</label>
-        <locationX>50</locationX>
-        <locationY>695</locationY>
+        <locationX>666</locationX>
+        <locationY>270</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>update_Opportunity_Record_Type</targetReference>
@@ -206,8 +207,8 @@
         <description>update Opp Record Type to KEA SME record type</description>
         <name>update_Opp_Record_Type</name>
         <label>update Opp Record Type</label>
-        <locationX>578</locationX>
-        <locationY>815</locationY>
+        <locationX>605</locationX>
+        <locationY>495</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -227,8 +228,8 @@
     <recordUpdates>
         <name>update_Opportunity_Record_Type</name>
         <label>update Opportunity Record Type</label>
-        <locationX>50</locationX>
-        <locationY>815</locationY>
+        <locationX>795</locationX>
+        <locationY>90</locationY>
         <filterLogic>and</filterLogic>
         <filters>
             <field>Id</field>
@@ -246,8 +247,8 @@
         <object>Opportunity</object>
     </recordUpdates>
     <start>
-        <locationX>518</locationX>
-        <locationY>0</locationY>
+        <locationX>17</locationX>
+        <locationY>24</locationY>
         <connector>
             <targetReference>check_retail_customer_type</targetReference>
         </connector>

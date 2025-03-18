@@ -65,9 +65,11 @@ export default class AddExpenseInVisit extends NavigationMixin(LightningElement)
             this.recordLabelList = this.LabelPickListOptions.map(l => l.label);
             this.recordValueList = this.LabelPickListOptions.map(l => l.value);
             console.log('recordValueList->',JSON.stringify(this.recordValueList,null,2));
+            console.log('recordId -> ',this.recordId);
             expenseListForVisit({ visitId: this.recordId }).then(exp => {
                 var expenseCustomerList = JSON.parse(JSON.stringify(exp));
                 this.customerExpenseData = expenseCustomerList;
+                console.log('customerExpenseData -> ',JSON.stringify(this.customerExpenseData,null,2));
                 if (exp.length > 0) {
                     this.customerExpenseData.forEach((ele) => {
                         if(ele.customerData.Lead__c != undefined && ele.customerData.Lead__c != null){
@@ -457,6 +459,7 @@ export default class AddExpenseInVisit extends NavigationMixin(LightningElement)
             }));
             ele.expenseDataList = resultList;
         });
+        console.log('customerExpenseData LAST ',JSON.stringify(this.customerExpenseData,null,2));
     }
 
     validateAllInputs() {

@@ -19,7 +19,7 @@ public class EmailMessageTriggerHandler {
         if(caseList != null && caseList.size()>0){
             for(Case cs : caseList){
                 if(caseToEmailMessage.containsKey(cs.Id)){
-                 	List<String> emailList = caseToEmailMessage.get(cs.Id).ToAddress.split(';');
+                    List<String> emailList = caseToEmailMessage.get(cs.Id).ToAddress.split(';');
                     if(caseToEmailMessage.get(cs.Id).CcAddress != null){
                         emailList.addAll(caseToEmailMessage.get(cs.Id).CcAddress.split(';'));
                     }
@@ -63,7 +63,11 @@ public class EmailMessageTriggerHandler {
         }
         
         if(caseIds != null && caseIds.size() > 0){
-            oldCases = new Map<Id,Case>([SELECT Id, Subject, Status, SuppliedEmail FROM Case WHERE Id IN :caseIds]);
+            oldCases = new Map<Id,Case>([SELECT Id, Subject, Status, SuppliedEmail, Company_of__c, Origin, SuppliedPhone,
+                                         Customer_Email__c,ContactId,Mobile__c,Customer_Name__c,AccountId,Priority
+                                         FROM Case 
+                                         WHERE Id IN :caseIds
+                                        ]);
         }
         
         if(caseFromAddresses != null && caseFromAddresses.size() > 0 && caseSubjects != null && caseSubjects.size() > 0){
@@ -108,6 +112,43 @@ public class EmailMessageTriggerHandler {
         
         if(emailMessageToUpdate != null && emailMessageToUpdate.size() > 0){
             Database.update(emailMessageToUpdate, false);
+        }
+    }
+    
+    public static void sendNotificationOnEmailReply(List<EmailMessage> emailMessageList){
+        Id notificationTypeId = [SELECT Id FROM CustomNotificationType WHERE DeveloperName='Customer_Email_Reply']?.Id;
+        
+        if(notificationTypeId == null){
+            return;
+        }
+        
+        Set<Id> emailMessageIds = new Set<Id>();
+        for(EmailMessage em : emailMessageList){
+            if(em.Incoming == true && em.ParentId != null && String.valueOf(em.ParentId).contains('500')){
+                emailMessageIds.add(em.Id);
+            }
+        }
+        
+        if(emailMessageIds.isEmpty()){
+            return;
+        }        
+       
+        for(EmailMessage em : [SELECT Id, ParentId, Parent.OwnerId, Subject, Parent.Origin, Parent.CaseNumber FROM EmailMessage WHERE Id IN :emailMessageIds AND Parent.Origin = 'Email']){
+            notifyUsers(em, notificationTypeId);
+        }
+    }
+    
+    public static void notifyUsers(EmailMessage emailMessageDetail, Id notificationTypeId) {        
+        Messaging.CustomNotification notification = new Messaging.CustomNotification();        
+        notification.setTitle('New Reply On Case - '+emailMessageDetail.Parent.CaseNumber);
+        notification.setBody(emailMessageDetail.Subject);        
+        notification.setNotificationTypeId(notificationTypeId);
+        notification.setTargetId(emailMessageDetail.ParentId);        
+        try {
+            notification.send(new Set<String>{emailMessageDetail.Parent.OwnerId});
+        }
+        catch (Exception e) {
+            System.debug('Problem sending notification: ' + e.getMessage());
         }
     }
 }

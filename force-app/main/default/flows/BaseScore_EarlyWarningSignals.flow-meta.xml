@@ -3,33 +3,15 @@
     <actionCalls>
         <name>Email_regarding_Base_Score</name>
         <label>Email regarding Base Score</label>
-        <locationX>1275</locationX>
-        <locationY>255</locationY>
+        <locationX>294</locationX>
+        <locationY>3347</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>emailBody</name>
-            <value>
-                <elementReference>BaseScoreValidationEmail</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
             <name>emailAddressesArray</name>
             <value>
                 <elementReference>EmailIDs</elementReference>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>sendRichBody</name>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </inputParameters>
-        <inputParameters>
-            <name>senderAddress</name>
-            <value>
-                <stringValue>gsalesforce@gatikwe.com</stringValue>
             </value>
         </inputParameters>
         <inputParameters>
@@ -39,20 +21,31 @@
             </value>
         </inputParameters>
         <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>gsalesforce@allcargologistics.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
             <name>emailSubject</name>
             <value>
                 <stringValue>Base Score validation</stringValue>
             </value>
         </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>BaseScoreValidationEmail</elementReference>
+            </value>
+        </inputParameters>
         <nameSegment>emailSimple</nameSegment>
-        <versionSegment>1</versionSegment>
     </actionCalls>
     <apiVersion>52.0</apiVersion>
     <assignments>
         <name>add_email</name>
         <label>add email of dmd</label>
-        <locationX>847</locationX>
-        <locationY>476</locationY>
+        <locationX>754</locationX>
+        <locationY>2711</locationY>
         <assignmentItems>
             <assignToReference>EmailIDs</assignToReference>
             <operator>Add</operator>
@@ -65,26 +58,10 @@
         </connector>
     </assignments>
     <assignments>
-        <name>add_owner</name>
-        <label>add owner</label>
-        <locationX>1011</locationX>
-        <locationY>239</locationY>
-        <assignmentItems>
-            <assignToReference>EmailIDs</assignToReference>
-            <operator>Add</operator>
-            <value>
-                <elementReference>$Record.Owner.Email</elementReference>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>Email_regarding_Base_Score</targetReference>
-        </connector>
-    </assignments>
-    <assignments>
         <name>add_the_email_of</name>
         <label>add the email of</label>
-        <locationX>509</locationX>
-        <locationY>351</locationY>
+        <locationX>633</locationX>
+        <locationY>2087</locationY>
         <assignmentItems>
             <assignToReference>EmailIDs</assignToReference>
             <operator>Add</operator>
@@ -99,8 +76,8 @@
     <assignments>
         <name>CBDO_Email</name>
         <label>CBDO Email</label>
-        <locationX>88</locationX>
-        <locationY>305</locationY>
+        <locationX>633</locationX>
+        <locationY>1679</locationY>
         <assignmentItems>
             <assignToReference>EmailIDs</assignToReference>
             <operator>Add</operator>
@@ -115,13 +92,20 @@
     <assignments>
         <name>Email_to_Zonal_and_BDFS_Head</name>
         <label>Email to Zonal and BDFS Head</label>
-        <locationX>573</locationX>
-        <locationY>159</locationY>
+        <locationX>407</locationX>
+        <locationY>1055</locationY>
         <assignmentItems>
             <assignToReference>EmailIDs</assignToReference>
             <operator>Add</operator>
             <value>
                 <elementReference>BDFS_HEAD.User__r.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>EmailIDs</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Record.Owner.Email</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -131,8 +115,8 @@
     <assignments>
         <name>Email_to_Zonal_Head_BDFS_Head_CBDO_and_CFO</name>
         <label>Email to Zonal Head, BDFS Head,CBDO and CFO</label>
-        <locationX>923</locationX>
-        <locationY>369</locationY>
+        <locationX>490</locationX>
+        <locationY>2387</locationY>
         <assignmentItems>
             <assignToReference>EmailIDs</assignToReference>
             <operator>Add</operator>
@@ -154,13 +138,20 @@
     <assignments>
         <name>Email_to_Zonal_Head_BDFS_head_CBDO_CFO_and_DMD</name>
         <label>Email to Zonal Head,BDFS head,CBDO,CFO and DMD</label>
-        <locationX>1068</locationX>
-        <locationY>568</locationY>
+        <locationX>886</locationX>
+        <locationY>2903</locationY>
         <assignmentItems>
             <assignToReference>EmailIDs</assignToReference>
             <operator>Add</operator>
             <value>
                 <elementReference>BDFS_HEAD.User__r.Email</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>EmailIDs</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>$Record.Owner.Email</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -170,8 +161,8 @@
     <assignments>
         <name>Email_to_Zonal_Heads</name>
         <label>Email to Zonal Heads</label>
-        <locationX>1079</locationX>
-        <locationY>41</locationY>
+        <locationX>50</locationX>
+        <locationY>839</locationY>
         <assignmentItems>
             <assignToReference>EmailIDs</assignToReference>
             <operator>Add</operator>
@@ -186,8 +177,8 @@
     <assignments>
         <name>EmailID</name>
         <label>EmailID</label>
-        <locationX>751</locationX>
-        <locationY>20</locationY>
+        <locationX>162</locationX>
+        <locationY>539</locationY>
         <assignmentItems>
             <assignToReference>EmailIDs</assignToReference>
             <operator>Add</operator>
@@ -202,8 +193,8 @@
     <decisions>
         <name>Base_Score_is_in_greater_than_30</name>
         <label>Base Score is in greater than 30</label>
-        <locationX>373</locationX>
-        <locationY>535</locationY>
+        <locationX>1040</locationX>
+        <locationY>2387</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Higher_Base_Score</name>
@@ -224,8 +215,8 @@
     <decisions>
         <name>Base_Score_is_in_range_of_10_20</name>
         <label>Base Score is in range of 10 - 20</label>
-        <locationX>723</locationX>
-        <locationY>283</locationY>
+        <locationX>539</locationX>
+        <locationY>1247</locationY>
         <defaultConnector>
             <targetReference>CBDO</targetReference>
         </defaultConnector>
@@ -248,7 +239,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>add_owner</targetReference>
+                <targetReference>Email_regarding_Base_Score</targetReference>
             </connector>
             <label>Check for Base Score</label>
         </rules>
@@ -256,8 +247,8 @@
     <decisions>
         <name>Base_Score_is_in_range_of_20_30</name>
         <label>Base Score is in range of 20-30</label>
-        <locationX>695</locationX>
-        <locationY>423</locationY>
+        <locationX>765</locationX>
+        <locationY>2279</locationY>
         <defaultConnector>
             <targetReference>Base_Score_is_in_greater_than_30</targetReference>
         </defaultConnector>
@@ -288,8 +279,8 @@
     <decisions>
         <name>Base_Score_is_less_than_10</name>
         <label>Base Score is less than 10</label>
-        <locationX>920</locationX>
-        <locationY>48</locationY>
+        <locationX>294</locationX>
+        <locationY>731</locationY>
         <defaultConnector>
             <targetReference>BDFS_HEAD</targetReference>
         </defaultConnector>
@@ -313,8 +304,8 @@
     <decisions>
         <name>CFO_is_not_null</name>
         <label>CFO is not null</label>
-        <locationX>232</locationX>
-        <locationY>483</locationY>
+        <locationX>765</locationX>
+        <locationY>1979</locationY>
         <defaultConnector>
             <targetReference>Base_Score_is_in_range_of_20_30</targetReference>
         </defaultConnector>
@@ -338,8 +329,8 @@
     <decisions>
         <name>Check_CBDO_is_null_or_not</name>
         <label>Check CBDO is null or not</label>
-        <locationX>231</locationX>
-        <locationY>296</locationY>
+        <locationX>765</locationX>
+        <locationY>1571</locationY>
         <defaultConnector>
             <targetReference>CFO_is_not_null</targetReference>
         </defaultConnector>
@@ -363,8 +354,8 @@
     <decisions>
         <name>Check_for_Manager_ID</name>
         <label>Check for Manager ID</label>
-        <locationX>557</locationX>
-        <locationY>47</locationY>
+        <locationX>294</locationX>
+        <locationY>431</locationY>
         <defaultConnector>
             <targetReference>Base_Score_is_less_than_10</targetReference>
         </defaultConnector>
@@ -388,8 +379,8 @@
     <decisions>
         <name>check_for_Zonal_BDFS</name>
         <label>check for Zonal BDFS</label>
-        <locationX>676</locationX>
-        <locationY>122</locationY>
+        <locationX>539</locationX>
+        <locationY>947</locationY>
         <defaultConnector>
             <targetReference>Base_Score_is_in_range_of_10_20</targetReference>
         </defaultConnector>
@@ -414,8 +405,8 @@
         <description>Credit Score less than Old Credit Score</description>
         <name>CS_less_than_OCS</name>
         <label>CS less than OCS</label>
-        <locationX>435</locationX>
-        <locationY>55</locationY>
+        <locationX>876</locationX>
+        <locationY>323</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>CS</name>
@@ -436,8 +427,8 @@
     <decisions>
         <name>DMD_is_not_null</name>
         <label>DMD is not null</label>
-        <locationX>701</locationX>
-        <locationY>584</locationY>
+        <locationX>886</locationX>
+        <locationY>2603</locationY>
         <defaultConnector>
             <targetReference>Email_to_Zonal_Head_BDFS_head_CBDO_CFO_and_DMD</targetReference>
         </defaultConnector>
@@ -476,7 +467,7 @@
     <processMetadataValues>
         <name>CanvasMode</name>
         <value>
-            <stringValue>FREE_FORM_CANVAS</stringValue>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
         </value>
     </processMetadataValues>
     <processMetadataValues>
@@ -489,8 +480,8 @@
     <recordLookups>
         <name>BDFS_HEAD</name>
         <label>BDFS HEAD</label>
-        <locationX>829</locationX>
-        <locationY>205</locationY>
+        <locationX>539</locationX>
+        <locationY>839</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>check_for_Zonal_BDFS</targetReference>
@@ -519,8 +510,8 @@
     <recordLookups>
         <name>CBDO</name>
         <label>CBDO</label>
-        <locationX>388</locationX>
-        <locationY>183</locationY>
+        <locationX>765</locationX>
+        <locationY>1355</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>CBDO_is_added</targetReference>
@@ -540,8 +531,8 @@
     <recordLookups>
         <name>CBDO_is_added</name>
         <label>CBDO is added</label>
-        <locationX>365</locationX>
-        <locationY>280</locationY>
+        <locationX>765</locationX>
+        <locationY>1463</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_CBDO_is_null_or_not</targetReference>
@@ -563,8 +554,8 @@
     <recordLookups>
         <name>Staff_Designation_as_CFO</name>
         <label>Staff Designation as CFO</label>
-        <locationX>87</locationX>
-        <locationY>423</locationY>
+        <locationX>633</locationX>
+        <locationY>1787</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>CFO_is_not_null</targetReference>
@@ -591,8 +582,8 @@
     <recordLookups>
         <name>Staff_Designation_as_DMD</name>
         <label>Staff Designation as DMD</label>
-        <locationX>611</locationX>
-        <locationY>559</locationY>
+        <locationX>886</locationX>
+        <locationY>2495</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>DMD_is_not_null</targetReference>
@@ -617,8 +608,8 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>50</locationX>
-        <locationY>54</locationY>
+        <locationX>750</locationX>
+        <locationY>0</locationY>
         <connector>
             <targetReference>CS_less_than_OCS</targetReference>
         </connector>
@@ -653,16 +644,19 @@
         </filters>
         <object>Account</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
-        <scheduledPaths>
-            <pathType>AsyncAfterCommit</pathType>
-        </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
     <textTemplates>
         <name>BaseScoreValidationEmail</name>
-        <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Dear Recipient,&lt;/p&gt;&lt;p&gt;This is an Early Warning Signal to notify that this customer&apos;s credit score is on a declining trend (-10) compared to its own initial score. The credit score is calculated based on various important parameters (financial &amp;amp; non-financial) and it determines creditworthiness. This EWS is to reduce the possibility of credit risk by understanding and acting timely on the below:&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;{!table}&lt;/p&gt;&lt;p&gt;# Collect invoices within credit period&lt;/p&gt;&lt;p&gt;# Specially reduce the share of outstanding above 60 days&lt;/p&gt;&lt;p&gt;# Watchful of credit limit &amp;amp; credit period (revisit if needed)&lt;/p&gt;&lt;p&gt;# Check late payment Interest &amp;amp; Penalty clauses in contract&lt;/p&gt;&lt;p&gt;# Trading window likely to get blocked (if credit score falls by 30 points from the base score)&lt;/p&gt;&lt;p&gt;# Less creditworthiness invite more credit risk&lt;/p&gt;&lt;p&gt;Sincerely,&lt;/p&gt;&lt;p&gt;Credit Control Team&lt;/p&gt;</text>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi,
+Base Score value of {!$Record.Name} value is changed.
+Credit Score is {!$Record.Credit_Score__c} .
+Old Credit Score is {!$Record.Old_Credit_Score__c} .
+Please take the necessary action by updating Credit Score and also review Customer Details.
+Thanks &amp; Regards,
+Gati.</text>
     </textTemplates>
     <variables>
         <name>EmailIDs</name>
@@ -670,15 +664,5 @@
         <isCollection>true</isCollection>
         <isInput>false</isInput>
         <isOutput>false</isOutput>
-    </variables>
-    <variables>
-        <name>table</name>
-        <dataType>String</dataType>
-        <isCollection>false</isCollection>
-        <isInput>false</isInput>
-        <isOutput>true</isOutput>
-        <value>
-            <stringValue>&lt;table style=&quot;width:100%;border:1px solid black;font-family: Arial, Helvetica, sans-serif; border-collapse: collapse;&quot;&gt;&lt;tr style=&quot;background-color: #f2f2f2;&quot;&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;Contract Number&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;{!$Record.Contract_Number__c}&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;Legal entity Name&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;{!$Record.Name}&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background-color: #f2f2f2;&quot;&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;New Credit Period&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;{!$Record.Credit_Period__c}&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;Previous Credit Period&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;{!$Record.Old_Credit_Period__c}&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background-color: #f2f2f2;&quot;&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;New Credit Score&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;{!$Record.Credit_Score__c}&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;Previous Credit Score&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;{!$Record.Old_Credit_Score__c}&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background-color: #f2f2f2;&quot;&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;New Credit Limit Amount&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;{!$Record.Credit_Amount__c}&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;Previous Credit Limit Amount&lt;/td&gt;&lt;td style=&quot;border: 1px solid black;padding: 8px;&quot;&gt;{!$Record.Old_Credit_Limit_Amount__c}&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</stringValue>
-        </value>
     </variables>
 </Flow>

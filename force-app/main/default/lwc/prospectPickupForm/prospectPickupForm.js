@@ -5,9 +5,9 @@ export default class ProspectPickupForm extends NavigationMixin(LightningElement
     @track loadingval = false;
     @track objectApiName = 'Case';
     //for production
-    //@api recordTypeID = '0129B0000004I0DQAU';
+    @api recordTypeID = '0129B0000004I0DQAU';
     //for sandbox
-    @api recordTypeID = '012p0000000Ss6TAAS';
+    //@api recordTypeID = '012p0000000Ss6TAAS';
     subtype = null;
     	
     closeModalchild(){
