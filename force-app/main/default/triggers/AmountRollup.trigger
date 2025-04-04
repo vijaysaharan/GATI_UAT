@@ -63,6 +63,9 @@ trigger AmountRollup on Account (after insert,after update,after unDelete,after 
         If(accList != null && accList.size()>0){
             AmountRollupHandler.setAccountTeamForAccount(accList);
         }
+        try {
+            AmountRollupHandler.sendAmendmentCreditCustomer(Trigger.new, Trigger.oldMap);
+        } catch (Exception e) {}
     }
 
     if(Trigger.isAfter && (Trigger.isInsert || Trigger.isUpdate)){

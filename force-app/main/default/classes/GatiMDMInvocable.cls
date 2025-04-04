@@ -36,6 +36,10 @@ public class GatiMDMInvocable {
                 GatiMDMUtil.ActionOutput output = GatiMDMIntegration.deleteServiceResourceFromMDM(input[0]);
                 return new List<GatiMDMUtil.ActionOutput>{output};
             }
+            when 'Amendment-Credit-Customer'{
+                GatiMDMUtil.ActionOutput output = GatiMDMIntegration.amendmentCreditCustomer(input[0]);
+                return new List<GatiMDMUtil.ActionOutput>{output};
+            }
             when else {
                 return null;
             }

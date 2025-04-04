@@ -1,6 +1,5 @@
 @isTest
-public class GatiMDMTest {
-    
+public class GatiMDMTest {    
     private class MockHttpResponseGenerator implements HttpCalloutMock {
         private Boolean isBodyReturn;        
         public MockHttpResponseGenerator(Boolean isBodyReturn) {
@@ -19,8 +18,7 @@ public class GatiMDMTest {
             res.setStatusCode(200);
             return res;
         }   
-    }
-    
+    }    
     
     @TestSetup
     static void makeData(){
@@ -164,4 +162,18 @@ public class GatiMDMTest {
                 testObj.Customer_Pan_Number = 'test';
                 testObj.Existing_Customer_Contract = new List<String>{'test'};     
             }
+    
+    @isTest
+    public static void sendAmendmentTest(){
+        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator(false));
+        Account test_Account = [SELECT Id,Credit_Amount__c,Credit_Days__c,GATI_Customer_Code__c,GATI_Company_Code__c FROM Account LIMIT 1];
+        
+        test.startTest();
+        test_Account.GATI_Customer_Code__c = '301202';
+        test_Account.GATI_Company_Code__c = '102';
+        test_Account.Credit_Amount__c = 100;
+        test_Account.Credit_Days__c = 5;
+        update test_Account;
+        test.stopTest();
+    }
 }

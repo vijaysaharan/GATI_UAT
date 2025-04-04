@@ -339,6 +339,44 @@ public class GatiMDMIntegration {
         }
         return null;
     }
+
+    public static GatiMDMUtil.ActionOutput amendmentCreditCustomer(GatiMDMUtil.ActionInput input){
+        GatiMDMUtil.GatiMDMRequestContentWrapper CUST_SEQ_NUM = new GatiMDMUtil.GatiMDMRequestContentWrapper();
+        GatiMDMUtil.GatiMDMRequestContentWrapper payment_Credit_Terms = new GatiMDMUtil.GatiMDMRequestContentWrapper();
+        GatiMDMUtil.GatiMDMRequestContentWrapper creditLimit = new GatiMDMUtil.GatiMDMRequestContentWrapper();
+        GatiMDMUtil.GatiMDMRequestContentWrapper CompanyID = new GatiMDMUtil.GatiMDMRequestContentWrapper();
+        String companyName = getCompanyName(input.account.GATI_Company_Code__c);
+        String endPoint = MDMSetting__mdt.getInstance('Amendment_Credit_Customer').EndPoint__c;
+
+        CUST_SEQ_NUM.content = input.account.GATI_Customer_Code__c;
+        payment_Credit_Terms.content = String.valueOf(input.account.Credit_Days__c);
+        creditLimit.content = String.valueOf(input.account.Credit_Amount__c);
+        CompanyID.content = companyName;
+
+        GatiMDMUtil.GatiMDMAmendmentRequestWrapper amendmentRequest = new GatiMDMUtil.GatiMDMAmendmentRequestWrapper();
+        amendmentRequest.CUST_SEQ_NUM = CUST_SEQ_NUM;
+        amendmentRequest.payment_Credit_Terms = payment_Credit_Terms;
+        amendmentRequest.creditLimit = creditLimit;
+        amendmentRequest.CompanyID = CompanyID;
+
+        GatiMDMUtil.GatiMDMRequestRootWrapper amendmentRequestRoot = new GatiMDMUtil.GatiMDMRequestRootWrapper();
+        amendmentRequestRoot.content = (Object)amendmentRequest;
+        
+        String requestBody = JSON.serialize(amendmentRequestRoot);
+
+        HttpRequest request = new Httprequest();
+        request.setMethod('POST');
+        request.setEndpoint(endPoint+'?updateOrInsert=true');
+        request.setBody(requestBody);
+        request.setTimeout(120000);
+        request.setHeader('Authorization', input.authorizationHeader);
+        request.setHeader('Content-Type', 'application/json');
+        Http http = new Http();
+        HttpResponse response = http.send(request);
+        GatiMDMUtil.ActionOutput output = new GatiMDMUtil.ActionOutput();
+        output.cmStatusCode = response.getStatusCode();
+        return output;
+    }
     
     private static String getCompanyName(String companyCode){
         if(companyCode == '101'){

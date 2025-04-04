@@ -20,12 +20,27 @@ public class TestManualCCECoutbound {
             return res;
         }
     }
+        
+    @isTest
+    static void TestMethod1(){
+        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
+        Test.startTest();
+        Case c1 = ServiceTestFactory.getCase9('CRM');
+        CCEC__c ccec1 = ServiceTestFactory.getCCEC(c1.id);
+        CCEC_Remark__c ccecremark = ServiceTestFactory.getCCECRemarkWithCCEC('testing', ccec1.Id,'CSA');
+        ccec1 = [Select Name from CCEC__c where id = :ccec1.id];
+        List<Id> ccecList = new List<Id>();
+        ccecList.add(ccec1.Id);
+        ManualCCECOutboundAPI.SendCCEC(ccecList);  
+        Test.stopTest();     
+    }
+    
     @isTest
     static void TestMethod2(){
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
         Test.startTest();
         Contact cont = TestFactory.getContact('Harit', 'a@a.com');
-        Case c1=ServiceTestFactory.getCase11('CRM',cont.id);
+        Case c1 = ServiceTestFactory.getCase11('CRM',cont.id);
         CCEC__c ccec1 = ServiceTestFactory.getCCEC(c1.id);
         CCEC_Remark__c ccecremark = ServiceTestFactory.getCCECRemarkWithCCEC('testing', ccec1.Id,'CSA');
         ccec1 = [Select Name from CCEC__c where id = :ccec1.id];
@@ -34,25 +49,13 @@ public class TestManualCCECoutbound {
         ManualCCECOutboundAPI.SendCCEC(ccecList);  
         Test.stopTest();     
     }
-     @isTest
+    
+    @isTest
     static void TestMethod3(){
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator1());
         Test.startTest();
         Contact cont = TestFactory.getContact('Harit', 'a@a.com');
-        Case c1=ServiceTestFactory.getCase11('CRM',cont.id);
-        CCEC__c ccec1 = ServiceTestFactory.getCCEC(c1.id);
-        CCEC_Remark__c ccecremark = ServiceTestFactory.getCCECRemarkWithCCEC('testing', ccec1.Id,'CSA');
-        ccec1 = [Select Name from CCEC__c where id = :ccec1.id];
-        List<Id> ccecList = new List<Id>();
-        ccecList.add(ccec1.Id);
-        ManualCCECOutboundAPI.SendCCEC(ccecList);  
-        Test.stopTest();     
-    }
-    @isTest
-    static void TestMethod1(){
-        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
-        Test.startTest();
-        Case c1=ServiceTestFactory.getCase9('CRM');
+        Case c1 = ServiceTestFactory.getCase11('CRM',cont.id);
         CCEC__c ccec1 = ServiceTestFactory.getCCEC(c1.id);
         CCEC_Remark__c ccecremark = ServiceTestFactory.getCCECRemarkWithCCEC('testing', ccec1.Id,'CSA');
         ccec1 = [Select Name from CCEC__c where id = :ccec1.id];

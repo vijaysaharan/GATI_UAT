@@ -111,7 +111,7 @@ public with sharing class FetchDataFromDocketController implements Queueable, Da
         
         if(domainToUserMapping != null && domainToUserMapping.size()>0){
             for(CS_Domain_Mapping__c dm : domainToUserMapping){
-                emailToUser.put(dm.Name.trim(),dm.User__c);
+                emailToUser.put(dm.Name.trim().toLowerCase(),dm.User__c);
             }
         }
         
@@ -128,12 +128,12 @@ public with sharing class FetchDataFromDocketController implements Queueable, Da
                     }
                 }*/   
                 String emailDomain = cs.SuppliedEmail != null ? cs.SuppliedEmail.split('@').get(1) : null;
-                if(emailToUser.containsKey(cs.SuppliedEmail)){
-                    cs.OwnerId = emailToUser.get(cs.SuppliedEmail);
+                if(cs.SuppliedEmail != null && emailToUser.containsKey(cs.SuppliedEmail.toLowerCase())){
+                    cs.OwnerId = emailToUser.get(cs.SuppliedEmail.toLowerCase());
                     cs.Status = 'Open(Assigned)';
                 }
-                else if(emailToUser.containsKey(emailDomain)){
-                    cs.OwnerId = emailToUser.get(emailDomain);
+                else if(emailDomain != null && emailToUser.containsKey(emailDomain.toLowerCase())){
+                    cs.OwnerId = emailToUser.get(emailDomain.toLowerCase());
                     cs.Status = 'Open(Assigned)';
                 }
                 else if(cs.Email_Address_For_Assignment__c == 'retail_support@allcargologistics.com'){

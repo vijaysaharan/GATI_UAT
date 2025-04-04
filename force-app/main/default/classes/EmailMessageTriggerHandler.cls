@@ -50,7 +50,6 @@ public class EmailMessageTriggerHandler {
         Map<Id, EmailMessage> caseIdToEmailMessage = new Map<Id, EmailMessage>();
         Map<Id, Case> oldCases = new Map<Id, Case>();
         Map<Id, Case> newCasesToInsert = new Map<Id, Case>();
-        List<EmailMessage> emailMessageToUpdate = new List<EmailMessage>();
         List<Case> subjectAddressCases = new List<Case>();
         Map<String, Case> subjectAddressToCases = new Map<String, Case>();
         
@@ -106,12 +105,7 @@ public class EmailMessageTriggerHandler {
             for(Id caseId : caseIdToEmailMessage.keySet()){
                 EmailMessage em = caseIdToEmailMessage.get(caseId);
                 em.ParentId = newCasesToInsert.containsKey(caseId) ? newCasesToInsert.get(caseId).Id : caseId;
-                emailMessageToUpdate.add(em);
             }
-        }
-        
-        if(emailMessageToUpdate != null && emailMessageToUpdate.size() > 0){
-            Database.update(emailMessageToUpdate, false);
         }
     }
     
@@ -132,7 +126,7 @@ public class EmailMessageTriggerHandler {
         if(emailMessageIds.isEmpty()){
             return;
         }        
-       
+        
         for(EmailMessage em : [SELECT Id, ParentId, Parent.OwnerId, Subject, Parent.Origin, Parent.CaseNumber FROM EmailMessage WHERE Id IN :emailMessageIds AND Parent.Origin = 'Email']){
             notifyUsers(em, notificationTypeId);
         }
@@ -149,6 +143,112 @@ public class EmailMessageTriggerHandler {
         }
         catch (Exception e) {
             System.debug('Problem sending notification: ' + e.getMessage());
+        }
+    }
+    
+    public static void updateAnaliticsOnCase(List<EmailMessage> emailMessageList){
+        Set<Id> inboundCaseIds = new Set<Id>();
+        Set<Id> outboundCaseIds = new Set<Id>();
+        List<Case> caseList = new List<Case>();
+        List<Case> caseListToUpdate = new List<Case>();
+        
+        for(EmailMessage em : emailMessageList){
+            if(em.Incoming == true && em.ParentId != null && String.valueOf(em.ParentId).contains('500')){
+                inboundCaseIds.add(em.ParentId);
+            }
+            if(em.Incoming == false && em.ParentId != null && String.valueOf(em.ParentId).contains('500')){
+                outboundCaseIds.add(em.ParentId);
+            }
+        }
+        
+        caseList = [SELECT Id, IsReplied__c, Inbound_Emails__c, Outbound_Emails__c 
+                    FROM Case 
+                    WHERE (Id IN :inboundCaseIds OR Id IN :outboundCaseIds)
+                   ];
+        
+        if(caseList.isEmpty()){
+            return;
+        }
+        
+        for(Case cs : caseList){
+            if(inboundCaseIds.contains(cs.Id)){
+                cs.IsReplied__c = false;
+                cs.Inbound_Emails__c = cs.Inbound_Emails__c != null ? (cs.Inbound_Emails__c + 1) : 1;
+                caseListToUpdate.add(cs);
+            }
+            else if(outboundCaseIds.contains(cs.Id)){
+                cs.IsReplied__c = true;
+                cs.Outbound_Emails__c = cs.Outbound_Emails__c != null ? (cs.Outbound_Emails__c + 1) : 1;
+                caseListToUpdate.add(cs);
+            }
+        }
+        
+        if(!caseListToUpdate.isEmpty()){
+            Database.update(caseListToUpdate, false);
+        }
+    }
+
+    public static void verifyStatusChange(List<EmailMessage> emailMessageList, Map<Id, EmailMessage> emailMessageMap){
+        List<EmailMessage> emailMessagesToDelete = new List<EmailMessage>();
+        
+        for(EmailMessage email : emailMessageList){
+            if(email.Status == '3' && emailMessageMap.get(email.Id).Status == '5'){
+                emailMessagesToDelete.add(email);
+            }
+        }
+
+        if(!emailMessagesToDelete.isEmpty()){
+            deleteOlderEmailMessages(emailMessagesToDelete);
+        }
+    }
+    
+    public static void deleteOlderEmailMessages(List<EmailMessage> emailMessageList){
+        Set<Id> caseIds = new Set<Id>();
+        Set<Id> emailMessageIds = new Set<Id>();
+        Map<Id, Id> emailToCaseMap = new Map<Id, Id>();
+        List<EmailMessage> emailsToDelete = new List<EmailMessage>();
+        List<ContentDocumentLink> caseAttachmentsToCreate = new List<ContentDocumentLink>();
+        
+        for(EmailMessage em : emailMessageList){
+            if(em.ParentId != null && String.valueOf(em.ParentId).contains('500') && em.Status != '5'){
+                caseIds.add(em.ParentId);
+                emailMessageIds.add(em.Id);
+            }
+        }
+        
+        if (!caseIds.isEmpty()) {
+            emailsToDelete = [SELECT Id, ParentId 
+                              FROM EmailMessage 
+                              WHERE ParentId IN :caseIds
+                              AND Id NOT IN :emailMessageIds
+                             ];
+        }
+        
+        if(!emailsToDelete.isEmpty()){
+            for(EmailMessage em : emailsToDelete){
+                emailToCaseMap.put(em.Id, em.ParentId);
+            }
+        }
+        
+        List<ContentDocumentLink> emailAttachments = [SELECT ContentDocumentId,LinkedEntityId 
+                                                      FROM ContentDocumentLink 
+                                                      WHERE LinkedEntityId IN :emailToCaseMap.keySet()
+                                                     ];
+        
+        for (ContentDocumentLink emailAttachment : emailAttachments) {
+            caseAttachmentsToCreate.add(new ContentDocumentLink(
+                ContentDocumentId = emailAttachment.ContentDocumentId,
+                LinkedEntityId = emailToCaseMap.get(emailAttachment.LinkedEntityId),
+                ShareType = 'V'
+            ));
+        }
+        
+        if(!caseAttachmentsToCreate.isEmpty()){
+            insert caseAttachmentsToCreate;
+        }
+        
+        if(!emailsToDelete.isEmpty()){
+            delete emailsToDelete;
         }
     }
 }

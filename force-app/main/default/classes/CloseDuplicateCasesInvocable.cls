@@ -34,7 +34,7 @@ public class CloseDuplicateCasesInvocable {
                 if(subjectToCaseNumber.containsKey(cs.Subject) && subjectToCaseNumber.get(cs.Subject) < cs.CaseNumber){
                     subjectToCaseNumber.put(cs.Subject, cs.CaseNumber);
                 }
-                else{
+                else if(!subjectToCaseNumber.containsKey(cs.Subject)){
                    subjectToCaseNumber.put(cs.Subject, cs.CaseNumber); 
                 }                
             }

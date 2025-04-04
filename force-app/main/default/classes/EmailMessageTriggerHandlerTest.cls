@@ -6,6 +6,7 @@ public class EmailMessageTriggerHandlerTest {
         newCase.Subject = 'Test Email To Case';
         newCase.Priority = 'Normal';
         newCase.Origin = 'Email';
+        newCase.SuppliedEmail = 'test@test.com';
         newCase.RecordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Complaint').getRecordTypeId();
         newCase.Description = 'Hi Test, You Are Sending Test.';
         insert newCase;
@@ -40,6 +41,7 @@ public class EmailMessageTriggerHandlerTest {
         newCase.Subject = 'Test Email To Case';
         newCase.Priority = 'Normal';
         newCase.Origin = 'Email';
+        newCase.SuppliedEmail = 'test@test.com';
         newCase.RecordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Complaint').getRecordTypeId();
         newCase.Description = 'Hi Test, You Are Sending Test.';
         insert newCase;

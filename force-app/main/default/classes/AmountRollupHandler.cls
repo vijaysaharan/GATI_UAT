@@ -165,4 +165,52 @@ public class AmountRollupHandler {
             Database.insert(accountTeamMemberToInsert, false);
         }
     }
+
+    //Send 
+    public static void sendAmendmentCreditCustomer(List<Account> accountList, Map<Id, Account> oldAccountsMap){
+        Set<Id> accountIdsToSend = new Set<Id>();
+        
+        for(Account eachAccount : accountList){
+            if((eachAccount.Credit_Amount__c != null && eachAccount.Credit_Amount__c != oldAccountsMap.get(eachAccount.Id).Credit_Amount__c) || (eachAccount.Credit_Days__c != null && eachAccount.Credit_Days__c != oldAccountsMap.get(eachAccount.Id).Credit_Days__c)){
+                accountIdsToSend.add(eachAccount.Id);
+            }
+        }
+
+        if(!accountIdsToSend.isEmpty()){
+            calloutForAmendmentChange(accountIdsToSend);
+        }
+    }
+    
+    public static String generateAuthorizationToken(){
+        Map<String, String> payload = new Map<String, String>();
+        payload.put('login', label.MDMAuthorizationUserName);
+        payload.put('password', label.MDMAuthorizationPassword);
+        HttpRequest request = new Httprequest();
+        request.setMethod('POST');
+        request.setEndpoint(MDMSetting__mdt.getInstance('Authorization_Token').EndPoint__c);
+        request.setHeader('Content-Type', 'application/json');
+        request.setBody(JSON.serialize(payload));        
+        Http http = new Http();
+        HttpResponse response = http.send(request);
+        if(response.getStatusCode() == 200){
+            Map<String, Object> responseMap = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+            String tokenType = (String) responseMap.get('tokenType');
+            String accessToken = (String) responseMap.get('accessToken');
+            return (tokenType + ' ' + accessToken);
+        }
+        return null;
+    }
+
+    @future(Callout = true)
+    public static void calloutForAmendmentChange(Set<Id> accountIds){
+        List<Account> accountList = [SELECT Id, GATI_Customer_Code__c, Credit_Amount__c, Credit_Days__c, GATI_Company_Code__c FROM Account WHERE Id IN :accountIds];
+        String authorizationToken = generateAuthorizationToken();
+        for(Account eachAccount : accountList){
+            GatiMDMUtil.ActionInput input = new GatiMDMUtil.ActionInput();
+            input.action = 'Amendment-Credit-Customer';
+            input.account = eachAccount;
+            input.authorizationHeader = authorizationToken;
+            GatiMDMInvocable.convertJSONToRecordCollection(new List<GatiMDMUtil.ActionInput>{input});
+        }
+    }
 }

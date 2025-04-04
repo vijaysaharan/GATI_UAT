@@ -4,35 +4,54 @@ public class OUAssignController {
         try {
             List<Organization_Master__c> pincodeLocations = new List<Organization_Master__c>();
             Map<Id, OperationalUnitWrapper> operationUnitToData = new Map<Id, OperationalUnitWrapper>();
-            List<Lead> leadDetails = [SELECT Id, PostalCode,Lead_Assigned_OU__c  FROM Lead WHERE Id = :leadId AND PostalCode != null];
+            List<Lead> leadDetails = [SELECT Id, PostalCode,Lead_Assigned_OU__c, Product__c FROM Lead WHERE Id = :leadId AND PostalCode != null];
 
             if(leadDetails != null && leadDetails.size() > 0){
                 String pincode = leadDetails[0].PostalCode;
                 Id currentAssignedOu = leadDetails[0].Lead_Assigned_OU__c;
                 Id pincodeLocationId = Schema.SObjectType.Organization_Master__c.getRecordTypeInfosByDeveloperName().get('Pincode').getRecordTypeId();
                 Id operationalUnitId = Schema.SObjectType.Organization_Master__c.getRecordTypeInfosByDeveloperName().get('Operation_Unit').getRecordTypeId();
-
-                pincodeLocations = [SELECT Id, RecordTypeId, Parent__c, Parent__r.RecordTypeId, Parent__r.Name 
-                                    FROM Organization_Master__c 
-                                    WHERE Name = :pincode
-                                    AND Parent__c != :currentAssignedOu
-                                    AND RecordTypeId = :pincodeLocationId
-                                    AND Parent__r.RecordTypeId = :operationalUnitId
-                                    ];
+                if(leadDetails[0].Product__c != null && (leadDetails[0].Product__c.contains('SCM') || leadDetails[0].Product__c.contains('MVATS'))){
+                    pincodeLocations = [SELECT Id,Name, RecordTypeId, OU_Name__c, Parent__c, Parent__r.RecordTypeId, 
+                                        Parent__r.Name, Parent__r.OU_Name__c
+                                        FROM Organization_Master__c 
+                                        WHERE SBU_Code__c = 'ASCPL'
+                                        AND RecordTypeId = :operationalUnitId
+                                       ];
+                }
+                else{
+                    pincodeLocations = [SELECT Id, RecordTypeId, OU_Name__c, Parent__c, Parent__r.RecordTypeId, 
+                                        Parent__r.Name, Parent__r.OU_Name__c  
+                                        FROM Organization_Master__c 
+                                        WHERE Name = :pincode
+                                        AND Parent__c != :currentAssignedOu
+                                        AND RecordTypeId = :pincodeLocationId
+                                        AND Parent__r.RecordTypeId = :operationalUnitId
+                                       ];
+                }
             }
 
             if(pincodeLocations != null && pincodeLocations.size() > 0){
                 for(Organization_Master__c OrgMaster : pincodeLocations){
-                    if(OrgMaster.Parent__c != null && !operationUnitToData.containsKey(OrgMaster.Parent__c)){
+                    if(leadDetails[0].Product__c != null && !operationUnitToData.containsKey(OrgMaster.Id) && (leadDetails[0].Product__c.contains('SCM') || leadDetails[0].Product__c.contains('MVATS'))){
+                        OperationalUnitWrapper operationUnitWrap = new OperationalUnitWrapper();
+                        operationUnitWrap.operationId = OrgMaster.Id;
+                        operationUnitWrap.operationCode = OrgMaster.Name;
+                        operationUnitWrap.operationName = OrgMaster.OU_Name__c;
+                        operationUnitToData.put(OrgMaster.Id, operationUnitWrap);
+                    }
+                    else if(OrgMaster.Parent__c != null && !operationUnitToData.containsKey(OrgMaster.Parent__c)){
                         OperationalUnitWrapper operationUnitWrap = new OperationalUnitWrapper();
                         operationUnitWrap.operationId = OrgMaster.Parent__c;
-                        operationUnitWrap.operationName = OrgMaster.Parent__r.Name;
+                        operationUnitWrap.operationCode = OrgMaster.Parent__r.Name;
+                        operationUnitWrap.operationName = OrgMaster.Parent__r.OU_Name__c;
                         operationUnitToData.put(OrgMaster.Parent__c, operationUnitWrap);
                     }
                 }
             }
             return operationUnitToData.values();
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
     }
@@ -51,6 +70,7 @@ public class OUAssignController {
 
     public class OperationalUnitWrapper{
         @AuraEnabled public Id operationId{get;set;}
+        @AuraEnabled public String operationCode{get;set;}
         @AuraEnabled public String operationName{get;set;}
     }
 }

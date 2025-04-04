@@ -1,24 +1,34 @@
 <template>
-    <lightning-card title="Operational Unit" icon-name="action:update_status">
-        <div class="slds-p-around_medium" lwc:if={isOperations}>
-            <lightning-radio-group
-                name="ouSelection"
-                label="Select Operation Unit"
-                options={ouOptions}
-                value={selectedOptionId}
-                type="radio"
-                onchange={handleSelectionChange}>
-            </lightning-radio-group>            
+    <div class="slds-p-around_small header-class">
+        <lightning-icon icon-name="action:update_status" alternative-text="Operational Unit" size="medium"></lightning-icon>
+        <span class="slds-p-left_medium">Operational Unit</span>
+    </div>
+    <div class="slds-p-around_small" lwc:if={isOperations}>
+        <lightning-input 
+            type="search" 
+            label="Search" 
+            variant="label-hidden"
+            placeholder="Search Operation Unit" 
+            onchange={handleSearch}>
+        </lightning-input>
+        <div class="scrollable-container slds-p-top_small">
+            <lightning-datatable 
+                key-field="operationId" 
+                data={filteredData} 
+                columns={columns} 
+                max-row-selection="1"
+                onrowselection={handleRowSelection}>
+            </lightning-datatable>
         </div>
-        <div lwc:if={isOperations} style="text-align: center;">
-            <lightning-button 
-                variant="brand" 
-                label="Update" 
-                onclick={handleUpdateAssignedOu}>
-            </lightning-button>
-        </div>
-        <div lwc:if={isNoData} style="font-size: x-large; text-align: center; color: red; font-weight: bold;">
-            There is no operational unit to select.
-        </div>
-    </lightning-card>
+    </div>
+    <div lwc:if={isNoData} style="font-size: x-large; text-align: center; color: red; font-weight: bold;">
+        There is no operational unit to select.
+    </div>
+    <div lwc:if={isOperations} class="button-container slds-p-around_small">
+        <lightning-button 
+            variant="brand" 
+            label="Update" 
+            onclick={handleUpdateAssignedOu}>
+        </lightning-button>
+    </div>
 </template>

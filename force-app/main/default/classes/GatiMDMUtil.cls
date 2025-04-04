@@ -71,4 +71,10 @@ public class GatiMDMUtil {
         @InvocableVariable public String companyCode;
     }
     
+    public class GatiMDMAmendmentRequestWrapper {
+        public GatiMDMRequestContentWrapper CUST_SEQ_NUM;
+        public GatiMDMRequestContentWrapper payment_Credit_Terms;
+        public GatiMDMRequestContentWrapper creditLimit;
+        public GatiMDMRequestContentWrapper CompanyID;
+    }
 }

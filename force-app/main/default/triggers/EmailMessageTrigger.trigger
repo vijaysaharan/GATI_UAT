@@ -1,4 +1,10 @@
-trigger EmailMessageTrigger on EmailMessage (after insert,before insert) {
+trigger EmailMessageTrigger on EmailMessage (after insert,before insert,after update) {
+    if(Trigger.isBefore && Trigger.isInsert){
+        try{
+            EmailMessageTriggerHandler.createNewCaseForClosedCase(Trigger.new);
+        }catch(Exception e){}
+    }
+    
     if(Trigger.isAfter && Trigger.isInsert){
         Set<Id> CaseIds = New Set<Id>();
         Map<Id,EmailMessage> emailIdToUpdateOnCase = New Map<Id,EmailMessage>();
@@ -22,12 +28,12 @@ trigger EmailMessageTrigger on EmailMessage (after insert,before insert) {
         
         try{
             EmailMessageTriggerHandler.sendNotificationOnEmailReply(Trigger.new);
+            EmailMessageTriggerHandler.updateAnaliticsOnCase(Trigger.new);
+            EmailMessageTriggerHandler.deleteOlderEmailMessages(Trigger.new);
         }catch(Exception e){}
     }
-    
-    if(Trigger.isBefore && Trigger.isInsert){
-        try{
-            EmailMessageTriggerHandler.createNewCaseForClosedCase(Trigger.new);
-        }catch(Exception e){}
+
+    if(Trigger.isAfter && Trigger.isUpdate){
+        EmailMessageTriggerHandler.verifyStatusChange(Trigger.new, Trigger.oldMap);
     }
 }

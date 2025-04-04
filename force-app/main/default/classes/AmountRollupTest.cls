@@ -113,4 +113,18 @@ public class AmountRollupTest {
         
         Test.stopTest();
     }
+    
+    @isTest
+    public static void sendAmendmentTest(){
+        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator('{"statusCode": 201}'));
+        Account test_Account = [SELECT Id,Credit_Amount__c,Credit_Days__c,GATI_Customer_Code__c,GATI_Company_Code__c FROM Account LIMIT 1];
+        
+        test.startTest();
+        test_Account.GATI_Customer_Code__c = '301202';
+        test_Account.GATI_Company_Code__c = '102';
+        test_Account.Credit_Amount__c = 100;
+        test_Account.Credit_Days__c = 5;
+        update test_Account;
+        test.stopTest();
+    }
 }

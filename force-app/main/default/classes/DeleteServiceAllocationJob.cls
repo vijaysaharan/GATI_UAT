@@ -20,7 +20,7 @@ public class DeleteServiceAllocationJob implements Queueable, Database.AllowsCal
         }
     }
 
-    private static String generateAuthorizationToken(){
+    public static String generateAuthorizationToken(){
         Map<String, String> payload = new Map<String, String>();
         payload.put('login', label.MDMAuthorizationUserName);
         payload.put('password', label.MDMAuthorizationPassword);

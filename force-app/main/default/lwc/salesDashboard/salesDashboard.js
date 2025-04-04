@@ -163,6 +163,7 @@ export default class SalesDashboard extends LightningElement {
   }    
     
   @api refreshDashboard(){
+    console.log('dateList ',JSON.stringify(this.dateList,null,2));
     this.currentMonthStart = this.dateList?.currentMonthStart;
     this.currentMonthEnd = this.dateList?.currentMonthEnd;
     this.lastMonthStart = this.dateList?.lastMonthStart;
@@ -873,17 +874,17 @@ export default class SalesDashboard extends LightningElement {
     
   get dynamicCurrentYearOpen() {
     this.isSpinner = true;
-    //console.log('currentFinancialYearOpen',this.currentFinancialYearOpen);
+    // console.log('currentFinancialYearOpen',this.currentFinancialYearOpen);
     return gql`${this.currentFinancialYearOpen}`;
   }
   get dynamicCurrentYear() {
     this.isSpinner = true;
-    //console.log('currentFinancialYear',this.currentFinancialYear);
+    // console.log('currentFinancialYear',this.currentFinancialYear);
     return gql`${this.currentFinancialYear}`;
   }
   get dynamicCurrentMonth() {
     this.isSpinner = true;
-    //console.log('currentFinancialMonth',this.currentFinancialMonth);
+    // console.log('currentFinancialMonth',this.currentFinancialMonth);
     return gql`${this.currentFinancialMonth}`;
   }
 

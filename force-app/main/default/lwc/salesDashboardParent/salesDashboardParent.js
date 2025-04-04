@@ -294,11 +294,13 @@ export default class SalesDashboardParent extends LightningElement {
             var yearCurr = new Date().getFullYear();
             var monthCurr = new Date().getMonth() + 1;
             var year = yearCurr;
-            if(monthCurr <= 3){
-                year = monthNumber > 3 ? (yearCurr - 1) : (yearCurr);
-            }
-            else{
-                year = monthNumber > 3 ? (yearCurr) : (yearCurr+1);
+            if(monthCurr != 4){
+                if(monthCurr <= 3){
+                    year = monthNumber > 3 ? (yearCurr - 1) : (yearCurr);
+                }
+                else{
+                    year = monthNumber > 3 ? (yearCurr) : (yearCurr+1);
+                }
             }
             var startDate = year+'-'+monthNumber.toString().padStart(2, '0')+'-'+'01';
             var endDate = year+'-'+monthNumber.toString().padStart(2, '0')+'-'+(new Date((new Date(year, monthNumber, 1)) - 1)).getDate();

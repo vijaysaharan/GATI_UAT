@@ -1,0 +1,12 @@
+.header-class{
+    align-items: center;
+    font-size: large;
+    font-weight: bold;
+}
+.button-container {
+    text-align: center;
+}
+.scrollable-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
