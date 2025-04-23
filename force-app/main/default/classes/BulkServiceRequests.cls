@@ -213,7 +213,7 @@ public without sharing class BulkServiceRequests {
         User CurrentUser=[Select id,name,FederationIdentifier,ADID__c,Profile.Name from user where id=:UserInfo.getUserId()];
         string fed;
         fed=CurrentUser.ADID__c;
-        if(CurrentUser.Profile.Name=='System Administrator'){
+        if(CurrentUser.Profile.Name=='System Administrator' || CurrentUser.Profile.Name=='User API'){
             fed='crmproj2';
         }
         if(fed==null){

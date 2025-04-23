@@ -4,8 +4,8 @@
     <assignments>
         <name>Lead_Assigned_OU</name>
         <label>Lead Assigned OU</label>
-        <locationX>50</locationX>
-        <locationY>755</locationY>
+        <locationX>149</locationX>
+        <locationY>863</locationY>
         <assignmentItems>
             <assignToReference>$Record.Lead_Assigned_OU__c</assignToReference>
             <operator>Assign</operator>
@@ -42,7 +42,7 @@
         <name>Set_SPOC_For_Zone</name>
         <label>Set SPOC For Zone</label>
         <locationX>50</locationX>
-        <locationY>1463</locationY>
+        <locationY>1655</locationY>
         <assignmentItems>
             <assignToReference>$Record.OwnerId</assignToReference>
             <operator>Assign</operator>
@@ -57,8 +57,8 @@
     <assignments>
         <name>Update_Receiver_Details</name>
         <label>Update Receiver Details</label>
-        <locationX>501</locationX>
-        <locationY>2039</locationY>
+        <locationX>550</locationX>
+        <locationY>2231</locationY>
         <assignmentItems>
             <assignToReference>$Record.Cross_Sell_Receiver_Name__c</assignToReference>
             <operator>Assign</operator>
@@ -102,7 +102,7 @@
         <name>Check_For_SPOC</name>
         <label>Check For SPOC</label>
         <locationX>182</locationX>
-        <locationY>1355</locationY>
+        <locationY>1547</locationY>
         <defaultConnector>
             <targetReference>Get_Owner_for_Cross_Sell</targetReference>
         </defaultConnector>
@@ -127,7 +127,7 @@
         <name>Email_Check_For_Zone_Wise</name>
         <label>Email Check For Zone Wise</label>
         <locationX>336</locationX>
-        <locationY>1139</locationY>
+        <locationY>1331</locationY>
         <defaultConnector>
             <targetReference>Get_Owner_for_Cross_Sell</targetReference>
         </defaultConnector>
@@ -151,7 +151,7 @@
     <decisions>
         <name>Is_New_or_Updated</name>
         <label>Is New or Updated</label>
-        <locationX>501</locationX>
+        <locationX>550</locationX>
         <locationY>323</locationY>
         <defaultConnector>
             <targetReference>Get_Owner_for_Cross_Sell</targetReference>
@@ -193,7 +193,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>OU_Details</targetReference>
+                <targetReference>Product_SCM_Or_MVATS</targetReference>
             </connector>
             <label>Available</label>
         </rules>
@@ -201,8 +201,8 @@
     <decisions>
         <name>Null_Check</name>
         <label>Null Check</label>
-        <locationX>182</locationX>
-        <locationY>647</locationY>
+        <locationX>281</locationX>
+        <locationY>755</locationY>
         <defaultConnector>
             <targetReference>Get_User_Email_According_to_Zone</targetReference>
         </defaultConnector>
@@ -221,6 +221,42 @@
                 <targetReference>Lead_Assigned_OU</targetReference>
             </connector>
             <label>Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Product_SCM_Or_MVATS</name>
+        <label>Product SCM Or MVATS?</label>
+        <locationX>83</locationX>
+        <locationY>539</locationY>
+        <defaultConnector>
+            <targetReference>OU_Details</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Other</defaultConnectorLabel>
+        <rules>
+            <name>SCM_MVATS</name>
+            <conditionLogic>(1 OR 2) AND 3</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Product__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>SCM</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Product__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>MVATS</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.GATI_Company_Code__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>102</stringValue>
+                </rightValue>
+            </conditions>
+            <label>SCM/MVATS</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -267,8 +303,8 @@ TEXT({!$Record.Cross_Sell_Lead_Status__c})
     <recordLookups>
         <name>Get_Contact</name>
         <label>Get Contact</label>
-        <locationX>501</locationX>
-        <locationY>1931</locationY>
+        <locationX>550</locationX>
+        <locationY>2123</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Update_Receiver_Details</targetReference>
@@ -288,8 +324,8 @@ TEXT({!$Record.Cross_Sell_Lead_Status__c})
     <recordLookups>
         <name>Get_Owner_for_Cross_Sell</name>
         <label>Get Owner for Cross Sell</label>
-        <locationX>501</locationX>
-        <locationY>1823</locationY>
+        <locationX>550</locationX>
+        <locationY>2015</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Get_Contact</targetReference>
@@ -310,7 +346,7 @@ TEXT({!$Record.Cross_Sell_Lead_Status__c})
         <name>Get_SPOC_For_Zone</name>
         <label>Get SPOC For Zone</label>
         <locationX>182</locationX>
-        <locationY>1247</locationY>
+        <locationY>1439</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_For_SPOC</targetReference>
@@ -338,7 +374,7 @@ TEXT({!$Record.Cross_Sell_Lead_Status__c})
         <name>Get_User_Email_According_to_Zone</name>
         <label>Get User Email According to Zone</label>
         <locationX>336</locationX>
-        <locationY>1031</locationY>
+        <locationY>1223</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Email_Check_For_Zone_Wise</targetReference>
@@ -358,8 +394,8 @@ TEXT({!$Record.Cross_Sell_Lead_Status__c})
     <recordLookups>
         <name>OU_Details</name>
         <label>OU Details</label>
-        <locationX>182</locationX>
-        <locationY>539</locationY>
+        <locationX>281</locationX>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Null_Check</targetReference>
@@ -393,12 +429,12 @@ TEXT({!$Record.Cross_Sell_Lead_Status__c})
     <recordUpdates>
         <name>Update_the_lead</name>
         <label>Update the lead</label>
-        <locationX>501</locationX>
-        <locationY>2147</locationY>
+        <locationX>550</locationX>
+        <locationY>2339</locationY>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>375</locationX>
+        <locationX>424</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Is_New_or_Updated</targetReference>

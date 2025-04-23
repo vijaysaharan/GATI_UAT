@@ -62,28 +62,32 @@ public with sharing class FetchDataFromDocketController implements Queueable, Da
         Map<String,Id> emailToUser = New Map<String,Id>();
         Map<String,Id> assignmentEmailToUser = New Map<String,Id>();
         Map<String,EmailToCase_Assignment__mdt> emailToGroupData = New Map<String,EmailToCase_Assignment__mdt>();
+
+        Id complaintRecordType = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Complaint').getRecordTypeId();
+        
+        for(Case cs : newCaseMap.values()){
+            if(cs.SuppliedEmail != null &&  complaintRecordType != null && cs.RecordTypeId == complaintRecordType && cs.Origin == 'Email'){
+                suppliedMailsSet.add(cs.SuppliedEmail);
+                suppliedMailsSet.add(cs.SuppliedEmail.split('@').get(1).trim());
+            }
+            if(cs.Email_Address_For_Assignment__c != null && complaintRecordType != null && cs.RecordTypeId == complaintRecordType && cs.Origin == 'Email'){
+                assignmentEmails.addAll(cs.Email_Address_For_Assignment__c.split(';'));
+            }
+        }
+
+        if(suppliedMailsSet.isEmpty()){
+            return;
+        }
+
         List<Group> issueResolutionTeam = [SELECT Id, DeveloperName 
                                            FROM Group 
                                            WHERE DeveloperName = 'Issue_resolution_Team'
                                           ];
-        List<RecordType> recordType = [SELECT Id,DeveloperName 
-                                       FROM RecordType 
-                                       WHERE SobjectType = 'Case' 
-                                       AND DeveloperName = 'Complaint'
-                                      ];
+        
         List<EmailToCase_Assignment__mdt> allGroupData = [SELECT Id, DeveloperName, Label, Email__c 
                                                           FROM EmailToCase_Assignment__mdt
                                                           WHERE Email__c != null
                                                          ];
-        for(Case cs : newCaseMap.values()){
-            if(cs.SuppliedEmail != null && recordType != null && recordType.size()>0 && cs.RecordTypeId == recordType[0].Id && cs.Origin == 'Email'){
-                suppliedMailsSet.add(cs.SuppliedEmail);
-                suppliedMailsSet.add(cs.SuppliedEmail.split('@').get(1).trim());
-            }
-            if(cs.Email_Address_For_Assignment__c != null && recordType != null && recordType.size()>0 && cs.RecordTypeId == recordType[0].Id && cs.Origin == 'Email'){
-                assignmentEmails.addAll(cs.Email_Address_For_Assignment__c.split(';'));
-            }
-        }
         
         List<CS_Domain_Mapping__c> domainToUserMapping = [SELECT Id, Name, User__c 
                                                           FROM CS_Domain_Mapping__c 
@@ -116,7 +120,7 @@ public with sharing class FetchDataFromDocketController implements Queueable, Da
         }
         
         for(Case cs : newCaseMap.values()){
-            if(cs.Email_Address_For_Assignment__c != null && cs.Email_Address_For_Assignment__c != oldCaseMap.get(cs.Id).Email_Address_For_Assignment__c && recordType != null && recordType.size()>0 && cs.RecordTypeId == recordType[0].Id && cs.Origin == 'Email'){
+            if(cs.Email_Address_For_Assignment__c != null && cs.Email_Address_For_Assignment__c != oldCaseMap.get(cs.Id).Email_Address_For_Assignment__c && complaintRecordType != null && cs.RecordTypeId == complaintRecordType && cs.Origin == 'Email'){
                 caseListForDocket.add(cs.Id);
                 /*Boolean isOwnerAssigned = false;
                 List<String> emailsList = cs.Email_Address_For_Assignment__c.split(';');

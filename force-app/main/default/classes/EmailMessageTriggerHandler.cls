@@ -1,5 +1,17 @@
 public class EmailMessageTriggerHandler {
-    public static void updateFirstResponseOnCase(Set<Id> caseIds){
+    public static void updateFirstResponseOnCase(List<EmailMessage> emailMessageList){
+        Set<Id> caseIds = new Set<Id>();
+
+        for(EmailMessage em : emailMessageList){
+            if(em.Incoming == false && em.ParentId != null && String.valueOf(em.ParentId).contains('500')){
+                caseIds.add(em.ParentId);
+            }
+        }
+
+        if(caseIds.isEmpty()){
+            return;
+        }
+
         List<Case> caseList = [SELECT Id,First_Email_Response__c From Case Where Id IN: caseIds And First_Email_Response__c = null];
         if(caseList != null && caseList.size()>0){
             For(Case cs :caseList){
@@ -9,14 +21,24 @@ public class EmailMessageTriggerHandler {
         }
     }
     
-    public static void updateEmailAddressInCase(Map<Id,EmailMessage> caseToEmailMessage){
+    public static void updateEmailAddressInCase(List<EmailMessage> emailMessageList){
         Boolean isUpdate = false;
+        Map<Id,EmailMessage> caseToEmailMessage = New Map<Id,EmailMessage>();
+
+        for(EmailMessage em : emailMessageList){
+            if(em.Incoming == true && em.ParentId != null && String.valueOf(em.ParentId).contains('500') && em.ToAddress != null){
+                caseToEmailMessage.put(em.ParentId,em);
+            }
+        }
+
         List<Case> caseList = [SELECT Id,Email_Address_For_Assignment__c,OwnerId 
                                FROM Case 
                                WHERE Id IN: caseToEmailMessage.keySet() 
                                AND Email_Address_For_Assignment__c = null
                               ];
+
         if(caseList != null && caseList.size()>0){
+            Set<String> roundRobinEmails = new Set<String>(Label.RoundRobinEmails.split(','));
             for(Case cs : caseList){
                 if(caseToEmailMessage.containsKey(cs.Id)){
                     List<String> emailList = caseToEmailMessage.get(cs.Id).ToAddress.split(';');
@@ -30,6 +52,9 @@ public class EmailMessageTriggerHandler {
                     for(String em : emailList){
                         if(em.contains('@allcargologistics.com') || em.contains('@gati')){
                             emailToCheck = em.trim();
+                        }
+                        if(roundRobinEmails.contains(em.trim())){
+                            emailToCheck = 'retail_support@allcargologistics.com';
                             break;
                         }
                     }
@@ -110,12 +135,6 @@ public class EmailMessageTriggerHandler {
     }
     
     public static void sendNotificationOnEmailReply(List<EmailMessage> emailMessageList){
-        Id notificationTypeId = [SELECT Id FROM CustomNotificationType WHERE DeveloperName='Customer_Email_Reply']?.Id;
-        
-        if(notificationTypeId == null){
-            return;
-        }
-        
         Set<Id> emailMessageIds = new Set<Id>();
         for(EmailMessage em : emailMessageList){
             if(em.Incoming == true && em.ParentId != null && String.valueOf(em.ParentId).contains('500')){
@@ -125,7 +144,13 @@ public class EmailMessageTriggerHandler {
         
         if(emailMessageIds.isEmpty()){
             return;
-        }        
+        }  
+        
+        Id notificationTypeId = [SELECT Id FROM CustomNotificationType WHERE DeveloperName='Customer_Email_Reply']?.Id;
+        
+        if(notificationTypeId == null){
+            return;
+        }
         
         for(EmailMessage em : [SELECT Id, ParentId, Parent.OwnerId, Subject, Parent.Origin, Parent.CaseNumber FROM EmailMessage WHERE Id IN :emailMessageIds AND Parent.Origin = 'Email']){
             notifyUsers(em, notificationTypeId);

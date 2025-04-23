@@ -349,7 +349,7 @@ public class GatiMDMIntegration {
         String endPoint = MDMSetting__mdt.getInstance('Amendment_Credit_Customer').EndPoint__c;
 
         CUST_SEQ_NUM.content = input.account.GATI_Customer_Code__c;
-        payment_Credit_Terms.content = String.valueOf(input.account.Credit_Days__c);
+        payment_Credit_Terms.content = String.valueOf(input.account.Credit_Period__c);
         creditLimit.content = String.valueOf(input.account.Credit_Amount__c);
         CompanyID.content = companyName;
 

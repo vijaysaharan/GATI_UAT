@@ -601,7 +601,7 @@
             <assignToReference>requestBody.shorttermcreditamt</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>varCreditAmount</elementReference>
+                <elementReference>CreditAmount</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -755,6 +755,12 @@
     </decisions>
     <environments>Default</environments>
     <formulas>
+        <name>CreditAmount</name>
+        <dataType>Number</dataType>
+        <expression>IF(ISBLANK({!Get_Account_Data.Credit_Amount__c}),0,{!Get_Account_Data.Credit_Amount__c})</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
         <name>varAddress1</name>
         <dataType>String</dataType>
         <expression>IF(ISBLANK({!Get_Account_Data.Billing_Street_1__c}),&quot;null&quot;,{!Get_Account_Data.Billing_Street_1__c})</expression>
@@ -830,7 +836,7 @@
     <formulas>
         <name>varCreditDays</name>
         <dataType>Number</dataType>
-        <expression>IF(ISBLANK({!Get_Account_Data.Credit_Days__c}),0,{!Get_Account_Data.Credit_Days__c})</expression>
+        <expression>IF(ISBLANK({!Get_Account_Data.Credit_Period__c}),0,{!Get_Account_Data.Credit_Period__c})</expression>
         <scale>0</scale>
     </formulas>
     <formulas>
@@ -966,7 +972,7 @@
     <formulas>
         <name>varState</name>
         <dataType>String</dataType>
-        <expression>IF(ISBLANK({!recordId.Account.State__c}),&quot;null&quot;,{!recordId.Account.State__c})</expression>
+        <expression>IF(ISBLANK({!recordId.Account.BillingState}),&quot;null&quot;,{!recordId.Account.BillingState})</expression>
     </formulas>
     <formulas>
         <name>varToken</name>

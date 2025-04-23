@@ -18,6 +18,7 @@ public class FetchDataFromDocketControllerTest {
         newCase.Subject = 'Test Email To Case';
         newCase.Priority = 'Normal';
         newCase.Origin = 'Email';
+        newCase.SuppliedEmail = 'test@test.com';
         newCase.RecordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Complaint').getRecordTypeId();
         newCase.Description = 'Hi Test, You Are Sending Test 388508962.';
         insert newCase;

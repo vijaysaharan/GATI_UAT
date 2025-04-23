@@ -42,7 +42,7 @@
     <start>
         <locationX>50</locationX>
         <locationY>0</locationY>
-        <filterLogic>(1 OR 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8 OR 9 OR 10 OR 11 OR 12 OR 13 OR 14 OR 15 OR 16 OR 17 OR 18 OR 19 OR 20 OR 21) AND 22</filterLogic>
+        <filterLogic>(1 OR 2 OR 3 OR 4 OR 5 OR 6 OR 7 OR 8 OR 9 OR 10 OR 11 OR 12 OR 13 OR 14 OR 15 OR 16 OR 17 OR 18 OR 19 OR 20 OR 21) AND (22 OR 23)</filterLogic>
         <filters>
             <field>OwnerId</field>
             <operator>IsChanged</operator>
@@ -195,6 +195,13 @@
             <operator>EqualTo</operator>
             <value>
                 <stringValue>0125g000000EkgNAAS</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>RecordTypeId</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>0125g000000EkgMAAS</stringValue>
             </value>
         </filters>
         <object>Account</object>

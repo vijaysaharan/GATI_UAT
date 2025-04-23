@@ -203,7 +203,7 @@ public class AmountRollupHandler {
 
     @future(Callout = true)
     public static void calloutForAmendmentChange(Set<Id> accountIds){
-        List<Account> accountList = [SELECT Id, GATI_Customer_Code__c, Credit_Amount__c, Credit_Days__c, GATI_Company_Code__c FROM Account WHERE Id IN :accountIds];
+        List<Account> accountList = [SELECT Id, GATI_Customer_Code__c, Credit_Amount__c, Credit_Period__c, GATI_Company_Code__c FROM Account WHERE Id IN :accountIds];
         String authorizationToken = generateAuthorizationToken();
         for(Account eachAccount : accountList){
             GatiMDMUtil.ActionInput input = new GatiMDMUtil.ActionInput();

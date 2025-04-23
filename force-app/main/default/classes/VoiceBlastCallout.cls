@@ -26,20 +26,28 @@ public class VoiceBlastCallout implements Queueable, Database.AllowsCallouts {
             if(codeToProcessName.containsKey(caseRecord.NDR_Code__c)){
                 caseListObject.add(new Map<String, Object>{
                     'customerRecord' => new Map<String, Object>{
-                        'process' => codeToProcessName.get(caseRecord.NDR_Code__c).Process__c,
-                            'sf_id' => caseRecord.Id,
-                            'phone1' => caseRecord.ContactPhone,
-                            'vb_id' => caseRecord.Id,
-                            'dly_attempted_date' => caseRecord.PDC_DATE__c,
-                            'Pickup_Date__c' => caseRecord.Pickup_Date__c,
-                            'pickup_attempted_date' => null,
-                            'mobileno' => caseRecord.ContactMobile,
-                            'pickup_refno' => caseRecord.Case_Name__c,
-                            'reason_code' => caseRecord.NDR_Code__c,
-                            'delivery_ou' => caseRecord.Delivery_OU__r.Name,
-                            'ops_reason' => codeToProcessName.get(caseRecord.NDR_Code__c).Reason__c,
-                            'customername' => caseRecord.Contact.Name,
-                            'docket_no' => caseRecord.Docket_Number__c
+                            //'sf_id' => caseRecord.Id,
+                            //'phone1' => caseRecord.ContactPhone,
+                            //'vb_id' => caseRecord.Id,
+                            //'dly_attempted_date' => caseRecord.PDC_DATE__c,                            
+                            //'ndr_code' => caseRecord.NDR_Code__c,
+                            //'delivery_ou' => caseRecord.Delivery_OU__r.Name,
+                            //'ndr_reason' => codeToProcessName.get(caseRecord.NDR_Code__c).Reason__c,
+                            //'docket_number' => caseRecord.Docket_Number__c,
+                            //'customername' => caseRecord.Contact.Name,
+                            //'Pickup_Date__c' => caseRecord.Pickup_Date__c,
+                            //'pickup_attempted_date' => null,
+                            //'mobileno' => caseRecord.ContactMobile,
+                            //'pickup_refno' => caseRecord.Case_Name__c,
+                            'process' => codeToProcessName.get(caseRecord.NDR_Code__c).Process__c,
+                            'delivery_ou' => 'NAGW',
+                            'dly_attempted_date' => '2025-04-08 18:00:00',
+                            'docket_number' => '434546474',
+                            'ndr_reason' => 'customer_premises_closed',
+                            'ndr_code' => '13',
+                            'phone1' => '9561011706',
+                            'sf_id' => '500Bl00000Bk8ymIBC',
+                            'vb_id' => '1ABCDE456'
                             }
                 });
             }
@@ -50,6 +58,7 @@ public class VoiceBlastCallout implements Queueable, Database.AllowsCallouts {
                 'campaignId' => 84,
                     'customerAndCallbackRecords' => caseListObject,
                     'leadId' => 10776,
+                    'status' => 'NOT_TRIED',
                     'properties' => new Map<String, Boolean>{
                         'update.customer' => true,
                             'migrate.customer' => true
@@ -63,6 +72,7 @@ public class VoiceBlastCallout implements Queueable, Database.AllowsCallouts {
             req.setHeader('requesting-host',reqhost);
             req.setHeader('Content-Type',contenttype);
             req.setEndpoint(endpoint);
+            req.setTimeout(120000);
             req.setMethod('POST');
             req.setBody('data='+payload);  
             System.debug('Request Body '+payload);        

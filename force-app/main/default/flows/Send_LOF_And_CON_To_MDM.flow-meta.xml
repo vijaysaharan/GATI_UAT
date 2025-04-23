@@ -3,7 +3,7 @@
     <actionCalls>
         <name>Gati_MDM_Token_Request</name>
         <label>Gati MDM Token Request</label>
-        <locationX>446</locationX>
+        <locationX>578</locationX>
         <locationY>816</locationY>
         <actionName>GATIMDMAdditionalApprovalAuth.GatiMDMAdditionalApprovalAuth</actionName>
         <actionType>externalService</actionType>
@@ -30,6 +30,9 @@
         <connector>
             <targetReference>isContract_Sent</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Error_Send_CON</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>account</name>
@@ -61,13 +64,16 @@
     <actionCalls>
         <name>Send_LOF</name>
         <label>Send LOF</label>
-        <locationX>710</locationX>
+        <locationX>974</locationX>
         <locationY>1032</locationY>
         <actionName>GatiMDMInvocable</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>isLOF_Sent</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Failed_Send_LOF</targetReference>
+        </faultConnector>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>account</name>
@@ -98,9 +104,43 @@
     </actionCalls>
     <apiVersion>61.0</apiVersion>
     <assignments>
+        <name>Error_Send_CON</name>
+        <label>Error Send CON</label>
+        <locationX>578</locationX>
+        <locationY>1140</locationY>
+        <assignmentItems>
+            <assignToReference>varMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Update_Integration_Message</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Failed_Send_LOF</name>
+        <label>Failed Send LOF</label>
+        <locationX>1370</locationX>
+        <locationY>1140</locationY>
+        <assignmentItems>
+            <assignToReference>varMessage</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>Update_Integration_Message</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Set_Authorization_Params</name>
         <label>Set Authorization Params</label>
-        <locationX>446</locationX>
+        <locationX>578</locationX>
         <locationY>708</locationY>
         <assignmentItems>
             <assignToReference>varParams.login</assignToReference>
@@ -155,7 +195,7 @@
     <assignments>
         <name>Set_LOF_Error_Message</name>
         <label>Set LOF Error Message</label>
-        <locationX>842</locationX>
+        <locationX>1106</locationX>
         <locationY>1248</locationY>
         <assignmentItems>
             <assignToReference>varMessage</assignToReference>
@@ -171,7 +211,7 @@
     <assignments>
         <name>Set_LOF_Success_Message</name>
         <label>Set LOF Success Message</label>
-        <locationX>578</locationX>
+        <locationX>842</locationX>
         <locationY>1248</locationY>
         <assignmentItems>
             <assignToReference>varMessage</assignToReference>
@@ -187,7 +227,7 @@
     <decisions>
         <name>Check_For_Contract</name>
         <label>Check For Contract</label>
-        <locationX>446</locationX>
+        <locationX>578</locationX>
         <locationY>924</locationY>
         <defaultConnector>
             <targetReference>Send_LOF</targetReference>
@@ -212,7 +252,7 @@
     <decisions>
         <name>Is_Account</name>
         <label>Is Account</label>
-        <locationX>776</locationX>
+        <locationX>1106</locationX>
         <locationY>600</locationY>
         <defaultConnectorLabel>Account Not Found</defaultConnectorLabel>
         <rules>
@@ -234,7 +274,7 @@
     <decisions>
         <name>Is_Opportunity</name>
         <label>Is Opportunity?</label>
-        <locationX>1073</locationX>
+        <locationX>1502</locationX>
         <locationY>384</locationY>
         <defaultConnectorLabel>Opportunity Not Found</defaultConnectorLabel>
         <rules>
@@ -281,7 +321,7 @@
     <decisions>
         <name>isLOF_Sent</name>
         <label>isLOF Sent</label>
-        <locationX>710</locationX>
+        <locationX>974</locationX>
         <locationY>1140</locationY>
         <defaultConnector>
             <targetReference>Set_LOF_Error_Message</targetReference>
@@ -333,7 +373,7 @@
     <recordLookups>
         <name>Get_Account_Record</name>
         <label>Get Account Record</label>
-        <locationX>776</locationX>
+        <locationX>1106</locationX>
         <locationY>492</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -354,7 +394,7 @@
     <recordLookups>
         <name>Get_Opportunity_Record</name>
         <label>Get Opportunity Record</label>
-        <locationX>1073</locationX>
+        <locationX>1502</locationX>
         <locationY>276</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -375,7 +415,7 @@
     <recordUpdates>
         <name>Update_Integration_Message</name>
         <label>Update Integration Message</label>
-        <locationX>446</locationX>
+        <locationX>578</locationX>
         <locationY>1524</locationY>
         <inputAssignments>
             <field>IntegrationMessage__c</field>
@@ -386,7 +426,7 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>303</locationX>
+        <locationX>518</locationX>
         <locationY>0</locationY>
         <filterLogic>and</filterLogic>
         <filters>

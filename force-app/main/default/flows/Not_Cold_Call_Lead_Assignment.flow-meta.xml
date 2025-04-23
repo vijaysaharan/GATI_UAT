@@ -5,7 +5,7 @@
         <name>Assign_owner_to_HEAD</name>
         <label>Assign owner to HEAD</label>
         <locationX>50</locationX>
-        <locationY>755</locationY>
+        <locationY>863</locationY>
         <assignmentItems>
             <assignToReference>$Record.Lead_Assigned_OU__c</assignToReference>
             <operator>Assign</operator>
@@ -49,7 +49,7 @@
         <name>Check_if_organization_master_record_is_not_null</name>
         <label>Check if organization master record is not null</label>
         <locationX>380</locationX>
-        <locationY>539</locationY>
+        <locationY>647</locationY>
         <defaultConnectorLabel>null</defaultConnectorLabel>
         <rules>
             <name>not_null</name>
@@ -71,7 +71,7 @@
         <name>Check_Lead_Source</name>
         <label>Check Lead Source</label>
         <locationX>182</locationX>
-        <locationY>647</locationY>
+        <locationY>755</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Lead_Source_Not_Equal_To_Cold_Call_And_Cross_Sell</name>
@@ -99,7 +99,7 @@
     <decisions>
         <name>Check_New_or_Update</name>
         <label>Check New or Update</label>
-        <locationX>611</locationX>
+        <locationX>462</locationX>
         <locationY>323</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -141,9 +141,45 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>getOU</targetReference>
+                <targetReference>Is_SCM_OR_MVATS</targetReference>
             </connector>
             <label>New</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_SCM_OR_MVATS</name>
+        <label>Is SCM OR MVATS?</label>
+        <locationX>83</locationX>
+        <locationY>431</locationY>
+        <defaultConnector>
+            <targetReference>getOU</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Other</defaultConnectorLabel>
+        <rules>
+            <name>YesSCMMVATS</name>
+            <conditionLogic>(1 OR 2) AND 3</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Product__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>SCM</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Product__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>MVATS</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.GATI_Company_Code__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>102</stringValue>
+                </rightValue>
+            </conditions>
+            <label>SCM MVATS</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -182,7 +218,7 @@
         <name>getOU</name>
         <label>getOU</label>
         <locationX>380</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Check_if_organization_master_record_is_not_null</targetReference>
@@ -217,11 +253,11 @@
         <name>Update_Lead_Record</name>
         <label>Update Lead Record</label>
         <locationX>50</locationX>
-        <locationY>863</locationY>
+        <locationY>971</locationY>
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>485</locationX>
+        <locationX>336</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Check_New_or_Update</targetReference>

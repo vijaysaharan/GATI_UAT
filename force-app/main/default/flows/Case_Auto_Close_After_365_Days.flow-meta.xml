@@ -23,11 +23,40 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Log</name>
+        <label>Create Log</label>
+        <locationX>572</locationX>
+        <locationY>384</locationY>
+        <inputAssignments>
+            <field>Component_Name__c</field>
+            <value>
+                <stringValue>Case Auto Close After 365 Days Failed Flow</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Error_Message__c</field>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>eRecordID__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Integration_Log__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
     <recordUpdates>
         <name>update_status_to_closed</name>
         <label>update status to closed</label>
         <locationX>308</locationX>
         <locationY>276</locationY>
+        <faultConnector>
+            <targetReference>Create_Log</targetReference>
+        </faultConnector>
         <inputAssignments>
             <field>Approver_Remarks__c</field>
             <value>
