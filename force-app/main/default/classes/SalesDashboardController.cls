@@ -57,7 +57,7 @@ public with sharing class SalesDashboardController {
         List<String> accountTypes = whrClause.accountTypesSelected;
         String monthYear = whrClause.monthYear;
         List<MonthlyTradeDashboard__c> returnList = new List<MonthlyTradeDashboard__c>();
-        String queryString = 'SELECT ContractName__r.Id,ContractName__r.Name,UpDownTrade__c,ContractName__r.Contract_Number__c,RevenueMTD__c,RevenueLMTD__c,RevenueYTD__c,MoM__c FROM MonthlyTradeDashboard__c';
+        String queryString = 'SELECT ContractName__r.Id,ContractName__r.Name,UpDownTrade__c,ContractName__r.Contract_Number__c,RevenueMTD__c,RevenueLMTD__c,RevenueYTD__c,MoM__c,RevenueLYSM__c,YOYAmount__c,YOY__c FROM MonthlyTradeDashboard__c';
         if(userIds != null && zones != null && accountTypes != null){
         	queryString += (userIds != null && userIds.size()>0) ? ' WHERE ContractName__r.OwnerId IN: userIds AND' : ' WHERE';
         	queryString += (zones != null && zones.size()>0) ? ' ContractName__r.Zone_Name__c IN: zones AND' : '';

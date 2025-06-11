@@ -17,7 +17,7 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
     }
     
     public Database.QueryLocator start(Database.BatchableContext BC){
-        String query =	'SELECT Id,AccountName__c,ABSLInboundL12M__c,ABSLOutboundL12M__c,DIFOTL12M__c,DocketL12M__c,OutstandingL12M__c,RevenueL12M__c,VisitsL12M__c,VolumeL12M__c,ABSLInboundL3M__c,ABSLOutboundL3M__c,DIFOTL3M__c,DocketL3M__c,OutstandingL3M__c,RevenueL3M__c,VisitsL3M__c,VolumeL3M__c,ABSLInboundLM__c,ABSLOutboundLM__c,DIFOTLM__c,DocketLM__c,OutstandingLM__c,RevenueLM__c,VisitsLM__c,VolumeLM__c,ABSLInboundMTD__c,ABSLOutboundMTD__c,DIFOTMTD__c,DocketMTD__c,OutstandingMTD__c,RevenueMTD__c,VisitsMTD__c,VolumeMTD__c,ABSLInboundYTD__c,ABSLOutboundYTD__c,DIFOTYTD__c,DocketYTD__c,OutstandingYTD__c,RevenueYTD__c,VisitsYTD__c,VolumeYTD__c,CollectionMTD__c,CollectionLM__c,CollectionL3M__c,CollectionL12M__c,CollectionYTD__c,VisitsLMTD__c,On_time_arrival_Dockets_MTD__c, On_Time_Delivered_With_Out_Deps_MTD__c, Total_Assured_Dockets_MTD__c FROM CustomerDashboard__c';
+        String query =	'SELECT Id,AccountName__c,ABSLInboundL12M__c,ABSLOutboundL12M__c,DIFOTL12M__c,DocketL12M__c,OutstandingL12M__c,RevenueL12M__c,VisitsL12M__c,VolumeL12M__c,ABSLInboundL3M__c,ABSLOutboundL3M__c,DIFOTL3M__c,DocketL3M__c,OutstandingL3M__c,RevenueL3M__c,VisitsL3M__c,VolumeL3M__c,ABSLInboundLM__c,ABSLOutboundLM__c,DIFOTLM__c,DocketLM__c,OutstandingLM__c,RevenueLM__c,VisitsLM__c,VolumeLM__c,ABSLInboundMTD__c,ABSLOutboundMTD__c,DIFOTMTD__c,DocketMTD__c,OutstandingMTD__c,RevenueMTD__c,VisitsMTD__c,VolumeMTD__c,ABSLInboundYTD__c,ABSLOutboundYTD__c,DIFOTYTD__c,DocketYTD__c,OutstandingYTD__c,RevenueYTD__c,VisitsYTD__c,VolumeYTD__c,CollectionMTD__c,CollectionLM__c,CollectionL3M__c,CollectionL12M__c,CollectionYTD__c,VisitsLMTD__c,On_time_arrival_Dockets_MTD__c, On_Time_Delivered_With_Out_Deps_MTD__c, Total_Assured_Dockets_MTD__c,On_time_arrival_Dockets_YTD__c, Total_Assured_Dockets_YTD__c, On_Time_Delivered_With_Out_Deps_YTD__c,On_time_arrival_Dockets_LM__c, Total_Assured_Dockets_LM__c, On_Time_Delivered_With_Out_Deps_LM__c,On_time_arrival_Dockets_L3M__c, Total_Assured_Dockets_L3M__c, On_Time_Delivered_With_Out_Deps_L3M__c,On_time_arrival_Dockets_L12M__c, Total_Assured_Dockets_L12M__c, On_Time_Delivered_With_Out_Deps_L12M__c,RevenueLYSM__c FROM CustomerDashboard__c';
         return Database.getQueryLocator(query);
     }
     public void execute(Database.BatchableContext BC, List<CustomerDashboard__c> scope){
@@ -30,6 +30,7 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
         Map<Id,Decimal> accIdToVolume = new Map<Id,Decimal>();
         Map<Id,Decimal> accIdToCollection = new Map<Id,Decimal>();
         Map<Id,Decimal> accIdToRevenueLMTD = new Map<Id,Decimal>();
+        Map<Id,Decimal> accIdToRevenueLYSM = new Map<Id,Decimal>();
         Map<Id,Decimal> accIdToDocketLMTD = new Map<Id,Decimal>();
         Map<Id,Decimal> accIdToVolumnLMTD = new Map<Id,Decimal>();
         //Added for Difot And ABSL
@@ -44,7 +45,7 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
         }
 
         List<MonthlyTradeDashboard__c> monthlyTrades = [SELECT Id, Name, ContractName__c, RevenueMTD__c, RevenueLMTD__c, RevenueYTD__c, 
-                                                        UpDownTrade__c, MoM__c, MonthYear__c
+                                                        UpDownTrade__c, MoM__c, MonthYear__c, RevenueLYSM__c
                                                         FROM MonthlyTradeDashboard__c
                                                         WHERE MonthYear__c = :currentMonthYear
                                                         AND ContractName__c IN :accIds
@@ -52,7 +53,7 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
         List<Customer360__c> customer360List = [SELECT Customer_Code__c,Customer_Code__r.ParentId,No_of_dkt_MTD__c,LM_TD__c,
                                                 Ch_wt_MTD__c,MTD__c,DIFOT__c,ABSL_Inbound__c,ABSL_Outbound__c,Current_Month_OS__c,
                                                 COLL_as_on_date__c,CYLM_No_of_Dockets__c,CYLM_Charged_Wt__c,Total_Assured_Dockets__c,
-                                                ON_time_delivered_with_out_deps__c,On_time_arrival_Dockets__c  
+                                                ON_time_delivered_with_out_deps__c,On_time_arrival_Dockets__c,LYSM_TD__c  
                                                 FROM Customer360__c 
                                                 WHERE As_on_date__c >=: StartDate
                                                 AND As_on_date__c <=: EndDate
@@ -143,6 +144,14 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
                 else{
                     accIdToRevenueLMTD.put(key,cm.LM_TD__c);
                 }
+                if(cm.LYSM_TD__c != null){
+                    if(accIdToRevenueLYSM.containsKey(key)){
+                        accIdToRevenueLYSM.put(key,(accIdToRevenueLYSM.get(key)+cm.LYSM_TD__c));
+                    }
+                    else{
+                        accIdToRevenueLYSM.put(key,cm.LYSM_TD__c);
+                    }
+                }
                 if(cm.CYLM_Charged_Wt__c != null){
                     if(accIdToVolumnLMTD.containsKey(key)){
                         accIdToVolumnLMTD.put(key,(accIdToVolumnLMTD.get(key)+cm.CYLM_Charged_Wt__c));
@@ -193,6 +202,10 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
                 cdash.OutstandingL12M__c = accIdToOutstanding.containsKey(cdash.AccountName__c) ? (accIdToOutstanding.get(cdash.AccountName__c)) : 0;
                 cdash.RevenueL12M__c = accIdToRevenue.containsKey(cdash.AccountName__c) ? (accIdToRevenue.get(cdash.AccountName__c)) : 0;
                 cdash.VolumeL12M__c = accIdToVolume.containsKey(cdash.AccountName__c) ? (accIdToVolume.get(cdash.AccountName__c)) : 0;
+                //Added for Difot And ABSL
+                //cdash.On_time_arrival_Dockets_L12M__c = accIdToOnTimeArrival.containsKey(cdash.AccountName__c) ? (accIdToOnTimeArrival.get(cdash.AccountName__c)) : 0;
+                //cdash.Total_Assured_Dockets_L12M__c = accIdToTotalAssured.containsKey(cdash.AccountName__c) ? (accIdToTotalAssured.get(cdash.AccountName__c)) : 0;
+                //cdash.On_Time_Delivered_With_Out_Deps_L12M__c = accIdToOnTimeDelivered.containsKey(cdash.AccountName__c) ? (accIdToOnTimeDelivered.get(cdash.AccountName__c)) : 0;
             }
             else if(Identifier == 'L3M'){
                 cdash.VisitsL3M__c = accIdToVisitCount.containsKey(cdash.AccountName__c) ? accIdToVisitCount.get(cdash.AccountName__c) : 0;
@@ -200,6 +213,10 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
                 cdash.OutstandingL3M__c = accIdToOutstanding.containsKey(cdash.AccountName__c) ? (accIdToOutstanding.get(cdash.AccountName__c)) : 0;
                 cdash.RevenueL3M__c = accIdToRevenue.containsKey(cdash.AccountName__c) ? (accIdToRevenue.get(cdash.AccountName__c)) : 0;
                 cdash.VolumeL3M__c = accIdToVolume.containsKey(cdash.AccountName__c) ? (accIdToVolume.get(cdash.AccountName__c)) : 0;
+                //Added for Difot And ABSL
+                cdash.On_time_arrival_Dockets_L3M__c = accIdToOnTimeArrival.containsKey(cdash.AccountName__c) ? (accIdToOnTimeArrival.get(cdash.AccountName__c)) : 0;
+                cdash.Total_Assured_Dockets_L3M__c = accIdToTotalAssured.containsKey(cdash.AccountName__c) ? (accIdToTotalAssured.get(cdash.AccountName__c)) : 0;
+                cdash.On_Time_Delivered_With_Out_Deps_L3M__c = accIdToOnTimeDelivered.containsKey(cdash.AccountName__c) ? (accIdToOnTimeDelivered.get(cdash.AccountName__c)) : 0;
             }
             else if(Identifier == 'LM'){
                 cdash.VisitsLM__c = accIdToVisitCount.containsKey(cdash.AccountName__c) ? accIdToVisitCount.get(cdash.AccountName__c) : 0;
@@ -207,6 +224,10 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
                 cdash.OutstandingLM__c = accIdToOutstanding.containsKey(cdash.AccountName__c) ? (accIdToOutstanding.get(cdash.AccountName__c)) : 0;
                 cdash.RevenueLM__c = accIdToRevenue.containsKey(cdash.AccountName__c) ? (accIdToRevenue.get(cdash.AccountName__c)) : 0;
                 cdash.VolumeLM__c = accIdToVolume.containsKey(cdash.AccountName__c) ? (accIdToVolume.get(cdash.AccountName__c)) : 0;
+                //Added for Difot And ABSL
+                cdash.On_time_arrival_Dockets_LM__c = accIdToOnTimeArrival.containsKey(cdash.AccountName__c) ? (accIdToOnTimeArrival.get(cdash.AccountName__c)) : 0;
+                cdash.Total_Assured_Dockets_LM__c = accIdToTotalAssured.containsKey(cdash.AccountName__c) ? (accIdToTotalAssured.get(cdash.AccountName__c)) : 0;
+                cdash.On_Time_Delivered_With_Out_Deps_LM__c = accIdToOnTimeDelivered.containsKey(cdash.AccountName__c) ? (accIdToOnTimeDelivered.get(cdash.AccountName__c)) : 0;
             }
             else if(Identifier == 'MTD'){
                 cdash.VisitsMTD__c = accIdToVisitCount.containsKey(cdash.AccountName__c) ? accIdToVisitCount.get(cdash.AccountName__c) : 0;
@@ -216,6 +237,7 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
                 cdash.RevenueMTD__c = accIdToRevenue.containsKey(cdash.AccountName__c) ? (accIdToRevenue.get(cdash.AccountName__c)) : 0;
                 cdash.VolumeMTD__c = accIdToVolume.containsKey(cdash.AccountName__c) ? (accIdToVolume.get(cdash.AccountName__c)) : 0;
 				cdash.Revenue_LMTD__c = accIdToRevenueLMTD.containsKey(cdash.AccountName__c) ? (accIdToRevenueLMTD.get(cdash.AccountName__c)) : 0; 
+                cdash.RevenueLYSM__c = accIdToRevenueLYSM.containsKey(cdash.AccountName__c) ? (accIdToRevenueLYSM.get(cdash.AccountName__c)) : 0; 
                 cdash.CollectionMTD__c = accIdToCollection.containsKey(cdash.AccountName__c) ? (accIdToCollection.get(cdash.AccountName__c)) : 0;
                 cdash.VolumeLMTD__c = accIdToVolumnLMTD.containsKey(cdash.AccountName__c) ? (accIdToVolumnLMTD.get(cdash.AccountName__c)) : 0;
                 cdash.DocketLMTD__c = accIdToDocketLMTD.containsKey(cdash.AccountName__c) ? (accIdToDocketLMTD.get(cdash.AccountName__c)) : 0;
@@ -243,6 +265,10 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
                 cdash.OutstandingYTD__c = accIdToOutstanding.containsKey(cdash.AccountName__c) ? (accIdToOutstanding.get(cdash.AccountName__c)) : 0;
                 cdash.RevenueYTD__c = accIdToRevenue.containsKey(cdash.AccountName__c) ? (accIdToRevenue.get(cdash.AccountName__c)) : 0;
                 cdash.VolumeYTD__c = accIdToVolume.containsKey(cdash.AccountName__c) ? (accIdToVolume.get(cdash.AccountName__c)) : 0;
+                //Added for Difot And ABSL
+                cdash.On_time_arrival_Dockets_YTD__c = accIdToOnTimeArrival.containsKey(cdash.AccountName__c) ? (accIdToOnTimeArrival.get(cdash.AccountName__c)) : 0;
+                cdash.Total_Assured_Dockets_YTD__c = accIdToTotalAssured.containsKey(cdash.AccountName__c) ? (accIdToTotalAssured.get(cdash.AccountName__c)) : 0;
+                cdash.On_Time_Delivered_With_Out_Deps_YTD__c = accIdToOnTimeDelivered.containsKey(cdash.AccountName__c) ? (accIdToOnTimeDelivered.get(cdash.AccountName__c)) : 0;
             }
             else if(Identifier == 'LMTD'){
                 cdash.VisitsLMTD__c = accIdToVisitCount.containsKey(cdash.AccountName__c) ? accIdToVisitCount.get(cdash.AccountName__c) : 0;
@@ -253,6 +279,7 @@ public class CustomerDashboardCalculationsBatch implements Database.Batchable<sO
             if(Identifier == 'MTD'){
                 mTrade.RevenueMTD__c = accIdToRevenue.containsKey(mTrade.ContractName__c) ? (accIdToRevenue.get(mTrade.ContractName__c)) : 0;
                 mTrade.RevenueLMTD__c = accIdToRevenueLMTD.containsKey(mTrade.ContractName__c) ? (accIdToRevenueLMTD.get(mTrade.ContractName__c)) : 0;
+                mTrade.RevenueLYSM__c = accIdToRevenueLYSM.containsKey(mTrade.ContractName__c) ? (accIdToRevenueLYSM.get(mTrade.ContractName__c)) : 0;
             }
             else if(Identifier == 'YTD'){
                 mTrade.RevenueYTD__c = accIdToRevenue.containsKey(mTrade.ContractName__c) ? (accIdToRevenue.get(mTrade.ContractName__c)) : 0;

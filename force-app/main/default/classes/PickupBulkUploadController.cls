@@ -1,27 +1,22 @@
-public with sharing class PickupBulkUploadController {
+public without sharing class PickupBulkUploadController {
     @AuraEnabled
-    public static list<DatatoReturn>  csvData(list<map<string,string>> data , List<String> pincodes, List<String> shipperAndDestination){
+    public static list<DatatoReturn>  csvData(List<map<String, String>> data , List<String> pincodes, List<String> shipperAndDestination){
         try {
-            list<SObject> objects= new list<SObject>();
-            string docts='';
+            Boolean allDocketCheck = false;
+            String docts = '';
+            List<SObject> objects = new List<SObject>();
             DocketValidate valid = new DocketValidate();
-            map<string,DocketJson.cls_response> results=new map<string,DocketJson.cls_response>();
-            list<DatatoReturn> exception_List= new list<DatatoReturn>();
-            System.debug('--- check all data---'+data);
-            id pick = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName().get('Pick_Up').getRecordTypeId();            
-            // allcheckBoolean    can use exception list here  
-            //getting organization data with distance
-            Map<String,Decimal> mapOfShipperPinCodeWithDistance =  getOrgnizationDataWithDistance(pincodes);
-            Map<String,String> mapOfShipperAndDestinationPinCodes = getOrgnizationData(shipperAndDestination);
-            System.debug('---- checking shipper pin code with Distance--'+mapOfShipperPinCodeWithDistance);
-            Boolean allDocketCheck = false;        
-            for(map<string,string> sc:data){  
-                
-                //single check for each boolean   
+            Map<String, DocketJson.cls_response> results=new Map<String, DocketJson.cls_response>();
+            List<DatatoReturn> exception_List = new List<DatatoReturn>();
+            Id pick = Schema.SObjectType.Case.getRecordTypeInfosByDeveloperName().get('Pick_Up').getRecordTypeId();
+            Map<String, Decimal> mapOfShipperPinCodeWithDistance =  getOrgnizationDataWithDistance(pincodes);
+            Map<String, String> mapOfShipperAndDestinationPinCodes = getOrgnizationData(shipperAndDestination);
+
+            for(map<string,string> sc : data){  
                 Boolean eachCheck = false;
                 String customError = '';
-                SObject sobjectRecord = Schema.getGlobalDescribe().get('Case').newSObject();                
-                // sobjectRecord.put('Subject',sc.get('Subject'));
+
+                SObject sobjectRecord = Schema.getGlobalDescribe().get('Case').newSObject();
                 sobjectRecord.put('Origin','Bulk');
                 sobjectRecord.put('Status','Open(Assigned)');                
                 sobjectRecord.put('Type','Pick Up');
@@ -38,24 +33,26 @@ public with sharing class PickupBulkUploadController {
                     }
                 }
                 
-                if(sc.get('Customer_Code')!='' && sc.containsKey('Customer_Code'))
-                {
+                if(sc.get('Customer_Code')!='' && sc.containsKey('Customer_Code')){
                     Account acc=new Account(Customer_Code__c= Decimal.valueOf(sc.get('Customer_Code')));
                     sobjectRecord.putSObject('Account',acc);
                 }
                 
                 if(sc.get('Pickup_Date__c')!=null && sc.get('Pickup_Date__c')!=''){
                     string str = sc.get('Pickup_Date__c');
-                    System.debug('str '+str);
                     sobjectRecord.put('Pickup_Date__c',Datetime.valueOf(str)); 
-                }                    
+                }
+
                 sobjectRecord.put('Pick_Up_Instructions__c',sc.get('Pick_Up_Instructions__c'));
                 sobjectRecord.put('Pickup_Address1__c',sc.get('Pickup_Address1__c'));
                 sobjectRecord.put('Pickup_Address2__c',sc.get('Pickup_Address2__c'));
                 sobjectRecord.put('Pickup_Address3__c',sc.get('Pickup_Address3__c'));
                 sobjectRecord.put('Pickup_City__c',sc.get('Pickup_City__c'));
-                if(sc.get('Volume__c') !=null & sc.get('Volume__c')!='')
-                sobjectRecord.put('Volume__c',Integer.ValueOf(sc.get('Volume__c')));
+                
+                if(sc.get('Volume__c') !=null & sc.get('Volume__c')!=''){
+                    sobjectRecord.put('Volume__c',Integer.ValueOf(sc.get('Volume__c')));
+                }
+
                 sobjectRecord.put('Product__c',sc.get('Product__c'));
                 sobjectRecord.put('Mobile__c',sc.get('Mobile__c'));
                 sobjectRecord.put('Customer_Email__c',sc.get('Customer_Email__c'));
@@ -71,74 +68,87 @@ public with sharing class PickupBulkUploadController {
                 Datetime nowTime = Datetime.parse(Datetime.now().format());
                 Decimal diffMins =  ((pickupDatetime.getTime())/1000/60) - ((nowTime.getTime())/1000/60);
                 Decimal distance = 0;
-                System.debug('pickupDatetime >>'+pickupDatetime.format('EEEE'));
+
                 if(!Test.isRunningTest()){
                     distance = mapOfShipperPinCodeWithDistance.get((String)sobjectRecord.get('Shipper_Pincode__c'));
                 }
+
                 Integer days_difference = nowTime.Date().daysBetween(pickupDatetime.Date());
                 
-                if (distance >= 0 && distance <= 25 && days_difference != 0 && days_difference > 7) {
+                if(distance >= 0 && distance <= 25 && days_difference != 0 && days_difference > 7){
                     customError = 'You can raise pickup today or within 7 days';
                     eachCheck = true;
-                } else if ((shiftTime <= 9 && shiftTimeMinutes != 0) || (shiftTime >= 19 && shiftTimeMinutes != 0)) {
+                }
+                else if((shiftTime <= 9 && shiftTimeMinutes != 0) || (shiftTime >= 19 && shiftTimeMinutes != 0)){
                     customError = 'Pickup time should be in between 9AM to 7PM';
                     eachCheck = true;
-                }else if (pickupDatetime.format('EEEE') == 'Sunday') {
+                }
+                else if(pickupDatetime.format('EEEE') == 'Sunday'){
                     customError = 'You cannot raise pickup on Sundays';
                     eachCheck = true;
-                }else if (days_difference == 0 && (shiftTime <= 9 && shiftTimeMinutes != 0) || (shiftTime >= 16 && shiftTimeMinutes > 30)) {
+                }
+                else if(days_difference == 0 && (shiftTime <= 9 && shiftTimeMinutes != 0) || (shiftTime >= 16 && shiftTimeMinutes > 30)){
                     customError = 'Pickup time for today should be in between 9 AM to 4:30 PM';
                     eachCheck = true;
-                } else if (distance >= 0 && distance <= 25 && days_difference == 0 && diffMins < 90) {
+                }
+                else if(distance >= 0 && distance <= 25 && days_difference == 0 && diffMins < 90){
                     customError = 'Pickup time should be 90 minutes from the current time';
                     eachCheck = true;
-                } else if (distance > 25 && distance <= 50 && days_difference == 0 || days_difference > 8) {
+                }
+                else if(distance > 25 && distance <= 50 && days_difference == 0 || days_difference > 8){
                     customError = 'Pickup date for the selected pin code is allowed from system date + 1 and for a maximum of 7 days';
                     eachCheck = true;
-                } else if (distance > 50 && distance <= 200 && (days_difference == 0 || days_difference == 1) || days_difference > 9) {
+                }
+                else if(distance > 50 && distance <= 200 && (days_difference == 0 || days_difference == 1) || days_difference > 9){
                     customError = 'Pickup date for the selected pin code is allowed from system date + 2 and for a maximum of 7 days.';
                     eachCheck = true;
-                } else if (distance > 200 && distance <= 300 && (days_difference == 0 || days_difference == 1 || days_difference == 2) || days_difference > 10) {
+                }
+                else if(distance > 200 && distance <= 300 && (days_difference == 0 || days_difference == 1 || days_difference == 2) || days_difference > 10){
                     customError = 'Pickup date for the selected pin code is allowed from system date + 3 and for a maximum of 7 days.';
                     eachCheck = true;
-                } else if (distance > 300 && (days_difference == 0 || days_difference == 1 || days_difference == 2 || days_difference == 3) || days_difference > 11) {
+                }
+                else if(distance > 300 && (days_difference == 0 || days_difference == 1 || days_difference == 2 || days_difference == 3) || days_difference > 11){
                     customError = 'Pickup date for the selected pin code is allowed from system date + 4 and for a maximum of 7 days.';
                     eachCheck = true;
-                } else if (days_difference < 0) {
+                }
+                else if(days_difference < 0){
                     customError = 'You can not raise pickup past date';
                     eachCheck = true;
-                } else {
+                }
+                else {
                     customError = '';
                 }
+
                 if( String.valueOf(sobjectRecord.get('Actual_Weight__c')).length()>4){
                     customError = 'You can not exceed max Actual weight 9999';
                     eachCheck = true;
-                }if(mapOfShipperAndDestinationPinCodes.containsKey(String.valueOf(sobjectRecord.get('Shipper_Pincode__c')))){
+                }
+
+                if(mapOfShipperAndDestinationPinCodes.containsKey(String.valueOf(sobjectRecord.get('Shipper_Pincode__c')))){
                     customError = 'Wrong Shipper Pin code-'+String.valueOf(sobjectRecord.get('Shipper_Pincode__c'));
                     eachCheck = true;
-                }if(mapOfShipperAndDestinationPinCodes.containsKey(String.valueOf(sobjectRecord.get('Receiver_Pincode__c')))){
+                }
+
+                if(mapOfShipperAndDestinationPinCodes.containsKey(String.valueOf(sobjectRecord.get('Receiver_Pincode__c')))){
                     customError = 'Wrong Destination Pin code-'+String.valueOf(sobjectRecord.get('Receiver_Pincode__c'));
                     eachCheck = true;
                 }
-                system.debug('sobjectRecord  '+sobjectRecord);
+
                 if(!eachCheck){
                     objects.add(sobjectRecord);
-                    system.debug('sobjectRecord  '+sobjectRecord);
-                }else{
+                }
+                else{
                     DatatoReturn ret= new DatatoReturn();
                     ret.title = customError;
                     ret.done = false;
                     ret.obj = sobjectRecord;
                     exception_List.add(ret);
-                    system.debug('ret  '+ret);
                 }              
-            }     
-            system.debug(objects);
-            if(objects.size()>0)
-            {
+            }
+
+            if(objects.size()>0){
                 system.debug(objects);
                 Database.SaveResult[] sveResult = Database.insert(objects, false);
-                system.debug('saveres '+sveResult);
                 for(Integer i=0;i<sveResult.size();i++){
                     DatatoReturn ret= new DatatoReturn();
                     if (sveResult.get(i).isSuccess()){                        
@@ -147,42 +157,37 @@ public with sharing class PickupBulkUploadController {
                     }
                     else if (!sveResult.get(i).isSuccess()){
                         ret.done=false;                        
-                        // DML operation failed
                         Database.Error error = sveResult.get(i).getErrors().get(0);
                         String failedDML = error.getMessage();
-                        ret.title=failedDML;
-                        //failed record from the list
-                        system.debug('Failed ID'+objects.get(i));
+                        ret.title = failedDML;
                     }
                     ret.obj= objects.get(i);
                     exception_List.add(ret);
                     system.debug(exception_List);
                 }
-                System.debug('exception_List'+exception_List);
                 return exception_List;
             }
-            else 
-            {
-                System.debug('exception_List'+exception_List);
+            else{
                 return exception_List;
             }
         }
         catch (Exception e) {
-            System.debug('exception occured '+ e.getLineNumber()+'  '+e.getMessage());
             throw new AuraHandledException(e.getMessage());
         }
     }
     @AuraEnabled
     public static Map<String,String> getOrgnizationData(List<String> pincodes){
-        System.debug('-- chekc 1 '+pincodes);
         List<String> wrongPincode =new List<String>();
         Map<String,String> pinCodesWithShiD = new Map<String,String>();
         Map<String,String> setOfIds = new  Map<String,String>();
         List<Organization_Master__c> orgData = new List<Organization_Master__c>();
-        orgData = [SELECT Id, Name FROM Organization_Master__c WHERE Name IN:pincodes];
+
+        orgData = [SELECT Id, Name FROM Organization_Master__c WHERE Name IN :pincodes];
+        
         for(Organization_Master__c og : orgData){
             setOfIds.put(og.Name,og.Name);
         }
+
         for(String str : pincodes){
             if(!setOfIds.containsKey(str)){
                 wrongPincode.add(str);
@@ -190,14 +195,13 @@ public with sharing class PickupBulkUploadController {
             }
         }
         
-        System.debug('--- wrong pin code --'+wrongPincode);
         if(!wrongPincode.isEmpty() && wrongPincode.size()>0){
             return pinCodesWithShiD;
-        }else{
+        }
+        else{
             pinCodesWithShiD.put(null,null);
             return pinCodesWithShiD;
-        }
-        
+        }        
     }
     
     @AuraEnabled
@@ -208,16 +212,14 @@ public with sharing class PickupBulkUploadController {
         for(Organization_Master__c og : orgData){
             setOfIds.put(og.Name,og.Distance__c);
         }
-        
+
         if(!setOfIds.isEmpty() && setOfIds.size()>0){
             return setOfIds;
         }
-        return null;
-        
+
+        return null;        
     }
-    
-    
-    
+
     public  class DatatoReturn {
         @AuraEnabled
         public string title;        
@@ -226,78 +228,4 @@ public with sharing class PickupBulkUploadController {
         @AuraEnabled
         public boolean done;      
     }
-    @TestVisible
-    private static void dummy(){
-        Integer i=1;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-        i++;
-    }
-    
-    
 }

@@ -5,6 +5,7 @@ public without sharing class RoundRobinAssigner {
         List<GroupMember> groupNameToMember = [SELECT Group.Name, Group.DeveloperName, GroupId, UserOrGroupId 
                                                FROM GroupMember
                                                WHERE Group.Name != null
+                                               AND UserOrGroup.IsActive = true
                                               ];
         if(groupNameToMember != null && groupNameToMember.size()>0){
             for(GroupMember gm : groupNameToMember){

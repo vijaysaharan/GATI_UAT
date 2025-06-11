@@ -200,6 +200,7 @@ public class GatiMDMIntegration {
         Map<String, Object> mainMap = new Map<String, Object>();
         mainMap.put('content', contentMap);
         String requestBody = JSON.serialize(mainMap);
+        System.debug('requestBody '+requestBody);
         HttpRequest request = new Httprequest();
         request.setMethod('POST');
         request.setEndpoint(MDMSetting__mdt.getInstance('Create_LOF_Account').EndPoint__c);
@@ -231,6 +232,7 @@ public class GatiMDMIntegration {
         requestGet.setHeader('Authorization', authorizationToken);
         requestGet.setHeader('Content-Type', 'application/json');
         Http httpGet = new Http();
+        System.debug('requestGet '+requestGet);
         HttpResponse responseGet = httpGet.send(requestGet);
         if(responseGet.getStatusCode() == 200 && ((List<Object>)((Map<String, Object>) JSON.deserializeUntyped(responseGet.getBody())).get('rows')) != null && ((List<Object>)((Map<String, Object>) JSON.deserializeUntyped(responseGet.getBody())).get('rows')).size() > 0){
             sequenceNumber = (String)((Map<String, Object>)((Map<String, Object>)((Map<String, Object>)((List<Object>)((Map<String, Object>) JSON.deserializeUntyped(responseGet.getBody())).get('rows'))[0]).get('content')).get('CUST_CONTR_SEQ_NUM')).get('content');
@@ -287,6 +289,7 @@ public class GatiMDMIntegration {
             Map<String, Object> mainMap = new Map<String, Object>();
             mainMap.put('content', contentMap);
             String requestBody = JSON.serialize(mainMap);
+            System.debug('requestBody '+requestBody);
             HttpRequest request = new Httprequest();
             request.setMethod('PUT');
             request.setEndpoint(MDMSetting__mdt.getInstance('Create_LOF_Account').EndPoint__c+sequenceNumber);

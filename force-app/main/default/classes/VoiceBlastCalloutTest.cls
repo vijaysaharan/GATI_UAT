@@ -13,11 +13,14 @@ private class VoiceBlastCalloutTest {
     @isTest
     static void testVoiceBlastCallout() {
         List<Case> testCases = new List<Case>();
+        Account testAccount_1 = new Account(Name = 'Test Account', Voice_blast_for_NDR__c = true);
+        insert testAccount_1;
         for (Integer i = 0; i < 2; i++) {
             Case testCase = new Case(
                 Subject = 'Test Case ' + i,
                 Status = 'New',
-                Mobile__c = '1234567890'
+                AccountId = testAccount_1.Id,
+                Receiver_Contact_No__c = '1234567890'
             );
             testCases.add(testCase);
         }
@@ -26,7 +29,10 @@ private class VoiceBlastCalloutTest {
         Test.setMock(HttpCalloutMock.class, new VoiceBlastCalloutMock());
 
         Test.startTest();
-        System.enqueueJob(new VoiceBlastCallout(testCases));
+        for(Case cs : testCases){
+            cs.NDR_Code__c = '9';
+        }
+        update testCases;
         Test.stopTest();
     }
 }

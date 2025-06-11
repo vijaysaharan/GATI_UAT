@@ -41,6 +41,7 @@ public class DashboardDataCaseToZeroBatchTest {
         Customer360__c test360_1 = new Customer360__c(
             Customer_Code__c = testAccount1.Id,
             MTD__c = 200,
+            LYSM_TD__c = 150,
             Current_Month_OS__c = 200,
             ABSL_Outbound__c = 20,
             ABSL_Inbound__c = 20,
@@ -61,6 +62,7 @@ public class DashboardDataCaseToZeroBatchTest {
         Customer360__c test360_2 = new Customer360__c(
             Customer_Code__c = testAccount2.Id,
             MTD__c = 200,
+            LYSM_TD__c = 150,
             Current_Month_OS__c = 200,
             ABSL_Outbound__c = 20,
             ABSL_Inbound__c = 20,

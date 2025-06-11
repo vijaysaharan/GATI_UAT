@@ -63,6 +63,11 @@ export default class SalesDashboard extends LightningElement {
           'MTD_OTHER' : 0,
           'MTD' : 0,
           'MTD_TOTAL' : 0,
+          'LYSM_KEA' : 0,
+          'LYSM_OTHER' : 0,
+          'LYSM' : 0,
+          'LYSM_TOTAL' : 0,
+          'YOY' : 0,
           'LMTD_KEA' : 0,
           'LMTD_OTHER' : 0,
           'LMTD' : 0,
@@ -70,9 +75,11 @@ export default class SalesDashboard extends LightningElement {
           'YTD' : 0,
           'YTD_TOTAL' : 0,
           'MTD_STRING' : '',
+          'LYSM_STRING' : '',
           'LMTD_STRING' : '',
           'YTD_STRING' : '',
           'MTD_TOTAL_STRING' : '',
+          'LYSM_TOTAL_STRING' : '',
           'LMTD_TOTAL_STRING' : '',
           'YTD_TOTAL_STRING' : '',
           'TGT_STRING' : '',
@@ -163,7 +170,6 @@ export default class SalesDashboard extends LightningElement {
   }    
     
   @api refreshDashboard(){
-    console.log('dateList ',JSON.stringify(this.dateList,null,2));
     this.currentMonthStart = this.dateList?.currentMonthStart;
     this.currentMonthEnd = this.dateList?.currentMonthEnd;
     this.lastMonthStart = this.dateList?.lastMonthStart;
@@ -205,8 +211,11 @@ export default class SalesDashboard extends LightningElement {
     this.customerData.Customer360.TGT_TOTAL = 0;
     this.customerData.Customer360NBD.TGT = 0;
     this.customerData.Customer360.MTD_TOTAL = 0;
+    this.customerData.Customer360.LYSM_TOTAL = 0;
     this.customerData.Customer360NBD.MTD = 0;
     this.customerData.Customer360.MTD = 0;
+    this.customerData.Customer360.LYSM = 0;
+    this.customerData.Customer360.YOY = 0;
     this.customerData.Customer360.LMTD_TOTAL = 0;
     this.customerData.Customer360NBD.LMTD = 0;
     this.customerData.Customer360.LMTD = 0;
@@ -284,7 +293,6 @@ export default class SalesDashboard extends LightningElement {
       'productList' : this.productListSelected,
       'accountTypes' : this.accountTypesSelected
     };
-    console.log('whereData ',JSON.stringify(whereData,null,2));
     getTargets({whereClause : whereData}).then(result => {
       this.customerData.Customer360.TGT = result?.Target ? result?.Target : 0;
       this.customerData.Customer360.TGT_TOTAL = result?.Total_Target ? result?.Total_Target : 0;
@@ -304,6 +312,8 @@ export default class SalesDashboard extends LightningElement {
       this.customerData.CustomerConnect.YTD = this.customerData?.CustomerConnect?.YTD_TOTAL - parseFloat(this.customerData?.CustomerConnectNBD?.YTD);
 
       this.customerData.Customer360.MTD_TOTAL = this.customerData?.Customer360?.MTD_KEA + this.customerData?.Customer360?.MTD_OTHER;
+      this.customerData.Customer360.LYSM_TOTAL = this.customerData?.Customer360?.LYSM_KEA + this.customerData?.Customer360?.LYSM_OTHER;
+      this.customerData.Customer360.YOY = this.customerData.Customer360.LYSM_TOTAL != 0 ? (((this.customerData.Customer360.MTD_TOTAL - this.customerData.Customer360.LYSM_TOTAL) / this.customerData.Customer360.LYSM_TOTAL)*100).toFixed(2) : 0;
       this.customerData.Customer360NBD.MTD = this.customerData?.Customer360NBD?.MTD_KEA + this.customerData?.Customer360NBD?.MTD_OTHER;
       this.customerData.Customer360.MTD = this.customerData?.Customer360?.MTD_TOTAL - this.customerData?.Customer360NBD?.MTD;        
       this.customerData.Customer360.LMTD_TOTAL = this.customerData?.Customer360?.LMTD_KEA + this.customerData?.Customer360?.LMTD_OTHER;
@@ -321,6 +331,7 @@ export default class SalesDashboard extends LightningElement {
     this.customerData.Customer360.LMTD_STRING = (this.customerData?.Customer360?.LMTD).toLocaleString('en-IN', {maximumFractionDigits: 0});
     this.customerData.Customer360.YTD_STRING = (this.customerData?.Customer360?.YTD).toLocaleString('en-IN', {maximumFractionDigits: 0});
     this.customerData.Customer360.MTD_TOTAL_STRING = (this.customerData?.Customer360?.MTD_TOTAL).toLocaleString('en-IN', {maximumFractionDigits: 0});
+    this.customerData.Customer360.LYSM_TOTAL_STRING = (this.customerData?.Customer360?.LYSM_TOTAL).toLocaleString('en-IN', {maximumFractionDigits: 0});
     this.customerData.Customer360.LMTD_TOTAL_STRING = (this.customerData?.Customer360?.LMTD_TOTAL).toLocaleString('en-IN', {maximumFractionDigits: 0});
     this.customerData.Customer360.YTD_TOTAL_STRING = (this.customerData?.Customer360?.YTD_TOTAL).toLocaleString('en-IN', {maximumFractionDigits: 0});
     this.customerData.Customer360.TGT_STRING = (parseFloat(this.customerData?.Customer360?.TGT)).toLocaleString('en-IN', {maximumFractionDigits: 0});
@@ -822,6 +833,7 @@ export default class SalesDashboard extends LightningElement {
         this.dashboardData.Lead.LMTDPotential = data?.uiapi?.aggregate?.Lead?.edges[0]?.node?.aggregate?.Expected_Business_Per_Month__c?.sum?.value ? (data?.uiapi?.aggregate?.Lead?.edges[0]?.node?.aggregate?.Expected_Business_Per_Month__c?.sum?.value).toLocaleString('en-IN', {maximumFractionDigits: 0}) : 0;
         this.customerData.CustomerConnect.LMTD_TOTAL = data?.uiapi?.aggregate?.Customer_Connect__c?.totalCount ? (data?.uiapi?.aggregate?.Customer_Connect__c?.totalCount) : 0;
         this.customerData.Customer360.MTD_KEA = data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.Achievement_Amount_INR__c?.sum?.value ? (data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.Achievement_Amount_INR__c?.sum?.value) : 0;
+        this.customerData.Customer360.LYSM_KEA = data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.LYSM_TD__c?.sum?.value ? (data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.LYSM_TD__c?.sum?.value) : 0;
         this.customerData.Customer360.LMTD_KEA = data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.LM_TD__c?.sum?.value ? (data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.LM_TD__c?.sum?.value) : 0;
         this.customerData.Customer360NBD.MTD_KEA = data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.NBDNetBiz__c?.sum?.value ? (data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.NBDNetBiz__c?.sum?.value) : 0;
         this.customerData.Customer360NBD.LMTD_KEA = data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.NBD_LMTD__c?.sum?.value ? (data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.NBD_LMTD__c?.sum?.value) : 0;
@@ -859,6 +871,7 @@ export default class SalesDashboard extends LightningElement {
           this.dashboardData.Lead.MTD = data?.uiapi?.aggregate?.Lead?.totalCount ? (data?.uiapi?.aggregate?.Lead?.totalCount).toLocaleString('en-IN', {maximumFractionDigits: 0}) : 0;
           this.dashboardData.Lead.MTDPotential = data?.uiapi?.aggregate?.Lead?.edges[0]?.node?.aggregate?.Expected_Business_Per_Month__c?.sum?.value ? (data?.uiapi?.aggregate?.Lead?.edges[0]?.node?.aggregate?.Expected_Business_Per_Month__c?.sum?.value).toLocaleString('en-IN', {maximumFractionDigits: 0}) : 0;
           this.customerData.Customer360.MTD_OTHER = data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.Achievement_Amount_INR__c?.sum?.value ? (data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.Achievement_Amount_INR__c?.sum?.value) : 0;
+          this.customerData.Customer360.LYSM_OTHER = data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.LYSM_TD__c?.sum?.value ? (data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.LYSM_TD__c?.sum?.value) : 0;
           this.customerData.Customer360.LMTD_OTHER = data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.LM_TD__c?.sum?.value ? (data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.LM_TD__c?.sum?.value) : 0;
           this.customerData.Customer360NBD.MTD_OTHER = data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.NBDNetBiz__c?.sum?.value ? (data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.NBDNetBiz__c?.sum?.value) : 0;
           this.customerData.Customer360NBD.LMTD_OTHER = data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.NBD_LMTD__c?.sum?.value ? (data?.uiapi?.aggregate?.Sales_KRA__c?.edges[0]?.node?.aggregate?.NBD_LMTD__c?.sum?.value) : 0;
@@ -989,6 +1002,11 @@ export default class SalesDashboard extends LightningElement {
                         }
                       }
                       NBDNetBiz__c{
+                        sum{
+                          value
+                        }
+                      }
+                      LYSM_TD__c{
                         sum{
                           value
                         }
@@ -1149,6 +1167,11 @@ export default class SalesDashboard extends LightningElement {
                       }
                       Achievement_Percentage__c{
                         avg{
+                          value
+                        }
+                      }
+                      LYSM_TD__c{
+                        sum{
                           value
                         }
                       }

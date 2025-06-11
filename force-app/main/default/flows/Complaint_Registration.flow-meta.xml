@@ -4,7 +4,7 @@
         <name>registration</name>
         <label>registration</label>
         <locationX>50</locationX>
-        <locationY>539</locationY>
+        <locationY>647</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -68,7 +68,7 @@
         <name>send_email_if_new_complaint_only</name>
         <label>send email if new complaint only</label>
         <locationX>314</locationX>
-        <locationY>539</locationY>
+        <locationY>647</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -142,14 +142,14 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>new_complaint</targetReference>
+            <targetReference>Get_Restrict_Customer</targetReference>
         </connector>
     </assignments>
     <decisions>
         <name>new_complaint</name>
         <label>new complaint</label>
         <locationX>314</locationX>
-        <locationY>431</locationY>
+        <locationY>539</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>If_new_and_pickup</name>
@@ -175,6 +175,20 @@
                     <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>AccountOwner</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varToAddress</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>registration</targetReference>
             </connector>
@@ -182,7 +196,7 @@
         </rules>
         <rules>
             <name>If_new_and_other</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>1 AND 2 AND 3 AND 4 AND 5</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
@@ -195,6 +209,27 @@
                 <operator>NotEqualTo</operator>
                 <rightValue>
                     <stringValue>Bulk</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>AccountOwner</leftValueReference>
+                <operator>IsEmpty</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varToAddress</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Restrict_Customer</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
@@ -235,6 +270,27 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Restrict_Customer</name>
+        <label>Get Restrict Customer</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>new_complaint</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Email__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varToAddress</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RestrictedCustomers__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <start>
         <locationX>188</locationX>
         <locationY>0</locationY>
@@ -260,7 +316,7 @@
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Active</status>
+    <status>Obsolete</status>
     <textTemplates>
         <name>newemail</name>
         <isViewedAsPlainText>false</isViewedAsPlainText>

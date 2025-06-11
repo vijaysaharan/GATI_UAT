@@ -8,19 +8,19 @@ global with sharing class LOFUpdate{
         	List<LOFUpdateWrapper> wc = new List<LOFUpdateWrapper>();
             wc = (List<LOFUpdateWrapper>)JSON.deserialize(reqBody, List<LOFUpdateWrapper>.class);
            	list<LOFProducts> prdList = new List<LOFProducts>();
-            Map<string,PriceBookEntry> keyVSProduct= new Map<string,PriceBookEntry>();
-            for(LOFUpdateWrapper i:wc){
-                if(i.products!=null){ 
-                    for(LOFProducts p: i.products){
-                        p.quoteNumber = i.LofNo + i.LOFAmendmentversion+i.OpportunityId;
+            Map<String,PriceBookEntry> keyVSProduct= new Map<String,PriceBookEntry>();
+            for(LOFUpdateWrapper i : wc){
+                if(i.products != null){ 
+                    for(LOFProducts p : i.products){
+                        p.quoteNumber = i.LofNo + i.LOFAmendmentversion + i.OpportunityId;
                     }
                     prdList.addAll(i.products);
                 }
             }
 
-            List<string> frmEDC = new List<string>();
-            List<string> toEDC = new List<string>();
-            List<string> family = new List<string>();
+            List<String> frmEDC = new List<String>();
+            List<String> toEDC = new List<String>();
+            List<String> family = new List<String>();
             list<Quote> qobj = new List<Quote>();
             list<Account> aobj = new list<Account>();
             list<Opportunity> optyobj = new list<Opportunity>();
@@ -28,9 +28,9 @@ global with sharing class LOFUpdate{
             list<QuoteLineItem> qlobj = new list<QuoteLineItem>();
             for(LOFUpdateWrapper wcinst: wc){
                 Quote qinst = new Quote(Name=(wcinst.LofNo + wcinst.LOFAmendmentversion));
-                Account ainst = new Account(id = wcinst.AccountId);//[select Name from Account where Id=:wcinst.AccountId];
-                Opportunity oinst = new Opportunity(Id=wcinst.OpportunityId);// [select Name from Opportunity where Id=:wcinst.OpportunityId];
-                Contact cinst = new Contact(Gati_Con_eid__c=wcinst.EmailAddress+wcinst.AccountId);//[select name from contact where LastName = :wcinst.AuthorizedSignatory];
+                Account ainst = new Account(id = wcinst.AccountId);
+                Opportunity oinst = new Opportunity(Id=wcinst.OpportunityId);
+                Contact cinst = new Contact(Gati_Con_eid__c=wcinst.EmailAddress+wcinst.AccountId);
                 QuoteLineItem qlinst;
                 If( wcinst.LofNo + wcinst.LOFAmendmentversion!= null){
                                qinst.Name =  (String)wcinst.LofNo+' Version '+String.valueOf(wcinst.LOFAmendmentversion);
@@ -337,90 +337,88 @@ global with sharing class LOFUpdate{
             responseClass res = new responseClass();
             res.result = 'Error';
             res.message = e.getMessage();
-            system.debug(e.getMessage() +e.getLineNumber()+e.getCause());
             return res;
         }
     }
     
     global class ResponseClass{
-        string result{get;set;}
-        string message{get;set;}
+        String result{get;set;}
+        String message{get;set;}
     }
     
     public class LOFUpdateWrapper {
-        //string OpportunityId;
-        public List<LOFProducts> products{get;set;} //
-        string AccountId{get;set;} //*
-        string OpportunityId{get;set;} //*
-        string LofNo{get;set;} //*
-        date LOFDate{get;set;} //*
-        date LOFValidityDate{get;set;} //*
-        string LOFAmendmentversion{get;set;} //*
-        date LOFAmendmentDate{get;set;} //*
-        string CustomerName{get;set;} //*
-        string LOFContractStatus{get;set;} //*
-        string ContractType{get;set;} //*
-        string RiskCoveredBy{get;set;} //*
-        Integer CustomerBusinesPotential{get;set;} //*
-        Integer CommitedGatiPotentail{get;set;} //*
-        string PANNo{get;set;} //*
-        String BillingOn{get;set;} //*
-        string BillingFrequency{get;set;} //*
-        decimal Billingday1{get;set;} //*
-        decimal Billingday2{get;set;} //*
-        decimal Billingday3{get;set;} //*
-        decimal Billingday4{get;set;} //*
-        decimal Billingday5{get;set;} //*
-        decimal FreeStorageDays{get;set;} //*
-        Long MobileNumber{get;set;} //*
-        String OUCode{get;set;} //*
-        Integer pincode{get;set;} //*
-        string RegisteredUnderAct{get;set;} //*
-        string RegistedOfficeAddress1{get;set;} //--
-        string RegistedOfficeAddress2{get;set;} //--
-        string InStateOf{get;set;} //*
-        string AuthorizedSignatory{get;set;} //*
-        Long TelephoneNumber; //*
-        string ContractMobileNumber;
-        string EmailAddress{get;set;} //*
-        string Designation{get;set;} //*
-        date ContractValidity{get;set;} //*
-        date ContractStartDate{get;set;} //*
-        String approval_staff_code{get;set;} //*
-        String last_approval_staff_code{get;set;} //*
-        String status{get;set;}	   //*
-        date approved_date{get;set;} //*
-        date submitted_date{get;set;} //*
-        date rejected_date{get;set;} //*
-        Integer CreditScore{get;set;} //*
-        long creditLimitAmount{get;set;} //*
-        Integer Creditperiod{get;set;} //*
-        Integer oldCreditScore{get;set;} //*
-        long oldCreditLimitAmount{get;set;} //*
-        Integer oldCreditperiod{get;set;} //*
-        STring Created_date{get;set;} //*
-        string Created_by{get;set;} //*
-        String last_updated_date{get;set;} //*
-        string last_updated_by{get;set;} //*
-        string Credit_limit_Aprvl_stf_code{get;set;} //*
-        string Credit_limit_Aprvl_stf_name{get;set;} //*
-		date Credit_limit_Aprvl_dt{get;set;} //*
-		string Credit_period_Aprvl_stf_code{get;set;} //*
-        string Credit_period_Aprvl_stf_name{get;set;} //*
-		date Credit_period_Aprvl_dt{get;set;} //*
-        date PCSD_date{get;set;}
-        date PCD_Date{get;set;}
-        string dcr_status{get;set;}
+        public List<LOFProducts> products{get;set;}
+        String AccountId{get;set;}
+        String OpportunityId{get;set;}
+        String LofNo{get;set;}
+        Date LOFDate{get;set;}
+        Date LOFValidityDate{get;set;}
+        String LOFAmendmentversion{get;set;}
+        date LOFAmendmentDate{get;set;}
+        String CustomerName{get;set;}
+        String LOFContractStatus{get;set;}
+        String ContractType{get;set;}
+        String RiskCoveredBy{get;set;}
+        Integer CustomerBusinesPotential{get;set;}
+        Integer CommitedGatiPotentail{get;set;}
+        String PANNo{get;set;}
+        String BillingOn{get;set;}
+        String BillingFrequency{get;set;}
+        Decimal Billingday1{get;set;}
+        Decimal Billingday2{get;set;}
+        Decimal Billingday3{get;set;}
+        Decimal Billingday4{get;set;}
+        Decimal Billingday5{get;set;}
+        Decimal FreeStorageDays{get;set;}
+        Long MobileNumber{get;set;}
+        String OUCode{get;set;}
+        Integer pincode{get;set;}
+        String RegisteredUnderAct{get;set;}
+        String RegistedOfficeAddress1{get;set;}
+        String RegistedOfficeAddress2{get;set;}
+        String InStateOf{get;set;}
+        String AuthorizedSignatory{get;set;}
+        Long TelephoneNumber;
+        String ContractMobileNumber;
+        String EmailAddress{get;set;}
+        String Designation{get;set;}
+        Date ContractValidity{get;set;}
+        Date ContractStartDate{get;set;}
+        String approval_staff_code{get;set;}
+        String last_approval_staff_code{get;set;}
+        String status{get;set;}	  
+        Date approved_date{get;set;}
+        Date submitted_date{get;set;}
+        Date rejected_date{get;set;}
+        Integer CreditScore{get;set;}
+        Long creditLimitAmount{get;set;}
+        Integer Creditperiod{get;set;}
+        Integer oldCreditScore{get;set;}
+        Long oldCreditLimitAmount{get;set;}
+        Integer oldCreditperiod{get;set;}
+        STring Created_date{get;set;}
+        String Created_by{get;set;}
+        String last_updated_date{get;set;}
+        String last_updated_by{get;set;}
+        String Credit_limit_Aprvl_stf_code{get;set;}
+        String Credit_limit_Aprvl_stf_name{get;set;}
+		Date Credit_limit_Aprvl_dt{get;set;}
+		String Credit_period_Aprvl_stf_code{get;set;}
+        String Credit_period_Aprvl_stf_name{get;set;}
+		Date Credit_period_Aprvl_dt{get;set;}
+        Date PCSD_date{get;set;}
+        Date PCD_Date{get;set;}
+        String dcr_status{get;set;}
         boolean isContractApprovedVersion{get;set;}
-        date contractActivationDate{get;set;}
-        date contractExtensionDate{get;set;}
-        date contractTerminationDate{get;set;}
-        date contractEndDate{get;set;}
-        date contractRenewDate{get;set;}
-        string dph_type{get;set;}
-        string atf_type{get;set;}
-        string ess2applicability_flag{get;set;}
-        string customerType{get;set;}
+        Date contractActivationDate{get;set;}
+        Date contractExtensionDate{get;set;}
+        Date contractTerminationDate{get;set;}
+        Date contractEndDate{get;set;}
+        Date contractRenewDate{get;set;}
+        String dph_type{get;set;}
+        String atf_type{get;set;}
+        String ess2applicability_flag{get;set;}
+        String customerType{get;set;}
         Decimal atf_index{get;set;}
         Decimal dieselPrice{get;set;}
         public LOFUpdateWrapper(){
@@ -428,11 +426,11 @@ global with sharing class LOFUpdate{
         }
     }
     public class LOFProducts{
-        public string toLane{get;set;}
-        public string frmLane{get;set;}
-        public string quoteNumber{get;set;}
+        public String toLane{get;set;}
+        public String frmLane{get;set;}
+        public String quoteNumber{get;set;}
         public Integer VolumePerMonth{get;set;}
         public Integer RevenuePerMonth{get;set;}
-        public string productFamily{get;set;}
+        public String productFamily{get;set;}
     }
 }

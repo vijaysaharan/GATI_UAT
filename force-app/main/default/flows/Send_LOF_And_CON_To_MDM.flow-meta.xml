@@ -3,7 +3,7 @@
     <actionCalls>
         <name>Gati_MDM_Token_Request</name>
         <label>Gati MDM Token Request</label>
-        <locationX>578</locationX>
+        <locationX>908</locationX>
         <locationY>816</locationY>
         <actionName>GATIMDMAdditionalApprovalAuth.GatiMDMAdditionalApprovalAuth</actionName>
         <actionType>externalService</actionType>
@@ -140,7 +140,7 @@
     <assignments>
         <name>Set_Authorization_Params</name>
         <label>Set Authorization Params</label>
-        <locationX>578</locationX>
+        <locationX>908</locationX>
         <locationY>708</locationY>
         <assignmentItems>
             <assignToReference>varParams.login</assignToReference>
@@ -227,12 +227,9 @@
     <decisions>
         <name>Check_For_Contract</name>
         <label>Check For Contract</label>
-        <locationX>578</locationX>
+        <locationX>908</locationX>
         <locationY>924</locationY>
-        <defaultConnector>
-            <targetReference>Send_LOF</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>LOF</defaultConnectorLabel>
+        <defaultConnectorLabel>Else</defaultConnectorLabel>
         <rules>
             <name>Contract</name>
             <conditionLogic>and</conditionLogic>
@@ -248,11 +245,26 @@
             </connector>
             <label>Contract</label>
         </rules>
+        <rules>
+            <name>LOF</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Test_LOF_number__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>LOF</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_LOF</targetReference>
+            </connector>
+            <label>LOF</label>
+        </rules>
     </decisions>
     <decisions>
         <name>Is_Account</name>
         <label>Is Account</label>
-        <locationX>1106</locationX>
+        <locationX>1403</locationX>
         <locationY>600</locationY>
         <defaultConnectorLabel>Account Not Found</defaultConnectorLabel>
         <rules>
@@ -274,7 +286,7 @@
     <decisions>
         <name>Is_Opportunity</name>
         <label>Is Opportunity?</label>
-        <locationX>1502</locationX>
+        <locationX>1782</locationX>
         <locationY>384</locationY>
         <defaultConnectorLabel>Opportunity Not Found</defaultConnectorLabel>
         <rules>
@@ -373,7 +385,7 @@
     <recordLookups>
         <name>Get_Account_Record</name>
         <label>Get Account Record</label>
-        <locationX>1106</locationX>
+        <locationX>1403</locationX>
         <locationY>492</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -394,7 +406,7 @@
     <recordLookups>
         <name>Get_Opportunity_Record</name>
         <label>Get Opportunity Record</label>
-        <locationX>1502</locationX>
+        <locationX>1782</locationX>
         <locationY>276</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -415,7 +427,7 @@
     <recordUpdates>
         <name>Update_Integration_Message</name>
         <label>Update Integration Message</label>
-        <locationX>578</locationX>
+        <locationX>908</locationX>
         <locationY>1524</locationY>
         <inputAssignments>
             <field>IntegrationMessage__c</field>
@@ -426,7 +438,7 @@
         <inputReference>$Record</inputReference>
     </recordUpdates>
     <start>
-        <locationX>518</locationX>
+        <locationX>658</locationX>
         <locationY>0</locationY>
         <filterLogic>and</filterLogic>
         <filters>

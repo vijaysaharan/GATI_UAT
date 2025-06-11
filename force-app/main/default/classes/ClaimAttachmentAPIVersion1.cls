@@ -22,7 +22,7 @@ global without sharing class ClaimAttachmentAPIVersion1 {
                     Map<String, Decimal> docketToAccount = new Map<String, Decimal>();
                     Map<Decimal, Account> AccountMap = new Map<Decimal, Account>();
                     
-                    if(CaseAndAttachmentObj?.caseObj?.Docket_Number__c != null){
+                    if(CaseAndAttachmentObj?.caseObj?.Docket_Number__c != null && CaseAndAttachmentObj?.caseObj?.Docket_Number__c != ''){
                         apiResult = BulkServiceRequests.apiCall(CaseAndAttachmentObj?.caseObj?.Docket_Number__c);
                     }
                     

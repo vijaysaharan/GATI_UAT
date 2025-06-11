@@ -3,7 +3,7 @@
     <actionCalls>
         <name>Gati_MDM_Token_Request</name>
         <label>Gati MDM Token Request</label>
-        <locationX>446</locationX>
+        <locationX>644</locationX>
         <locationY>674</locationY>
         <actionName>GATIMDMAdditionalApprovalAuth.GatiMDMAdditionalApprovalAuth</actionName>
         <actionType>externalService</actionType>
@@ -100,7 +100,7 @@
     <assignments>
         <name>Set_Authorization_Params</name>
         <label>Set Authorization Params</label>
-        <locationX>446</locationX>
+        <locationX>644</locationX>
         <locationY>566</locationY>
         <assignmentItems>
             <assignToReference>varParams.login</assignToReference>
@@ -187,18 +187,18 @@
     <decisions>
         <name>Check_For_Contract</name>
         <label>Check For Contract</label>
-        <locationX>446</locationX>
+        <locationX>644</locationX>
         <locationY>782</locationY>
         <defaultConnector>
-            <targetReference>Send_LOF</targetReference>
+            <targetReference>Retail</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>LOF</defaultConnectorLabel>
+        <defaultConnectorLabel>Else</defaultConnectorLabel>
         <rules>
             <name>Contract</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>recordId.Test_LOF_number__c</leftValueReference>
-                <operator>EqualTo</operator>
+                <operator>Contains</operator>
                 <rightValue>
                     <stringValue>CON</stringValue>
                 </rightValue>
@@ -208,11 +208,26 @@
             </connector>
             <label>Contract</label>
         </rules>
+        <rules>
+            <name>LOF</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>recordId.Test_LOF_number__c</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <stringValue>LOF</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Send_LOF</targetReference>
+            </connector>
+            <label>LOF</label>
+        </rules>
     </decisions>
     <decisions>
         <name>Is_Account</name>
         <label>Is Account</label>
-        <locationX>776</locationX>
+        <locationX>1007</locationX>
         <locationY>458</locationY>
         <defaultConnectorLabel>Account Not Found</defaultConnectorLabel>
         <rules>
@@ -234,7 +249,7 @@
     <decisions>
         <name>Is_Opportunity</name>
         <label>Is Opportunity?</label>
-        <locationX>1073</locationX>
+        <locationX>1320</locationX>
         <locationY>242</locationY>
         <defaultConnectorLabel>Opportunity Not Found</defaultConnectorLabel>
         <rules>
@@ -333,7 +348,7 @@
     <recordLookups>
         <name>Get_Account_Record</name>
         <label>Get Account Record</label>
-        <locationX>776</locationX>
+        <locationX>1007</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -354,7 +369,7 @@
     <recordLookups>
         <name>Get_Opportunity_Record</name>
         <label>Get Opportunity Record</label>
-        <locationX>1073</locationX>
+        <locationX>1320</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -375,7 +390,7 @@
     <recordUpdates>
         <name>Update_Integration_Message</name>
         <label>Update Integration Message</label>
-        <locationX>446</locationX>
+        <locationX>644</locationX>
         <locationY>1382</locationY>
         <connector>
             <targetReference>Message</targetReference>
@@ -399,7 +414,7 @@
     <screens>
         <name>Message</name>
         <label>Message</label>
-        <locationX>446</locationX>
+        <locationX>644</locationX>
         <locationY>1490</locationY>
         <allowBack>true</allowBack>
         <allowFinish>true</allowFinish>
@@ -412,8 +427,24 @@
         <showFooter>false</showFooter>
         <showHeader>true</showHeader>
     </screens>
+    <screens>
+        <name>Retail</name>
+        <label>Retail</label>
+        <locationX>1106</locationX>
+        <locationY>890</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>Others</name>
+            <fieldText>&lt;p&gt;&lt;strong style=&quot;font-size: 14px; color: rgb(244, 8, 8);&quot;&gt;This is neither a CON nor an LOF.&lt;/strong&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
     <start>
-        <locationX>947</locationX>
+        <locationX>1194</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Opportunity_Record</targetReference>

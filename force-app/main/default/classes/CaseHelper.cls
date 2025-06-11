@@ -619,4 +619,34 @@ public without sharing class CaseHelper{
             }
         }            
     }
+
+    //Voice Blaster Callout    
+    public static void sendToVoiceBlaster(List<Case> caseList, Map<Id, Case> oldCaseMap){
+        Set<Id> accountIds = new Set<Id>();
+        List<Case> casesToSend = new List<Case>();
+        Map<Id, Account> accountIdToMap = new Map<Id, Account>();
+
+        for(Case cs : caseList){
+            if(cs.AccountId != null && cs.NDR_Code__c != null && cs.Receiver_Contact_No__c != null && (oldCaseMap == null || (oldCaseMap != null && oldCaseMap.get(cs.Id).NDR_Code__c != cs.NDR_Code__c))){
+                accountIds.add(cs.AccountId);
+            }
+        }
+
+        if(!accountIds.isEmpty()){
+            accountIdToMap = new Map<Id, Account>([SELECT Id, Voice_blast_for_NDR__c FROM Account WHERE Id IN :accountIds]);
+        }
+        else{
+            return;
+        }
+
+        for(Case cs : caseList){
+            if(cs.AccountId != null && cs.NDR_Code__c != null && cs.Receiver_Contact_No__c != null && (oldCaseMap == null || (oldCaseMap != null && oldCaseMap.get(cs.Id).NDR_Code__c != cs.NDR_Code__c)) && accountIdToMap.containsKey(cs.AccountId) && accountIdToMap.get(cs.AccountId).Voice_blast_for_NDR__c){
+                casesToSend.add(cs);
+            }
+        }
+
+        if(!casesToSend.isEmpty()){
+            System.enqueueJob(new VoiceBlastCallout(casesToSend));
+        }
+    }
 }

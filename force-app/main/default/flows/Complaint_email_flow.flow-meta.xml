@@ -3,8 +3,8 @@
     <actionCalls>
         <name>Closure</name>
         <label>Closure</label>
-        <locationX>446</locationX>
-        <locationY>539</locationY>
+        <locationX>314</locationX>
+        <locationY>647</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -52,7 +52,7 @@
     <actionCalls>
         <name>ReClassification</name>
         <label>ReClassification</label>
-        <locationX>182</locationX>
+        <locationX>50</locationX>
         <locationY>647</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
@@ -102,7 +102,7 @@
     <assignments>
         <name>owner</name>
         <label>owner</label>
-        <locationX>380</locationX>
+        <locationX>314</locationX>
         <locationY>323</locationY>
         <assignmentItems>
             <assignToReference>AccountOwner</assignToReference>
@@ -112,18 +112,18 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Case_check</targetReference>
+            <targetReference>Get_Restricted_Customer</targetReference>
         </connector>
     </assignments>
     <decisions>
         <name>Case_check</name>
         <label>Case check</label>
-        <locationX>380</locationX>
-        <locationY>431</locationY>
+        <locationX>314</locationX>
+        <locationY>539</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Complaint_Reclassification</name>
-            <conditionLogic>((1 OR 2) AND 3)</conditionLogic>
+            <conditionLogic>((1 OR 2) AND 3 AND 4)</conditionLogic>
             <conditions>
                 <leftValueReference>$Record__Prior.Sub_Type__c</leftValueReference>
                 <operator>NotEqualTo</operator>
@@ -145,14 +145,21 @@
                     <stringValue>Complaint</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>Get_Restricted_Customer</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
-                <targetReference>Is_Restrict_Email</targetReference>
+                <targetReference>ReClassification</targetReference>
             </connector>
             <label>Complaint Reclassification</label>
         </rules>
         <rules>
             <name>Complaint_Closure</name>
-            <conditionLogic>and</conditionLogic>
+            <conditionLogic>1 AND 2 AND 3</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.RecordType.DeveloperName</leftValueReference>
                 <operator>EqualTo</operator>
@@ -167,32 +174,17 @@
                     <stringValue>Closed</stringValue>
                 </rightValue>
             </conditions>
+            <conditions>
+                <leftValueReference>Get_Restricted_Customer</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
             <connector>
                 <targetReference>Closure</targetReference>
             </connector>
             <label>Complaint Closure</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <name>Is_Restrict_Email</name>
-        <label>Is Restrict Email?</label>
-        <locationX>50</locationX>
-        <locationY>539</locationY>
-        <defaultConnector>
-            <targetReference>ReClassification</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No</defaultConnectorLabel>
-        <rules>
-            <name>Yes</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Label.RestrictedCustomers</leftValueReference>
-                <operator>Contains</operator>
-                <rightValue>
-                    <elementReference>$Record.Customer_Email__c</elementReference>
-                </rightValue>
-            </conditions>
-            <label>Yes</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -217,8 +209,29 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Restricted_Customer</name>
+        <label>Get Restricted Customer</label>
+        <locationX>314</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Case_check</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Email__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Customer_Email__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RestrictedCustomers__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <start>
-        <locationX>254</locationX>
+        <locationX>188</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>owner</targetReference>

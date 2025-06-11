@@ -255,8 +255,9 @@ public class LeadTriggerHelperForCrossSell {
                 if(ld.Reason_for_Revisit__c!=null){
 					reasonRevisit = ld.Reason_for_Revisit__c;
                 }
-
-				email.setOrgWideEmailAddressId(fromEmail);
+                if(fromEmail != null && fromEmail != ''){
+                 	email.setOrgWideEmailAddressId(fromEmail);   
+                }
 				email.setToAddresses(toAddresses);
 				email.setCcAddresses(ccAddresses);
 				emailBody = 'Dear Colleague, <br/>'+ld.Company+' was placed in cold storage on '+ld.Revisit_Date__c+' reason for re-visit '+reasonRevisit+'.<br/>It is time to revisit this customer. We request you to revisit this lead and update the status within the next 3 days.';
@@ -297,21 +298,24 @@ public class LeadTriggerHelperForCrossSell {
                                        WHERE (Email IN: emailSet
                                        AND MobilePhone IN: mobileSet)
                                        AND LeadSource != 'Cross Sell'
-                                       AND IsConverted = false
                                       ];
 
         if(existingLeadList != null && existingLeadList.size() > 0){
             for(Lead ld : existingLeadList){
-                String key = ld.Email + '-' + ld.MobilePhone;
-                keyToLeads.put(key, ld);
+                //String key = ld.Email + '-' + ld.MobilePhone;
+                keyToLeads.put(ld.Email, ld);
+                keyToLeads.put(ld.MobilePhone, ld);
             }
         }
 
         for(Lead ld : leadList){
             if(ld.LeadSource != 'Cross Sell'){
-                String key = ld.Email + '-' + ld.MobilePhone;
-                if(keyToLeads.containsKey(key)){
-                    ld.addError('Lead Already Generated..!');
+                //String key = ld.Email + '-' + ld.MobilePhone;
+                if(keyToLeads.containsKey(ld.Email)){
+                    ld.addError('Lead Existing With Same Email!');
+                }
+                else if(keyToLeads.containsKey(ld.MobilePhone)){
+                    ld.addError('Lead Existing With Same MobilePhone!');
                 }
             }
         }

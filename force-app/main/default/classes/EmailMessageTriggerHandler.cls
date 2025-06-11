@@ -3,7 +3,7 @@ public class EmailMessageTriggerHandler {
         Set<Id> caseIds = new Set<Id>();
 
         for(EmailMessage em : emailMessageList){
-            if(em.Incoming == false && em.ParentId != null && String.valueOf(em.ParentId).contains('500')){
+            if(em.Incoming == false && em.FromAddress != 'customerservices@allcargologistics.com' && em.ParentId != null && String.valueOf(em.ParentId).contains('500')){
                 caseIds.add(em.ParentId);
             }
         }
@@ -24,47 +24,57 @@ public class EmailMessageTriggerHandler {
     public static void updateEmailAddressInCase(List<EmailMessage> emailMessageList){
         Boolean isUpdate = false;
         Map<Id,EmailMessage> caseToEmailMessage = New Map<Id,EmailMessage>();
-
-        for(EmailMessage em : emailMessageList){
-            if(em.Incoming == true && em.ParentId != null && String.valueOf(em.ParentId).contains('500') && em.ToAddress != null){
-                caseToEmailMessage.put(em.ParentId,em);
-            }
-        }
-
-        List<Case> caseList = [SELECT Id,Email_Address_For_Assignment__c,OwnerId 
-                               FROM Case 
-                               WHERE Id IN: caseToEmailMessage.keySet() 
-                               AND Email_Address_For_Assignment__c = null
-                              ];
-
-        if(caseList != null && caseList.size()>0){
-            Set<String> roundRobinEmails = new Set<String>(Label.RoundRobinEmails.split(','));
-            for(Case cs : caseList){
-                if(caseToEmailMessage.containsKey(cs.Id)){
-                    List<String> emailList = caseToEmailMessage.get(cs.Id).ToAddress.split(';');
-                    if(caseToEmailMessage.get(cs.Id).CcAddress != null){
-                        emailList.addAll(caseToEmailMessage.get(cs.Id).CcAddress.split(';'));
-                    }
-                    if(caseToEmailMessage.get(cs.Id).BccAddress != null){
-                        emailList.addAll(caseToEmailMessage.get(cs.Id).BccAddress.split(';'));
-                    }
-                    String emailToCheck = '';
-                    for(String em : emailList){
-                        if(em.contains('@allcargologistics.com') || em.contains('@gati')){
-                            emailToCheck = em.trim();
-                        }
-                        if(roundRobinEmails.contains(em.trim())){
-                            emailToCheck = 'retail_support@allcargologistics.com';
-                            break;
-                        }
-                    }
-                    cs.Email_Address_For_Assignment__c = emailToCheck;  
-                    isUpdate = true; 
+        try{
+            for(EmailMessage em : emailMessageList){
+                if(em.Incoming == true && em.ParentId != null && String.valueOf(em.ParentId).contains('500') && em.ToAddress != null){
+                    caseToEmailMessage.put(em.ParentId,em);
                 }
             }
-            if(isUpdate){
-                update caseList;
+
+            if(caseToEmailMessage.keySet().isEmpty()){
+                return;
             }
+
+            List<Case> caseList = [SELECT Id,Email_Address_For_Assignment__c,OwnerId 
+                                FROM Case 
+                                WHERE Id IN: caseToEmailMessage.keySet() 
+                                AND Email_Address_For_Assignment__c = null
+                                ];
+
+            if(caseList != null && caseList.size()>0){
+                Set<String> roundRobinEmails = new Set<String>(Label.RoundRobinEmails.split(','));
+                for(Case cs : caseList){
+                    if(caseToEmailMessage.containsKey(cs.Id)){
+                        List<String> emailList = caseToEmailMessage.get(cs.Id).ToAddress.split(';');
+                        if(caseToEmailMessage.get(cs.Id).CcAddress != null){
+                            emailList.addAll(caseToEmailMessage.get(cs.Id).CcAddress.split(';'));
+                        }
+                        if(caseToEmailMessage.get(cs.Id).BccAddress != null){
+                            emailList.addAll(caseToEmailMessage.get(cs.Id).BccAddress.split(';'));
+                        }
+                        String emailToCheck = '';
+                        for(String em : emailList){
+                            if(em.contains('@allcargologistics.com') || em.contains('@gati')){
+                                emailToCheck = em.trim();
+                            }
+                            if(roundRobinEmails.contains(em.trim())){
+                                emailToCheck = 'retail_support@allcargologistics.com';
+                                break;
+                            }
+                        }
+                        cs.Email_Address_For_Assignment__c = emailToCheck;  
+                        isUpdate = true; 
+                    }
+                }
+                if(isUpdate){
+                    update caseList;
+                }
+            }
+        }catch(Exception e){
+            Integration_Log__c integrationLog = new Integration_Log__c();
+            integrationLog.Component_Name__c = 'Retail_Issue';
+            integrationLog.Error_Message__c = e.getMessage();
+            insert integrationLog;
         }
     }
     
@@ -229,9 +239,11 @@ public class EmailMessageTriggerHandler {
     
     public static void deleteOlderEmailMessages(List<EmailMessage> emailMessageList){
         Set<Id> caseIds = new Set<Id>();
+        Set<Id> contentDocumentIds = new Set<Id>();
         Set<Id> emailMessageIds = new Set<Id>();
         Map<Id, Id> emailToCaseMap = new Map<Id, Id>();
         List<EmailMessage> emailsToDelete = new List<EmailMessage>();
+        List<ContentDocumentLink> emailAttachments = new List<ContentDocumentLink>();
         List<ContentDocumentLink> caseAttachmentsToCreate = new List<ContentDocumentLink>();
         
         for(EmailMessage em : emailMessageList){
@@ -255,17 +267,29 @@ public class EmailMessageTriggerHandler {
             }
         }
         
-        List<ContentDocumentLink> emailAttachments = [SELECT ContentDocumentId,LinkedEntityId 
+        List<ContentDocumentLink> attachmentList = [SELECT ContentDocumentId,LinkedEntityId 
                                                       FROM ContentDocumentLink 
-                                                      WHERE LinkedEntityId IN :emailToCaseMap.keySet()
-                                                     ];
+                                                      WHERE (LinkedEntityId IN :emailToCaseMap.keySet() OR LinkedEntityId IN :caseIds)
+                                                    ];
         
+        for(ContentDocumentLink eachDocumentLink : attachmentList){
+            if(caseIds.contains(eachDocumentLink.LinkedEntityId)){
+                contentDocumentIds.add(eachDocumentLink.ContentDocumentId);
+            }
+            else{
+                emailAttachments.add(eachDocumentLink);
+            }
+        }  
+
         for (ContentDocumentLink emailAttachment : emailAttachments) {
-            caseAttachmentsToCreate.add(new ContentDocumentLink(
-                ContentDocumentId = emailAttachment.ContentDocumentId,
-                LinkedEntityId = emailToCaseMap.get(emailAttachment.LinkedEntityId),
-                ShareType = 'V'
-            ));
+            if(!contentDocumentIds.contains(emailAttachment.ContentDocumentId)){
+                caseAttachmentsToCreate.add(new ContentDocumentLink(
+                    ContentDocumentId = emailAttachment.ContentDocumentId,
+                    LinkedEntityId = emailToCaseMap.get(emailAttachment.LinkedEntityId),
+                    ShareType = 'V'
+                ));
+                contentDocumentIds.add(emailAttachment.ContentDocumentId);
+            }
         }
         
         if(!caseAttachmentsToCreate.isEmpty()){

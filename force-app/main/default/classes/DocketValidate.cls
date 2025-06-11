@@ -1,5 +1,4 @@
-public with sharing class DocketValidate {
-    
+public with sharing class DocketValidate {    
     public Map<String, DocketJson.cls_response>  validate(String docketNo){
         try {
             Map<String,DocketJson.cls_response> sc = new Map<String, DocketJson.cls_response>();
@@ -42,7 +41,7 @@ public with sharing class DocketValidate {
                 }
                 else{                    
                     res.setHeader('Content-Type', 'application/json');
-                    res.setBody('{"requid":"GS21004","result":"successful", "sErrMsg":"","response":[{"docketNo":"177697167","companyId":"GKE","result":[{"DOCKET_NO":"177697167","CUSTOMER_CODE":"123456","PDC_BLOCK":"N","ASSURED_DLY_DT":"2025-06-12"}]}]}');
+                    res.setBody('{"requid":"GS21004","result":"successful", "sErrMsg":"","response":[{"docketNo":"416857232","companyId":"GKE","result":[{"DOCKET_NO":416857232,"BKG_DT":"2025-05-14","CUSTOMER_CODE":"80226264","CONSIGNOR_EMAIL":"vlr@gmail.com","BOOKING_STN":"VNB","STOCK_OU":"HYDE","STOCK_RECEIVING_OU":"HYDE","DELIVERY_STN":"HYDE","CONSIGNOR_PINCODE":"632006","CONSIGNEE_PINCODE":"500047","DOCKET_TYPE":"OWNERS RISK","PROD_SERV_CODE":"23","ORIGINAL_ADD":"2025-05-17","ASSURED_DLY_DT":"2025-05-17","DOCKET_STATUS":"DELIVERED","CURRENT_DOCKET_STATUS":"DELIVERED","APPROVED_DLY_DT":"2025-05-22","NO_OF_PKGS":1,"NO_OF_PKGS_DELIVERED":1,"ACTUAL_WT":20,"CHARGED_WT":20,"COD_AMT":0,"COD_TYPE":"S","DECL_CARGO_VAL":5000,"CONSIGNOR_NAME":"STUDENT EXPRESS - NEW","CONSIGNOR_MOBILE_NO":"8919485354","CONSIGNEE_NAME":"NARSIMHA RAO","CONSIGNEE_MOBILE_NO":"8008559817","PDC_BLOCK":"N","POD_TYPE":"GOOD","STOCK_IN_DATE_TIME":"2025-05-22 08:11:39","LAST_ATTEMPT_DATE":"2025-05-22 08:11:39","DEBIT_STATUS":"NO","CLAIM_EXCEP":"N"}],"sErrMsg":""}]}');
                     res.setStatusCode(200);
                 }
                 
@@ -54,8 +53,7 @@ public with sharing class DocketValidate {
                         ic.Inbound_JSON__c=res.getBody();
                         ic.Outbound_JSON__c=JSON.serialize(docket);
                         insert ic;
-                    }
-                    catch(Exception e){}   
+                    }catch(Exception e){}   
                 }
                 else{
                     try{ 
@@ -65,8 +63,7 @@ public with sharing class DocketValidate {
                         ic.Inbound_JSON__c=res.getBody();
                         ic.Outbound_JSON__c=JSON.serialize(docket);
                         insert ic;
-                    }
-                    catch(Exception e){}   
+                    }catch(Exception e){}   
                 }
                 obj =(map<string,object>)JSON.deserializeUntyped(res.getBody());                
                 DocketJson ob=DocketJson.parse(res.getBody());
@@ -76,7 +73,7 @@ public with sharing class DocketValidate {
                     }                    
                 }
             }
-            
+            System.debug('sc '+sc);
             return sc;
         }
         catch(Exception e){

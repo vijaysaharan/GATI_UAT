@@ -6,6 +6,7 @@ public class VoiceBlastCallout implements Queueable, Database.AllowsCallouts {
     }
     
     public void execute(QueueableContext context) {
+        List<Case> caseToUpdate = new List<Case>();
         String hashkey = AmeyoVoiceBlast__mdt.getInstance('Ameyovoiceblast').hash_key__c;
         String endpoint = AmeyoVoiceBlast__mdt.getInstance('Ameyovoiceblast').endpoint__c;
         String host = AmeyoVoiceBlast__mdt.getInstance('Ameyovoiceblast').host__c;
@@ -26,28 +27,16 @@ public class VoiceBlastCallout implements Queueable, Database.AllowsCallouts {
             if(codeToProcessName.containsKey(caseRecord.NDR_Code__c)){
                 caseListObject.add(new Map<String, Object>{
                     'customerRecord' => new Map<String, Object>{
-                            //'sf_id' => caseRecord.Id,
-                            //'phone1' => caseRecord.ContactPhone,
-                            //'vb_id' => caseRecord.Id,
-                            //'dly_attempted_date' => caseRecord.PDC_DATE__c,                            
-                            //'ndr_code' => caseRecord.NDR_Code__c,
-                            //'delivery_ou' => caseRecord.Delivery_OU__r.Name,
-                            //'ndr_reason' => codeToProcessName.get(caseRecord.NDR_Code__c).Reason__c,
-                            //'docket_number' => caseRecord.Docket_Number__c,
-                            //'customername' => caseRecord.Contact.Name,
-                            //'Pickup_Date__c' => caseRecord.Pickup_Date__c,
-                            //'pickup_attempted_date' => null,
-                            //'mobileno' => caseRecord.ContactMobile,
-                            //'pickup_refno' => caseRecord.Case_Name__c,
+                            'sf_id' => caseRecord.Id,
+                            'phone1' => caseRecord.Receiver_Contact_No__c,
+                            'vb_id' => caseRecord.Id,
+                            'dly_attempted_date' => caseRecord.PDC_DATE__c,                            
+                            'ndr_code' => caseRecord.NDR_Code__c,
+                            'delivery_ou' => caseRecord.Delivery_OU__r.Name,
+                            'ndr_reason' => codeToProcessName.get(caseRecord.NDR_Code__c).Reason__c,
+                            'docket_no' => caseRecord.Docket_Number__c,
                             'process' => codeToProcessName.get(caseRecord.NDR_Code__c).Process__c,
-                            'delivery_ou' => 'NAGW',
-                            'dly_attempted_date' => '2025-04-08 18:00:00',
-                            'docket_number' => '434546474',
-                            'ndr_reason' => 'customer_premises_closed',
-                            'ndr_code' => '13',
-                            'phone1' => '9561011706',
-                            'sf_id' => '500Bl00000Bk8ymIBC',
-                            'vb_id' => '1ABCDE456'
+                            'reason_code' => caseRecord.NDR_Code__c
                             }
                 });
             }
@@ -58,7 +47,8 @@ public class VoiceBlastCallout implements Queueable, Database.AllowsCallouts {
                 'campaignId' => 84,
                     'customerAndCallbackRecords' => caseListObject,
                     'leadId' => 10776,
-                    'status' => 'NOT_TRIED',
+                    'attempts'=> 0,
+                    'status'=> 'NOT_TRIED',
                     'properties' => new Map<String, Boolean>{
                         'update.customer' => true,
                             'migrate.customer' => true
@@ -74,11 +64,23 @@ public class VoiceBlastCallout implements Queueable, Database.AllowsCallouts {
             req.setEndpoint(endpoint);
             req.setTimeout(120000);
             req.setMethod('POST');
-            req.setBody('data='+payload);  
-            System.debug('Request Body '+payload);        
+            req.setBody('data='+payload);       
             Http http = new Http();
-            HttpResponse res = http.send(req); 
+            HttpResponse res = http.send(req);
             
+            if(res.getStatusCode() == 200){
+                for(Case eachCase : caseList){
+                    Case updatableCase = eachCase.clone(false, true, false, false);
+                    updatableCase.Id = eachCase.Id;
+                    updatableCase.IsVoiceBlast__c = true;
+                    caseToUpdate.add(updatableCase);
+                }
+            }
+            
+            if(!caseToUpdate.isEmpty()){
+                Database.update(caseToUpdate, false);
+            }
+
             Ameyo_Voice_Blast_Detail__c integrationLog = new Ameyo_Voice_Blast_Detail__c();
             integrationLog.InboundJSON__c = payload;
             integrationLog.OutboundJSON__c = res.getBody();

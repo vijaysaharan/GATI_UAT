@@ -36,6 +36,7 @@ trigger CaseTrigger on Case (Before Insert,After Insert,Before Update, After Upd
     /*After Insert*/
     if(Trigger.isAfter && Trigger.isInsert){
         FetchDataFromDocketController.deleteAssignmentCase(Trigger.New);
+        CaseHelper.sendToVoiceBlaster(Trigger.New, null);
     }
     
     /*Before Update*/
@@ -84,6 +85,7 @@ trigger CaseTrigger on Case (Before Insert,After Insert,Before Update, After Upd
         if(!apiProfile.containsKey(UserInfo.getProfileId())){
             CaseHelper.shareCase(Trigger.newMap, Trigger.oldMap);
         }
+        CaseHelper.sendToVoiceBlaster(Trigger.new, Trigger.oldMap);
     } 
 
     /*After Update And Avoid Recursion*/

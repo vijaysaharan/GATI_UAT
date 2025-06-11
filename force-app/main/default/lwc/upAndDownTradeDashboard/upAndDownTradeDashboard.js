@@ -47,6 +47,16 @@ export default class UpAndDownTradeDashboard extends LightningElement {
             cellAttributes: { alignment: 'right' },
         },
         { 
+            label: 'LYSM', 
+            fieldName: 'Last_Year_Same_Month',
+            cellAttributes: { alignment: 'right' },
+        },        
+        { 
+            label: 'YOY%', 
+            fieldName: 'YOY%',
+            cellAttributes: { alignment: 'right' },
+        },
+        { 
             label: 'YTD', 
             fieldName: 'Year_Till',
             cellAttributes: { alignment: 'right' },
@@ -101,7 +111,7 @@ export default class UpAndDownTradeDashboard extends LightningElement {
           'monthYear': this.currentMonthYear
         };
         getTradeData({whrClause : whereData}).then(cusData => {
-            //console.log('cusData ',JSON.stringify(cusData,null,2));
+            console.log('cusData ',JSON.stringify(cusData,null,2));
             let resultData = cusData.map(ele =>{
                 return {
                     'Contract_Id' : ele?.ContractName__r?.Id,
@@ -112,6 +122,9 @@ export default class UpAndDownTradeDashboard extends LightningElement {
                     'Diff_MTD_LMTD' : (ele?.UpDownTrade__c).toLocaleString('en-IN', {maximumFractionDigits: 0}),
                     'Year_Till' : (ele?.RevenueYTD__c).toLocaleString('en-IN', {maximumFractionDigits: 0}),
                     'MOM%' : ele?.MoM__c,
+                    'Last_Year_Same_Month' : (ele?.RevenueLYSM__c).toLocaleString('en-IN', {maximumFractionDigits: 0}),
+                    'YOY_Amount' : (ele?.YOYAmount__c).toLocaleString('en-IN', {maximumFractionDigits: 0}),
+                    'YOY%' : ele?.YOY__c,
                     'nameUrl' : '/'+  ele?.ContractName__r?.Id
                 }
             });

@@ -4,7 +4,7 @@
         <name>Docket_part</name>
         <label>Docket part</label>
         <locationX>314</locationX>
-        <locationY>539</locationY>
+        <locationY>755</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -44,7 +44,7 @@
         <name>feedback_email</name>
         <label>feedback email</label>
         <locationX>50</locationX>
-        <locationY>539</locationY>
+        <locationY>755</locationY>
         <actionName>emailSimple</actionName>
         <actionType>emailSimple</actionType>
         <flowTransactionModel>CurrentTransaction</flowTransactionModel>
@@ -84,7 +84,7 @@
     <decisions>
         <name>check_customer_email</name>
         <label>Check customer email</label>
-        <locationX>380</locationX>
+        <locationX>611</locationX>
         <locationY>323</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -92,13 +92,13 @@
             <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.Customer_Email__c</leftValueReference>
-                <operator>IsNull</operator>
+                <operator>IsBlank</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>if_pickup_complaint</targetReference>
+                <targetReference>Get_Restrict_Customer</targetReference>
             </connector>
             <label>If present</label>
         </rules>
@@ -107,7 +107,7 @@
         <name>if_pickup_complaint</name>
         <label>If pickup complaint</label>
         <locationX>182</locationX>
-        <locationY>431</locationY>
+        <locationY>647</locationY>
         <defaultConnector>
             <targetReference>Docket_part</targetReference>
         </defaultConnector>
@@ -126,6 +126,28 @@
                 <targetReference>feedback_email</targetReference>
             </connector>
             <label>If yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Is_Restricted</name>
+        <label>Is Restricted?</label>
+        <locationX>380</locationX>
+        <locationY>539</locationY>
+        <defaultConnectorLabel>Restricted</defaultConnectorLabel>
+        <rules>
+            <name>Not_Restricted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Restrict_Customer</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>if_pickup_complaint</targetReference>
+            </connector>
+            <label>Not Restricted</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -150,8 +172,29 @@
         </value>
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Restrict_Customer</name>
+        <label>Get Restrict Customer</label>
+        <locationX>380</locationX>
+        <locationY>431</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Restricted</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Email__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Customer_Email__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RestrictedCustomers__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
     <start>
-        <locationX>254</locationX>
+        <locationX>485</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>check_customer_email</targetReference>

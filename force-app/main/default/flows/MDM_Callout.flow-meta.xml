@@ -49,7 +49,7 @@
     <actionCalls>
         <name>Get_Error_Message</name>
         <label>Get Error Message</label>
-        <locationX>1194</locationX>
+        <locationX>1458</locationX>
         <locationY>998</locationY>
         <actionName>GatiMDMInvocable</actionName>
         <actionType>apex</actionType>
@@ -75,7 +75,7 @@
     <actionCalls>
         <name>MDMCalloutGati</name>
         <label>MDMCalloutGati</label>
-        <locationX>810</locationX>
+        <locationX>952</locationX>
         <locationY>782</locationY>
         <actionName>MDMCalloutGati.MDMCalloutGati</actionName>
         <actionType>externalService</actionType>
@@ -265,9 +265,25 @@
         </connector>
     </assignments>
     <assignments>
+        <name>Assignment_Sent_To_MDM</name>
+        <label>Assignment Sent To MDM</label>
+        <locationX>842</locationX>
+        <locationY>998</locationY>
+        <assignmentItems>
+            <assignToReference>recordId.SentToMDM__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Sent_To_MDM</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <name>Error_Message_Assignment</name>
         <label>Error Message Assignment</label>
-        <locationX>1282</locationX>
+        <locationX>1546</locationX>
         <locationY>1322</locationY>
         <assignmentItems>
             <assignToReference>varErrorMessage</assignToReference>
@@ -283,7 +299,7 @@
     <assignments>
         <name>Error_Wrapper_Assignment</name>
         <label>Error Wrapper Assignment</label>
-        <locationX>1194</locationX>
+        <locationX>1458</locationX>
         <locationY>1106</locationY>
         <assignmentItems>
             <assignToReference>varErrorResponseMessage</assignToReference>
@@ -322,7 +338,7 @@
     <assignments>
         <name>Set_Request_Body</name>
         <label>Set Request Body</label>
-        <locationX>810</locationX>
+        <locationX>952</locationX>
         <locationY>674</locationY>
         <assignmentItems>
             <assignToReference>requestBody.state</assignToReference>
@@ -683,7 +699,7 @@
     <decisions>
         <name>Is_Market_Code_For_Retail</name>
         <label>Is Market Code For Retail</label>
-        <locationX>430</locationX>
+        <locationX>501</locationX>
         <locationY>242</locationY>
         <defaultConnector>
             <targetReference>Get_Opportunity_Line_Items</targetReference>
@@ -715,7 +731,7 @@
     <decisions>
         <name>Response_Code_Check</name>
         <label>Response Code Check</label>
-        <locationX>810</locationX>
+        <locationX>952</locationX>
         <locationY>890</locationY>
         <defaultConnector>
             <targetReference>Get_Error_Message</targetReference>
@@ -747,10 +763,38 @@
                 </rightValue>
             </conditions>
             <connector>
-                <isGoTo>true</isGoTo>
-                <targetReference>OpenURL</targetReference>
+                <targetReference>Assignment_Sent_To_MDM</targetReference>
             </connector>
             <label>Contarct Created</label>
+        </rules>
+        <rules>
+            <name>Status_Code_Is_500</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>MDMCalloutGati.responseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>500.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>MDMCalloutGati.responseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>501.0</numberValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>MDMCalloutGati.responseCode</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>502.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>MDM_Error</targetReference>
+            </connector>
+            <label>Status Code Is 500</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -984,7 +1028,7 @@
     <loops>
         <name>Error_Message_Loop</name>
         <label>Error Message Loop</label>
-        <locationX>1194</locationX>
+        <locationX>1458</locationX>
         <locationY>1214</locationY>
         <collectionReference>varErrorResponseMessage</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -1031,7 +1075,7 @@
     <recordLookups>
         <name>Get_Account_Data</name>
         <label>Get Account Data</label>
-        <locationX>430</locationX>
+        <locationX>501</locationX>
         <locationY>134</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1052,7 +1096,7 @@
     <recordLookups>
         <name>Get_Industry_Mapping</name>
         <label>Get Industry Mapping</label>
-        <locationX>810</locationX>
+        <locationX>952</locationX>
         <locationY>458</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1073,7 +1117,7 @@
     <recordLookups>
         <name>Get_Opportunity_Line_Items</name>
         <label>Get Opportunity Line Items</label>
-        <locationX>810</locationX>
+        <locationX>952</locationX>
         <locationY>350</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1091,6 +1135,17 @@
         <object>OpportunityLineItem</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Update_Sent_To_MDM</name>
+        <label>Update Sent To MDM</label>
+        <locationX>842</locationX>
+        <locationY>1106</locationY>
+        <connector>
+            <isGoTo>true</isGoTo>
+            <targetReference>OpenURL</targetReference>
+        </connector>
+        <inputReference>recordId</inputReference>
+    </recordUpdates>
     <runInMode>SystemModeWithoutSharing</runInMode>
     <screens>
         <name>Auto_Finish</name>
@@ -1109,6 +1164,22 @@
             <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
         <showFooter>false</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>MDM_Error</name>
+        <label>MDM Error</label>
+        <locationX>1106</locationX>
+        <locationY>998</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>errorMessage</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;color: rgb(224, 7, 7);&quot;&gt;{!MDMCalloutGati.2XX.Response}&lt;/span&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <showFooter>true</showFooter>
         <showHeader>true</showHeader>
     </screens>
     <screens>
@@ -1168,7 +1239,7 @@
     <screens>
         <name>ServerDownScreen</name>
         <label>Server Down Screen</label>
-        <locationX>1194</locationX>
+        <locationX>1458</locationX>
         <locationY>1514</locationY>
         <allowBack>false</allowBack>
         <allowFinish>true</allowFinish>
@@ -1182,7 +1253,7 @@
         <showHeader>true</showHeader>
     </screens>
     <start>
-        <locationX>304</locationX>
+        <locationX>375</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Get_Account_Data</targetReference>
@@ -1192,7 +1263,7 @@
     <transforms>
         <name>Transform_Opportunity_Product</name>
         <label>Transform Opportunity Product</label>
-        <locationX>810</locationX>
+        <locationX>952</locationX>
         <locationY>566</locationY>
         <apexClass>ExternalService__MDMCalloutGati_MDMCalloutGati_IN_body_lineDtls</apexClass>
         <connector>
